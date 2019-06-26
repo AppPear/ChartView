@@ -14,11 +14,13 @@ public struct ChartRow : View {
         data.max() ?? 0
     }
     public var body: some View {
-        HStack(alignment: .bottom, spacing: 14){
-            ForEach(0..<data.count) { i in
-                ChartCell(value: Double(self.data[i])/Double(self.maxValue), index: i)
-            }
-        }.padding([.trailing,.leading])
+        GeometryReader { geometry in
+            HStack(alignment: .bottom, spacing: (geometry.frame(in: .local).width-22)/CGFloat(self.data.count * 3)){
+                ForEach(0..<self.data.count) { i in
+                    ChartCell(value: Double(self.data[i])/Double(self.maxValue), index: i, width: Float(geometry.frame(in: .local).width - 22), numberOfDataPoints: self.data.count)
+                }
+                }.padding([.trailing,.leading], 13)
+        }
     }
 }
 

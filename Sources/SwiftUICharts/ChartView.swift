@@ -39,6 +39,7 @@ public struct ChartView : View {
                 }.padding()
                 ChartRow(data: data)
                 .foregroundColor(self.accentColor)
+                .clipped()
                 if self.legend != nil {
                     Text(self.legend!)
                         .font(.headline)
