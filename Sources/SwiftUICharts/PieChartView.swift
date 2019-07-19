@@ -15,7 +15,7 @@ public struct PieChartView : View {
     public var backgroundColor:Color
     public var accentColor:Color
     
-    public init(data: [Int], title: String, legend: String? = nil, backgroundColor:Color = Color(red: 252.0/255.0, green: 236.0/255.0, blue: 234.0/255.0),accentColor:Color = Color(red: 225.0/255.0, green: 97.0/255.0, blue: 76.0/255.0)){
+    public init(data: [Int], title: String, legend: String? = nil, backgroundColor:Color = Colors.color3,accentColor:Color = Colors.color3Accent){
         self.data = data
         self.title = title
         self.legend = legend

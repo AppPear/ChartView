@@ -19,7 +19,8 @@ public struct ChartRow : View {
                 ForEach(0..<self.data.count) { i in
                     ChartCell(value: Double(self.data[i])/Double(self.maxValue), index: i, width: Float(geometry.frame(in: .local).width - 22), numberOfDataPoints: self.data.count)
                 }
-                }.padding([.trailing,.leading], 13)
+            }
+            .padding([.trailing,.leading], 13)
         }
     }
 }

@@ -28,7 +28,6 @@ public struct ChartCell : View {
                 self.scaleValue = self.value
             }
             .animation(Animation.spring().delay(Double(self.index) * 0.04))
-      
     }
 }
 

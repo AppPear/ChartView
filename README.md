@@ -3,6 +3,7 @@
 Swift package for displaying charts effortlessly.
 
 ![SwiftUI Charts](./chartview.gif "SwiftUI Charts")
+![Chart forms](./chartforms.png "Chart forms")
 
 It supports currently:
 * barcharts
@@ -34,9 +35,23 @@ You can optionally configure:
 * legend
 * background color
 * accent color
+* size format
+
+### Size format (only for bar charts yet!)
+Can be 
+* small
+* medium
+* large
 
 ```swift
-ChartView(data: [12,17,24,33,36,31,27,23,14], title: "Title", legend: "Legend", backgroundColor:Color(red: 226.0/255.0, green: 250.0/255.0, blue: 231.0/255.0) , accentColor:Color(red: 114.0/255.0, green: 191.0/255.0, blue: 130.0/255.0))
+ChartView(data: [12,17,24,33,23,56], title: "Chart two", form: Form.small)
+```
+
+### Customizing color: 
+I added color constants, so you can predefine your color palette. To do so, you can find `Colors` struct in the ChartColors swift file.
+
+```swift
+ChartView(data: [12,17,24,33,23,56], title: "Chart two", backgroundColor:Colors.color3 , accentColor:Colors.color3Accent)
 ```
 
 
