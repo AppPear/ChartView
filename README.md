@@ -3,7 +3,6 @@
 Swift package for displaying charts effortlessly.
 
 ![SwiftUI Charts](./chartview.gif "SwiftUI Charts")
-![Chart forms](./chartforms.png "Chart forms")
 
 It supports currently:
 * barcharts
@@ -38,6 +37,9 @@ You can optionally configure:
 * size format
 
 ### Size format (only for bar charts yet!)
+
+![Chart forms](./chartforms.png "Chart forms")
+
 Can be 
 * small
 * medium
