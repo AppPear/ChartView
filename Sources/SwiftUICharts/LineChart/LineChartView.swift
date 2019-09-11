@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct LineChartView: View {
+public struct LineChartView: View {
     let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     @ObservedObject var data:ChartData
     public var title: String
