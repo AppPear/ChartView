@@ -40,7 +40,7 @@ public struct Styles {
         textColor: Color.black,
         legendTextColor: Color.gray)
     
-    public static let barChartStyleOne = ChartStyle(
+    public static let barChartStyleOrangeLight = ChartStyle(
         backgroundColor: Color.white,
         accentColor: Colors.OrangeStart,
         secondGradientColor: Colors.OrangeEnd,
@@ -48,7 +48,15 @@ public struct Styles {
         textColor: Color.black,
         legendTextColor: Color.gray)
     
-    public static let barChartStyleTwo = ChartStyle(
+    public static let barChartStyleOrangeDark = ChartStyle(
+        backgroundColor: Color.black,
+        accentColor: Colors.OrangeStart,
+        secondGradientColor: Colors.OrangeEnd,
+        chartFormSize: Form.medium,
+        textColor: Color.white,
+        legendTextColor: Color.gray)
+    
+    public static let barChartStyleNeonBlueLight = ChartStyle(
         backgroundColor: Color.white,
         accentColor: Colors.GradientNeonBlue,
         secondGradientColor: Colors.GradientPurple,
@@ -56,7 +64,7 @@ public struct Styles {
         textColor: Color.black,
         legendTextColor: Color.gray)
     
-    public static let barChartStyleThree = ChartStyle(
+    public static let barChartStyleNeonBlueDark = ChartStyle(
         backgroundColor: Color.black,
         accentColor: Colors.GradientNeonBlue,
         secondGradientColor: Colors.GradientPurple,
@@ -64,7 +72,7 @@ public struct Styles {
         textColor: Color.white,
         legendTextColor: Color.gray)
     
-    public static let barChartMidnightGreen = ChartStyle(
+    public static let barChartMidnightGreenDark = ChartStyle(
         backgroundColor: Color(hexString: "#3B5147"), //3B5147, 313D34
         accentColor: Color(hexString: "#FFD603"),
         secondGradientColor: Color(hexString: "#FFCA04"),
