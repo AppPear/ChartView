@@ -73,7 +73,7 @@ public struct Styles {
         legendTextColor: Color.gray)
     
     public static let barChartMidnightGreenDark = ChartStyle(
-        backgroundColor: Color(hexString: "#3B5147"), //3B5147, 313D34
+        backgroundColor: Color(hexString: "#36534D"), //3B5147, 313D34
         accentColor: Color(hexString: "#FFD603"),
         secondGradientColor: Color(hexString: "#FFCA04"),
         chartFormSize: Form.medium,
