@@ -73,7 +73,7 @@ You can access built-in styles:
 ```swift
  BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", style: Styles.barChartMidnightGreen)
 ```
-All styles available as a preset: 
+#### All styles available as a preset: 
 * barChartStyleOrangeLight
 * barChartStyleOrangeDark
 * barChartStyleNeonBlueLight
