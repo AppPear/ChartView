@@ -64,6 +64,22 @@ public struct Styles {
         textColor: Color.white,
         legendTextColor: Color.gray)
     
+    public static let barChartMidnightGreen = ChartStyle(
+        backgroundColor: Color(hexString: "#3B5147"), //3B5147, 313D34
+        accentColor: Color(hexString: "#FFD603"),
+        secondGradientColor: Color(hexString: "#FFCA04"),
+        chartFormSize: Form.medium,
+        textColor: Color.white,
+        legendTextColor: Color(hexString: "#D2E5E1"))
+    
+    public static let barChartMidnightGreenLight = ChartStyle(
+        backgroundColor: Color.white,
+        accentColor: Color(hexString: "#84A094"), //84A094 , 698378
+        secondGradientColor: Color(hexString: "#50675D"),
+        chartFormSize: Form.medium,
+        textColor: Color.black,
+        legendTextColor:Color.gray)
+    
     public static let pieChartStyleOne = ChartStyle(
         backgroundColor: Color.white,
         accentColor: Colors.OrangeStart,
