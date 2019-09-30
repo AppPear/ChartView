@@ -50,7 +50,7 @@ You can add different formats:
 * Large `Form.large` 
 
  ```swift
- BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", style: ChartStyle(formSize: Form.small))
+ BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: Form.small)
  ```
  
  ### You can customize styling of the chart with a ChartStyle object: 
