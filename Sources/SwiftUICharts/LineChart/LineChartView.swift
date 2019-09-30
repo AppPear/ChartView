@@ -9,28 +9,31 @@
 import SwiftUI
 
 public struct LineChartView: View {
-    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+//    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     @ObservedObject var data:ChartData
     public var title: String
     public var legend: String?
     public var style: ChartStyle
+    public var formSize:CGSize
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
     @State private var currentValue: Int = 2 {
         didSet{
             if (oldValue != self.currentValue && showIndicatorDot) {
-                selectionFeedbackGenerator.selectionChanged()
+//                selectionFeedbackGenerator.selectionChanged()
+                HapticFeedback.playSelection()
             }
             
         }
     }
     let frame = CGSize(width: 180, height: 120)
     
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne ){
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
         self.style = style
+        self.formSize = form!
     }
     
     public var body: some View {
@@ -70,7 +73,7 @@ public struct LineChartView: View {
                 .frame(width: frame.width, height: frame.height)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .offset(x: 0, y: 0)
-            }.frame(width: self.style.chartFormSize.width, height: self.style.chartFormSize.height)
+            }.frame(width: self.formSize.width, height: self.formSize.height)
         }
         .gesture(DragGesture()
         .onChanged({ value in

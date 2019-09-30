@@ -27,8 +27,6 @@ public struct Colors {
     public static let GradientLowerBlue:Color = Color(hexString: "#F1F9FF")
     public static let DarkPurple:Color = Color(hexString: "#1B205E")
     public static let BorderBlue:Color = Color(hexString: "#4EBCFF")
-    
-    
 }
 
 public struct Styles {
@@ -36,7 +34,6 @@ public struct Styles {
         backgroundColor: Color.white,
         accentColor: Colors.OrangeStart,
         secondGradientColor: Colors.OrangeEnd,
-        chartFormSize: Form.medium,
         textColor: Color.black,
         legendTextColor: Color.gray)
     
@@ -44,7 +41,6 @@ public struct Styles {
         backgroundColor: Color.white,
         accentColor: Colors.OrangeStart,
         secondGradientColor: Colors.OrangeEnd,
-        chartFormSize: Form.medium,
         textColor: Color.black,
         legendTextColor: Color.gray)
     
@@ -52,7 +48,6 @@ public struct Styles {
         backgroundColor: Color.black,
         accentColor: Colors.OrangeStart,
         secondGradientColor: Colors.OrangeEnd,
-        chartFormSize: Form.medium,
         textColor: Color.white,
         legendTextColor: Color.gray)
     
@@ -60,7 +55,6 @@ public struct Styles {
         backgroundColor: Color.white,
         accentColor: Colors.GradientNeonBlue,
         secondGradientColor: Colors.GradientPurple,
-        chartFormSize: Form.medium,
         textColor: Color.black,
         legendTextColor: Color.gray)
     
@@ -68,7 +62,6 @@ public struct Styles {
         backgroundColor: Color.black,
         accentColor: Colors.GradientNeonBlue,
         secondGradientColor: Colors.GradientPurple,
-        chartFormSize: Form.medium,
         textColor: Color.white,
         legendTextColor: Color.gray)
     
@@ -76,7 +69,6 @@ public struct Styles {
         backgroundColor: Color(hexString: "#36534D"), //3B5147, 313D34
         accentColor: Color(hexString: "#FFD603"),
         secondGradientColor: Color(hexString: "#FFCA04"),
-        chartFormSize: Form.medium,
         textColor: Color.white,
         legendTextColor: Color(hexString: "#D2E5E1"))
     
@@ -84,7 +76,6 @@ public struct Styles {
         backgroundColor: Color.white,
         accentColor: Color(hexString: "#84A094"), //84A094 , 698378
         secondGradientColor: Color(hexString: "#50675D"),
-        chartFormSize: Form.medium,
         textColor: Color.black,
         legendTextColor:Color.gray)
     
@@ -92,31 +83,37 @@ public struct Styles {
         backgroundColor: Color.white,
         accentColor: Colors.OrangeStart,
         secondGradientColor: Colors.OrangeEnd,
-        chartFormSize: Form.medium,
         textColor: Color.black,
         legendTextColor: Color.gray)
 }
 
 public struct Form {
+    #if os(watchOS)
+    public static let small = CGSize(width:120, height:90)
+    public static let medium = CGSize(width:120, height:160)
+    public static let large = CGSize(width:180, height:90)
+    public static let detail = CGSize(width:180, height:160)
+    #else
     public static let small = CGSize(width:180, height:120)
     public static let medium = CGSize(width:180, height:240)
     public static let large = CGSize(width:360, height:120)
     public static let detail = CGSize(width:180, height:120)
+    #endif
+    
+    
 }
 
 public struct ChartStyle {
     public var backgroundColor: Color
     public var accentColor: Color
     public var secondGradientColor: Color
-    public var chartFormSize: CGSize
     public var textColor: Color
     public var legendTextColor: Color
     
-    public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, chartFormSize: CGSize, textColor: Color, legendTextColor: Color){
+    public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color){
         self.backgroundColor = backgroundColor
         self.accentColor = accentColor
         self.secondGradientColor = secondGradientColor
-        self.chartFormSize = chartFormSize
         self.textColor = textColor
         self.legendTextColor = legendTextColor
     }
@@ -125,7 +122,6 @@ public struct ChartStyle {
         self.backgroundColor = Color.white
         self.accentColor = Colors.OrangeStart
         self.secondGradientColor = Colors.OrangeEnd
-        self.chartFormSize = formSize
         self.legendTextColor = Color.gray
         self.textColor = Color.black
     }
@@ -162,4 +158,19 @@ extension Color {
         }
         self.init(red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
     }
+}
+
+class HapticFeedback {
+    #if os(watchOS)
+    //watchOS implementation
+    static func playSelection() -> Void {
+        WKInterfaceDevice.current().play(.click)
+    }
+    #else
+    //iOS implementation
+    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+    static func playSelection() -> Void {
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
+    #endif
 }

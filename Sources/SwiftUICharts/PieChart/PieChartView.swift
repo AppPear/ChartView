@@ -13,11 +13,13 @@ public struct PieChartView : View {
     public var title: String
     public var legend: String?
     public var style: ChartStyle
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne ){
+    public var formSize:CGSize
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = Form.medium ){
         self.data = data
         self.title = title
         self.legend = legend
         self.style = style
+        self.formSize = form!
     }
     
     public var body: some View {
@@ -46,7 +48,7 @@ public struct PieChartView : View {
                 }
                 
             }
-        }.frame(width: self.style.chartFormSize.width, height: self.style.chartFormSize.height)
+        }.frame(width: self.formSize.width, height: self.formSize.height)
     }
 }
 

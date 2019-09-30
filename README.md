@@ -59,7 +59,6 @@ Customizable:
 * background color
 * accent color
 * second gradient color
-* chart form size
 * text color
 * legend text color
 
@@ -85,6 +84,22 @@ You can access built-in styles:
 
 ![Custom Charts](./showcase5.png "Custom Charts")
 
+
+### You can customize the size of the chart with a Form object: 
+
+**Form**
+* `.small`
+* `.medium`
+* `.large`
+* `.detail`
+
+```swift
+BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: Form.small)
+```
+
+### WatchOS support for Bar charts: 
+
+![Pie Charts](./watchos1.png "Pie Charts")
 
 ## Pie charts
 ![Pie Charts](./showcase4.png "Pie Charts")
