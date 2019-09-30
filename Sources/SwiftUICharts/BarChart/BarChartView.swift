@@ -27,7 +27,7 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.style.chartFormSize == Form.large
     }
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOne ){
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight ){
         self.data = data
         self.title = title
         self.legend = legend
