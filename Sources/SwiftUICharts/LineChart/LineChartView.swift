@@ -33,7 +33,7 @@ public struct LineChartView: View {
         self.style = style
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 20).fill(self.style.backgroundColor).frame(width: frame.width, height: 240, alignment: .center).shadow(radius: 8)
             VStack(alignment: .leading){
