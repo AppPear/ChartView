@@ -93,7 +93,6 @@ public struct BarChartView : View {
     
     func getCurrentValue()-> Int{
         let index = max(0,min(self.data.count-1,Int(floor((self.touchLocation*self.formSize.width)/(self.formSize.width/CGFloat(self.data.count))))))
-        print(index)
         return self.data[index]
     }
 }
