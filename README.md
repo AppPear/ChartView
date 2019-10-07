@@ -21,6 +21,10 @@ import the package in the file you would like to use it: `import SwiftUICharts`
 
 You can display a Chart by adding a chart view to your parent view: 
 
+### Demo
+
+Added an example project, with **iOS, watchOS** target: https://github.com/AppPear/ChartViewDemo
+
 ## Line charts
 ![Line Charts](./showcase3.gif "Line Charts")
 
