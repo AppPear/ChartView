@@ -35,7 +35,7 @@ public struct LineChartView: View {
         self.legend = legend
         self.style = style
         self.formSize = form!
-        self.rateValue = rateValue
+        self.rateValue = rateValue!
     }
     
     public var body: some View {
