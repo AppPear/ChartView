@@ -35,7 +35,7 @@ public struct LineChartView: View {
         self.legend = legend
         self.style = style
         self.formSize = form!
-        self.rateValue = (self.data[self.data.endIndex - 1] - self.data[self.data.endIndex - 2]) / self.data[self.data.endIndex - 2]
+        self.rateValue = (ChartData(points: data)[ChartData(points: data).endIndex - 1] - ChartData(points: data)[ChartData(points: data).endIndex - 2]) / ChartData(points: data)[ChartData(points: data).endIndex - 2]
     }
     
     public var body: some View {
