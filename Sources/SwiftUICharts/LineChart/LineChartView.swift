@@ -27,7 +27,7 @@ public struct LineChartView: View {
         }
     }
     let frame = CGSize(width: 180, height: 120)
-    private var rateValue: Double
+    private var rateValue: Int
     
     public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium ,rateValue: Int? = 14){
         self.data = ChartData(points: data)
