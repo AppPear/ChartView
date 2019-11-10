@@ -27,6 +27,7 @@ public struct LineChartView: View {
         }
     }
     let frame = CGSize(width: 180, height: 120)
+    private var rateValue: Double
     
     public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium){
         self.data = ChartData(points: data)
@@ -34,6 +35,7 @@ public struct LineChartView: View {
         self.legend = legend
         self.style = style
         self.formSize = form!
+        self.rateValue = (self.data[self.data.endIndex - 1] - self.data[self.data.endIndex - 2]) / self.data[self.data.endIndex - 2]
     }
     
     public var body: some View {
@@ -48,7 +50,7 @@ public struct LineChartView: View {
                         }
                         HStack {
                             Image(systemName: "arrow.up")
-                            Text("14%")
+                            Text("\(self.rateValue)%")
                         }
                     }
                     .transition(.opacity)
