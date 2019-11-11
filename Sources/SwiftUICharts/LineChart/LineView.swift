@@ -30,7 +30,7 @@ public struct LineView: View {
         self.style = style!
     }
     
-    public var body: some View {
+   public var body: some View {
         GeometryReader{ geometry in
             VStack(alignment: .leading, spacing: 8) {
                 Group{
@@ -40,7 +40,7 @@ public struct LineView: View {
                     if (self.legend != nil){
                         Text(self.legend!).font(.callout).foregroundColor(self.colorScheme == .dark ? Color.white : self.style.legendTextColor)
                     }
-                }.offset(x: 0, y: 46)
+                }.offset(x: 0, y: 20)
                 ZStack{
                     GeometryReader{ reader in
                         Rectangle().foregroundColor(self.colorScheme == .dark ? Color.black : self.style.backgroundColor)
@@ -56,7 +56,7 @@ public struct LineView: View {
                     }.frame(width: geometry.frame(in: .local).size.width, height: 240).offset(x: 0, y: 40 )
                     MagnifierRect(currentNumber: self.$currentDataNumber)
                         .opacity(self.opacity)
-                        .offset(x: self.dragLocation.x - geometry.frame(in: .local).size.width/2, y: 50)
+                        .offset(x: self.dragLocation.x - geometry.frame(in: .local).size.width/2, y: 36)
                 }
                 .frame(width: geometry.frame(in: .local).size.width, height: 240)
                 .gesture(DragGesture()
@@ -91,7 +91,7 @@ public struct LineView: View {
 
 struct LineView_Previews: PreviewProvider {
     static var previews: some View {
-        LineView(data: [37,72,51,22,39,47,66,85,50], title: "Full chart", style: Styles.lineChartStyleOne).environment(\.colorScheme, .dark)
+        LineView(data: [8,23,54,32,12,37,7,23,43], title: "Full chart", style: Styles.lineChartStyleOne)
     }
 }
 
@@ -110,15 +110,22 @@ struct MagnifierRect: View {
         ZStack{
             Text("\(self.currentNumber)")
                 .font(.system(size: 18, weight: .bold))
-                .offset(x: 0, y:-96)
+                .offset(x: 0, y:-110)
                 .animation(.spring())
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.white, lineWidth: self.colorScheme == .dark ? 2 : 0)
-                .frame(width: 60, height: 240)
-                .foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                .shadow(color: Colors.LegendText, radius: 12, x: 0, y: 6 )
-                .blendMode(self.colorScheme == .dark ? .normal : .multiply)
+            if (self.colorScheme == .dark ){
+                 RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.white, lineWidth: self.colorScheme == .dark ? 2 : 0)
+                    .frame(width: 60, height: 260)
+                    
+            }else{
+                 RoundedRectangle(cornerRadius: 16)
+                    .frame(width: 60, height: 280)
+                    .foregroundColor(Color.white)
+                    .shadow(color: Colors.LegendText, radius: 12, x: 0, y: 6 )
+                    .blendMode(.multiply)
+            }
+           
 
         }.animation(.linear)
     }
