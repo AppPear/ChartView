@@ -12,7 +12,8 @@ struct Legend: View {
     @ObservedObject var data: ChartData
     @Binding var frame: CGRect
     @Binding var hideHorizontalLines: Bool
-    
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     var stepWidth: CGFloat {
         return frame.size.width / CGFloat(data.points.count-1)
     }
@@ -28,7 +29,7 @@ struct Legend: View {
                         .foregroundColor(Colors.LegendText)
                         .font(.caption)
                      self.line(atHeight: CGFloat(self.getYLegend()![height]), width: self.frame.width)
-                        .stroke(Colors.LegendColor, style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [5,height == 0 ? 0 : 10]))
+                        .stroke(colorScheme == .dark ? Colors.LegendDarkColor : Colors.LegendColor, style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [5,height == 0 ? 0 : 10]))
                         .opacity((self.hideHorizontalLines && height != 0) ? 0 : 1)
                         .rotationEffect(.degrees(180), anchor: .center)
                         .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))

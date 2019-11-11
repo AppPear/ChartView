@@ -19,6 +19,7 @@ public struct Colors {
     public static let OrangeEnd:Color = Color(hexString: "#EC2301")
     public static let LegendText:Color = Color(hexString: "#A7A6A8")
     public static let LegendColor:Color = Color(hexString: "#E8E7EA")
+    public static let LegendDarkColor:Color = Color(hexString: "#545454")
     public static let IndicatorKnob:Color = Color(hexString: "#FF57A6")
     public static let GradientUpperBlue:Color = Color(hexString: "#C2E8FF")
     public static let GradinetUpperBlue1:Color = Color(hexString: "#A8E1FF")
