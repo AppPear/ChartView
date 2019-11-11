@@ -26,6 +26,17 @@ You can display a Chart by adding a chart view to your parent view:
 Added an example project, with **iOS, watchOS** target: https://github.com/AppPear/ChartViewDemo
 
 ## Line charts
+
+**New full screen view called LineView!!!**
+
+![Line Charts](./fullscreen1.gif "Line Charts")![Line Charts](./fullscreen2.gif "Line Charts")
+
+```swift
+ LineView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Full screen") // legend is optional, use optional .padding()
+```
+
+Adopts to dark mode automatically 
+
 ![Line Charts](./showcase3.gif "Line Charts")
 
 **Line chart is interactive, so you can drag across to reveal the data points**
@@ -35,6 +46,8 @@ You can add a line chart with the following code:
 ```swift
  LineChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", legend: "Legendary") // legend is optional
 ```
+
+**Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
 
 
 ## Bar charts
@@ -56,7 +69,8 @@ You can add different formats:
  ```swift
  BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: Form.small)
  ```
- 
+ **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
+
  ### You can customize styling of the chart with a ChartStyle object: 
 
 Customizable: 
@@ -113,4 +127,6 @@ You can add a line chart with the following code:
 ```swift
  PieChartView(data: [8,23,54,32], title: "Title", legend: "Legendary") // legend is optional
 ```
+
+**Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
 
