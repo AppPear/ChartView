@@ -27,13 +27,15 @@ public struct LineChartView: View {
         }
     }
     let frame = CGSize(width: 180, height: 120)
+    private var rateValue: Int
     
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium){
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium ,rateValue: Int? = 14){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
         self.style = style
         self.formSize = form!
+        self.rateValue = rateValue!
     }
     
     public var body: some View {
@@ -47,8 +49,12 @@ public struct LineChartView: View {
                             Text(self.legend!).font(.callout).foregroundColor(self.style.legendTextColor)
                         }
                         HStack {
-                            Image(systemName: "arrow.up")
-                            Text("14%")
+                            if (self.rateValue >= 0){
+                                Image(systemName: "arrow.up")
+                            }else{
+                                Image(systemName: "arrow.down")
+                            }
+                            Text("\(self.rateValue)%")
                         }
                     }
                     .transition(.opacity)
