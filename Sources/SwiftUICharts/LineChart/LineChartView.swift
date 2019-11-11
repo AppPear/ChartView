@@ -15,6 +15,8 @@ public struct LineChartView: View {
     public var legend: String?
     public var style: ChartStyle
     public var formSize:CGSize
+    public var dropShadow: Bool
+
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
     @State private var currentValue: Int = 2 {
@@ -29,18 +31,19 @@ public struct LineChartView: View {
     let frame = CGSize(width: 180, height: 120)
     private var rateValue: Int
     
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium ,rateValue: Int? = 14){
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium ,rateValue: Int? = 14, dropShadow: Bool? = true){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
         self.style = style
         self.formSize = form!
         self.rateValue = rateValue!
+        self.dropShadow = dropShadow!
     }
     
     public var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 20).fill(self.style.backgroundColor).frame(width: frame.width, height: 240, alignment: .center).shadow(radius: 8)
+            RoundedRectangle(cornerRadius: 20).fill(self.style.backgroundColor).frame(width: frame.width, height: 240, alignment: .center).shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
                     VStack(alignment: .leading, spacing: 8){

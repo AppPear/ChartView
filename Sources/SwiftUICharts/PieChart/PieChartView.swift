@@ -14,12 +14,15 @@ public struct PieChartView : View {
     public var legend: String?
     public var style: ChartStyle
     public var formSize:CGSize
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = Form.medium ){
+    public var dropShadow: Bool
+
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = Form.medium, dropShadow: Bool? = true ){
         self.data = data
         self.title = title
         self.legend = legend
         self.style = style
         self.formSize = form!
+        self.dropShadow = dropShadow!
     }
     
     public var body: some View {
@@ -27,7 +30,7 @@ public struct PieChartView : View {
             Rectangle()
                 .fill(self.style.backgroundColor)
                 .cornerRadius(20)
-                .shadow(color: Color.gray, radius: 12)
+                .shadow(color: Color.gray, radius: self.dropShadow ? 12 : 0)
             VStack(alignment: .leading){
                 HStack{
                     Text(self.title)

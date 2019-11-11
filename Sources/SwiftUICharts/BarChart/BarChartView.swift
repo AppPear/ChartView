@@ -14,6 +14,8 @@ public struct BarChartView : View {
     public var legend: String?
     public var style: ChartStyle
     public var formSize:CGSize
+    public var dropShadow: Bool
+
 //    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
     
     @State private var touchLocation: CGFloat = -1.0
@@ -29,12 +31,13 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == Form.large
     }
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = Form.medium){
+    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = Form.medium, dropShadow: Bool? = true){
         self.data = data
         self.title = title
         self.legend = legend
         self.style = style
         self.formSize = form!
+        self.dropShadow = dropShadow!
     }
     
     public var body: some View {
@@ -42,7 +45,7 @@ public struct BarChartView : View {
             Rectangle()
                 .fill(self.style.backgroundColor)
                 .cornerRadius(20)
-                .shadow(color: Color.gray, radius: 8 )
+                .shadow(color: Color.gray, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 HStack{
                     if(!showValue){
