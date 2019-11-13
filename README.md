@@ -29,7 +29,7 @@ Added an example project, with **iOS, watchOS** target: https://github.com/AppPe
 
 **New full screen view called LineView!!!**
 
-![Line Charts](./fullscreen1.gif "Line Charts")![Line Charts](./fullscreen2.gif "Line Charts")
+![Line Charts](./fullscreen2.gif "Line Charts")
 
 ```swift
  LineView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Full screen") // legend is optional, use optional .padding()
