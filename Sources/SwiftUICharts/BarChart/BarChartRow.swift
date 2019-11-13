@@ -22,6 +22,7 @@ public struct BarChartRow : View {
                 ForEach(0..<self.data.count) { i in
                     BarChartCell(value: self.normalizedValue(index: i), index: i, width: Float(geometry.frame(in: .local).width - 22), numberOfDataPoints: self.data.count, accentColor: self.accentColor, secondGradientAccentColor: self.secondGradientAccentColor, touchLocation: self.$touchLocation)
                         .scaleEffect(self.touchLocation > CGFloat(i)/CGFloat(self.data.count) && self.touchLocation < CGFloat(i+1)/CGFloat(self.data.count) ? CGSize(width: 1.4, height: 1.1) : CGSize(width: 1, height: 1), anchor: .bottom)
+                        .animation(.spring())
                     
                 }
             }
