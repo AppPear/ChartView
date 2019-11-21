@@ -25,7 +25,7 @@ struct Legend: View {
         ZStack(alignment: .topLeading){
             ForEach((0...4), id: \.self) { height in
                 HStack(alignment: .center){
-                    Text("\(self.getYLegend()![height])").offset(x: 0, y: (self.frame.height-CGFloat(self.getYLegend()![height])*self.stepHeight)-(self.frame.height/2))
+                    Text("\(self.getYLegend()![height], specifier: "%.2f")").offset(x: 0, y: (self.frame.height-CGFloat(self.getYLegend()![height])*self.stepHeight)-(self.frame.height/2))
                         .foregroundColor(Colors.LegendText)
                         .font(.caption)
                      self.line(atHeight: CGFloat(self.getYLegend()![height]), width: self.frame.width)
@@ -49,13 +49,14 @@ struct Legend: View {
         return hLine
     }
     
-    func getYLegend() -> [Int]? {
+    func getYLegend() -> [Double]? {
         guard let max = data.points.max() else { return nil }
         guard let min = data.points.min() else { return nil }
         if(min >= 0){
             let upperBound = ((max/10)+1) * 10
-            let step = upperBound/4
-            return [step * 0,step * 1, step * 2, step * 3, step * 4]
+            let step = upperBound.rounded()/4
+            
+            return [step * 0, step * 1, step * 2, step * 3, step * 4]
         }
         
         return nil

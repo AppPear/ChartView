@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct BarChartView : View {
-    public var data: [Int]
+    public var data: [Double]
     public var title: String
     public var legend: String?
     public var style: ChartStyle
@@ -20,7 +20,7 @@ public struct BarChartView : View {
     
     @State private var touchLocation: CGFloat = -1.0
     @State private var showValue: Bool = false
-    @State private var currentValue: Int = 0 {
+    @State private var currentValue: Double = 0 {
         didSet{
             if(oldValue != self.currentValue && self.showValue) {
 //                selectionFeedbackGenerator.selectionChanged()
@@ -31,7 +31,7 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == Form.large
     }
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = Form.medium, dropShadow: Bool? = true){
+    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = Form.medium, dropShadow: Bool? = true){
         self.data = data
         self.title = title
         self.legend = legend
@@ -94,7 +94,7 @@ public struct BarChartView : View {
         )
     }
     
-    func getCurrentValue()-> Int{
+    func getCurrentValue()-> Double {
         let index = max(0,min(self.data.count-1,Int(floor((self.touchLocation*self.formSize.width)/(self.formSize.width/CGFloat(self.data.count))))))
         return self.data[index]
     }

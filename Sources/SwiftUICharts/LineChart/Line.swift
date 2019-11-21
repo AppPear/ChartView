@@ -94,7 +94,7 @@ extension CGPoint {
     }
 }
 extension Path {
-    static func quadCurvedPathWithPoints(points:[Int], step:CGPoint) -> Path {
+    static func quadCurvedPathWithPoints(points:[Double], step:CGPoint) -> Path {
         var path = Path()
         var p1 = CGPoint(x: 0, y: CGFloat(points[0])*step.y)
         path.move(to: p1)
@@ -112,7 +112,7 @@ extension Path {
         return path
     }
     
-    static func quadClosedCurvedPathWithPoints(points:[Int], step:CGPoint) -> Path {
+    static func quadClosedCurvedPathWithPoints(points:[Double], step:CGPoint) -> Path {
         var path = Path()
         path.move(to: .zero)
         var p1 = CGPoint(x: 0, y: CGFloat(points[0])*step.y)

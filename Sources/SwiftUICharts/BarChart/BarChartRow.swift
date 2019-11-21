@@ -9,10 +9,10 @@
 import SwiftUI
 
 public struct BarChartRow : View {
-    var data: [Int]
+    var data: [Double]
     var accentColor: Color
     var secondGradientAccentColor: Color?
-    var maxValue: Int {
+    var maxValue: Double {
         data.max() ?? 0
     }
     @Binding var touchLocation: CGFloat
