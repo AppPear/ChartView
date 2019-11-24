@@ -20,10 +20,10 @@ public struct LineView: View {
     @State private var indicatorLocation:CGPoint = .zero
     @State private var closestPoint: CGPoint = .zero
     @State private var opacity:Double = 0
-    @State private var currentDataNumber: Int = 0
+    @State private var currentDataNumber: Double = 0
     @State private var hideHorizontalLines: Bool = false
     
-    public init(data: [Int], title: String? = nil, legend: String? = nil, style: ChartStyle? = Styles.lineChartStyleOne){
+    public init(data: [Double], title: String? = nil, legend: String? = nil, style: ChartStyle? = Styles.lineChartStyleOne){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
@@ -104,11 +104,11 @@ struct IndicatorCircle: View {
 }
 
 struct MagnifierRect: View {
-    @Binding var currentNumber:Int
+    @Binding var currentNumber: Double
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var body: some View {
         ZStack{
-            Text("\(self.currentNumber)")
+            Text("\(self.currentNumber, specifier: "%.2f")")
                 .font(.system(size: 18, weight: .bold))
                 .offset(x: 0, y:-110)
                 .animation(.spring())

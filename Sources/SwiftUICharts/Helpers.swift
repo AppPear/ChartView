@@ -129,10 +129,10 @@ public struct ChartStyle {
 }
 
 class ChartData: ObservableObject {
-    @Published var points: [Int] = [Int]()
-    @Published var currentPoint: Int? = nil
+    @Published var points: [Double] = [Double]()
+    @Published var currentPoint: Double? = nil
     
-    init(points:[Int]) {
+    init(points:[Double]) {
         self.points = points
     }
 }

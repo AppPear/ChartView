@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct PieChartRow : View {
-    var data: [Int]
+    var data: [Double]
     var backgroundColor: Color
     var accentColor: Color
     var slices: [PieSlice] {

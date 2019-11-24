@@ -12,7 +12,7 @@ struct PieSlice: Identifiable {
     var id = UUID()
     var startDeg: Double
     var endDeg: Double
-    var value: Int
+    var value: Double
     var normalizedValue: Double
 }
 

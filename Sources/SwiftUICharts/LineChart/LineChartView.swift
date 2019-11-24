@@ -19,7 +19,7 @@ public struct LineChartView: View {
 
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
-    @State private var currentValue: Int = 2 {
+    @State private var currentValue: Double = 2 {
         didSet{
             if (oldValue != self.currentValue && showIndicatorDot) {
 //                selectionFeedbackGenerator.selectionChanged()
@@ -31,7 +31,7 @@ public struct LineChartView: View {
     let frame = CGSize(width: 180, height: 120)
     private var rateValue: Int
     
-    public init(data: [Int], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium ,rateValue: Int? = 14, dropShadow: Bool? = true){
+    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = Form.medium ,rateValue: Int? = 14, dropShadow: Bool? = true){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
@@ -66,7 +66,7 @@ public struct LineChartView: View {
                 }else{
                     HStack{
                         Spacer()
-                        Text("\(self.currentValue)")
+                        Text("\(self.currentValue, specifier: "%.2f")")
                             .font(.system(size: 41, weight: .bold, design: .default))
                             .offset(x: 0, y: 30)
                         Spacer()
@@ -96,7 +96,7 @@ public struct LineChartView: View {
         )
     }
     
-    func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
+    @discardableResult func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
         let stepWidth: CGFloat = width / CGFloat(data.points.count-1)
         let stepHeight: CGFloat = height / CGFloat(data.points.max()! + data.points.min()!)
         
