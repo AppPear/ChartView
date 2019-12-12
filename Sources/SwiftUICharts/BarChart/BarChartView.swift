@@ -29,9 +29,9 @@ public struct BarChartView : View {
         }
     }
     var isFullWidth:Bool {
-        return self.formSize == Form.large
+        return self.formSize == ChartForm.large
     }
-    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = Form.medium, dropShadow: Bool? = true){
+    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true){
         self.data = data
         self.title = title
         self.legend = legend
@@ -57,7 +57,7 @@ public struct BarChartView : View {
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }
-                    if(self.formSize == Form.large && self.legend != nil && !showValue) {
+                    if(self.formSize == ChartForm.large && self.legend != nil && !showValue) {
                         Text(self.legend!)
                             .font(.callout)
                             .foregroundColor(self.style.accentColor)
@@ -70,7 +70,7 @@ public struct BarChartView : View {
                         .foregroundColor(self.style.legendTextColor)
                 }.padding()
                 BarChartRow(data: data, accentColor: self.style.accentColor, secondGradientAccentColor: self.style.secondGradientColor, touchLocation: self.$touchLocation)
-                if self.legend != nil  && self.formSize == Form.medium {
+                if self.legend != nil  && self.formSize == ChartForm.medium {
                     Text(self.legend!)
                         .font(.headline)
                         .foregroundColor(self.style.legendTextColor)

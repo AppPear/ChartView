@@ -16,7 +16,7 @@ public struct PieChartView : View {
     public var formSize:CGSize
     public var dropShadow: Bool
 
-    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = Form.medium, dropShadow: Bool? = true ){
+    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true ){
         self.data = data
         self.title = title
         self.legend = legend

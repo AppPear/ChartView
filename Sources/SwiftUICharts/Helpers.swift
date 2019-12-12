@@ -88,7 +88,7 @@ public struct Styles {
         legendTextColor: Color.gray)
 }
 
-public struct Form {
+public struct ChartForm {
     #if os(watchOS)
     public static let small = CGSize(width:120, height:90)
     public static let medium = CGSize(width:120, height:160)

@@ -62,12 +62,12 @@ You can add a bar chart with the following code:
 ```
 
 You can add different formats: 
-* Small `Form.small`
-* Medium  `Form.medium`
-* Large `Form.large` 
+* Small `ChartForm.small`
+* Medium  `ChartForm.medium`
+* Large `ChartForm.large` 
 
  ```swift
- BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: Form.small)
+ BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.small)
  ```
  **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
 
@@ -81,7 +81,7 @@ Customizable:
 * legend text color
 
 ```swift
- let chartStyle = ChartStyle(backgroundColor: Color.black, accentColor: Colors.OrangeStart, secondGradientColor: Colors.OrangeEnd, chartFormSize: Form.medium, textColor: Color.white, legendTextColor: Color.white )
+ let chartStyle = ChartStyle(backgroundColor: Color.black, accentColor: Colors.OrangeStart, secondGradientColor: Colors.OrangeEnd, chartFormSize: ChartForm.medium, textColor: Color.white, legendTextColor: Color.white )
  ...
  BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", style: chartStyle)
 ```
@@ -103,16 +103,16 @@ You can access built-in styles:
 ![Custom Charts](./showcase5.png "Custom Charts")
 
 
-### You can customize the size of the chart with a Form object: 
+### You can customize the size of the chart with a ChartForm object: 
 
-**Form**
+**ChartForm**
 * `.small`
 * `.medium`
 * `.large`
 * `.detail`
 
 ```swift
-BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: Form.small)
+BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.small)
 ```
 
 ### WatchOS support for Bar charts: 
