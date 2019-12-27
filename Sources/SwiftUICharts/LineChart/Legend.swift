@@ -13,22 +13,37 @@ struct Legend: View {
     @Binding var frame: CGRect
     @Binding var hideHorizontalLines: Bool
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    let padding:CGFloat = 3
 
     var stepWidth: CGFloat {
+        if data.points.count < 2 {
+            return 0
+        }
         return frame.size.width / CGFloat(data.points.count-1)
     }
     var stepHeight: CGFloat {
-        return frame.size.height / CGFloat(data.points.max()! + data.points.min()!)
+        if let min = data.points.min(), let max = data.points.max(), min != max {
+            if (min < 0){
+                return (frame.size.height-padding) / CGFloat(max - min)
+            }else{
+                return (frame.size.height-padding) / CGFloat(max + min)
+            }
+        }
+        return 0
+    }
+    
+    var min: CGFloat {
+        return CGFloat(data.points.min() ?? 0)
     }
     
     var body: some View {
         ZStack(alignment: .topLeading){
             ForEach((0...4), id: \.self) { height in
                 HStack(alignment: .center){
-                    Text("\(self.getYLegend()![height], specifier: "%.2f")").offset(x: 0, y: (self.frame.height-CGFloat(self.getYLegend()![height])*self.stepHeight)-(self.frame.height/2))
+                    Text("\(self.getYLegendSafe(height: height), specifier: "%.2f")").offset(x: 0, y: self.getYposition(height: height) )
                         .foregroundColor(Colors.LegendText)
                         .font(.caption)
-                     self.line(atHeight: CGFloat(self.getYLegend()![height]), width: self.frame.width)
+                    self.line(atHeight: self.getYLegendSafe(height: height), width: self.frame.width)
                         .stroke(self.colorScheme == .dark ? Colors.LegendDarkColor : Colors.LegendColor, style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [5,height == 0 ? 0 : 10]))
                         .opacity((self.hideHorizontalLines && height != 0) ? 0 : 1)
                         .rotationEffect(.degrees(180), anchor: .center)
@@ -42,31 +57,40 @@ struct Legend: View {
         }
     }
     
+    func getYLegendSafe(height:Int)->CGFloat{
+        if let legend = getYLegend() {
+            return CGFloat(legend[height])
+        }
+        return 0
+    }
+    
+    func getYposition(height: Int)-> CGFloat {
+        if let legend = getYLegend() {
+            return (self.frame.height-((CGFloat(legend[height]) - min)*self.stepHeight))-(self.frame.height/2)
+        }
+        return 0
+       
+    }
+    
     func line(atHeight: CGFloat, width: CGFloat) -> Path {
         var hLine = Path()
-        hLine.move(to: CGPoint(x:5, y: atHeight*stepHeight))
-        hLine.addLine(to: CGPoint(x: width, y: atHeight*stepHeight))
+        hLine.move(to: CGPoint(x:5, y: (atHeight-min)*stepHeight))
+        hLine.addLine(to: CGPoint(x: width, y: (atHeight-min)*stepHeight))
         return hLine
     }
     
     func getYLegend() -> [Double]? {
         guard let max = data.points.max() else { return nil }
         guard let min = data.points.min() else { return nil }
-        if(min >= 0){
-            let upperBound = ((max/10)+1) * 10
-            let step = upperBound.rounded()/4
-            
-            return [step * 0, step * 1, step * 2, step * 3, step * 4]
-        }
-        
-        return nil
+        let step = Double(max - min)/4
+        return [min+step * 0, min+step * 1, min+step * 2, min+step * 3, min+step * 4]
     }
 }
 
 struct Legend_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in
-            Legend(data: TestData.data, frame: .constant(geometry.frame(in: .local)), hideHorizontalLines: .constant(false))
+            Legend(data: ChartData(points: [0.2,0.4,1.4,4.5]), frame: .constant(geometry.frame(in: .local)), hideHorizontalLines: .constant(false))
         }.frame(width: 320, height: 200)
     }
 }
