@@ -104,7 +104,7 @@ extension CGPoint {
     }
 }
 extension Path {
-    static func quadCurvedPathWithPoints(points:[Int], step:CGPoint) -> Path {
+    static func quadCurvedPathWithPoints(points:[Double], step:CGPoint) -> Path {
         var path = Path()
         if (points.count < 2){
             return path
@@ -123,7 +123,7 @@ extension Path {
         return path
     }
     
-    static func quadClosedCurvedPathWithPoints(points:[Int], step:CGPoint) -> Path {
+    static func quadClosedCurvedPathWithPoints(points:[Double], step:CGPoint) -> Path {
         var path = Path()
         if (points.count < 2){
             return path
