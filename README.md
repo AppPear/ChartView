@@ -11,9 +11,9 @@ It supports:
 
 ### Installation:
 
-It requires iOS 13 and xCode 11!
+It requires iOS 13 and Xcode 11!
 
-In xCode got to `File -> Swift Packages -> Add Package Dependency` and paste inthe repo's url: `https://github.com/AppPear/ChartView`
+In Xcode got to `File -> Swift Packages -> Add Package Dependency` and paste inthe repo's url: `https://github.com/AppPear/ChartView`
 
 ### Usage:
 
