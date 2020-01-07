@@ -72,14 +72,14 @@ public struct LineChartView: View {
                         Spacer()
                     }
                     .transition(.scale)
-                    .animation(.spring())
+//                    .animation(.spring())
                     
                 }
                 Spacer()
                 GeometryReader{ geometry in
                     Line(data: self.data, frame: .constant(geometry.frame(in: .local)), touchLocation: self.$touchLocation, showIndicator: self.$showIndicatorDot)
                 }
-                .frame(width: frame.width, height: frame.height)
+                .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width, height: self.formSize.height)
