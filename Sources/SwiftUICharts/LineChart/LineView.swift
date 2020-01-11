@@ -13,7 +13,8 @@ public struct LineView: View {
     public var title: String?
     public var legend: String?
     public var style: ChartStyle
-    
+    public var valueSpecifier:String
+
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State private var showLegend = false
     @State private var dragLocation:CGPoint = .zero
@@ -23,11 +24,12 @@ public struct LineView: View {
     @State private var currentDataNumber: Double = 0
     @State private var hideHorizontalLines: Bool = false
     
-    public init(data: [Double], title: String? = nil, legend: String? = nil, style: ChartStyle? = Styles.lineChartStyleOne){
+    public init(data: [Double], title: String? = nil, legend: String? = nil, style: ChartStyle? = Styles.lineChartStyleOne, valueSpecifier: String? = "%.1f"){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
         self.style = style!
+        self.valueSpecifier = valueSpecifier!
     }
     
    public var body: some View {
@@ -54,7 +56,7 @@ public struct LineView: View {
                                 self.showLegend.toggle()
                             }
                     }.frame(width: geometry.frame(in: .local).size.width, height: 240).offset(x: 0, y: 40 )
-                    MagnifierRect(currentNumber: self.$currentDataNumber)
+                    MagnifierRect(currentNumber: self.$currentDataNumber, valueSpecifier: self.valueSpecifier)
                         .opacity(self.opacity)
                         .offset(x: self.dragLocation.x - geometry.frame(in: .local).size.width/2, y: 36)
                 }
@@ -77,13 +79,14 @@ public struct LineView: View {
     }
     
     func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
-        let stepWidth: CGFloat = width / CGFloat(data.points.count-1)
-        let stepHeight: CGFloat = height / CGFloat(data.points.max()! + data.points.min()!)
+        let points = self.data.onlyPoints()
+        let stepWidth: CGFloat = width / CGFloat(points.count-1)
+        let stepHeight: CGFloat = height / CGFloat(points.max()! + points.min()!)
 
         let index:Int = Int(floor((toPoint.x-15)/stepWidth))
-        if (index >= 0 && index < data.points.count){
-            self.currentDataNumber = self.data.points[index]
-            return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(self.data.points[index])*stepHeight)
+        if (index >= 0 && index < points.count){
+            self.currentDataNumber = points[index]
+            return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(points[index])*stepHeight)
         }
         return .zero
     }
@@ -105,13 +108,14 @@ struct IndicatorCircle: View {
 
 struct MagnifierRect: View {
     @Binding var currentNumber: Double
+    var valueSpecifier:String
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var body: some View {
         ZStack{
-            Text("\(self.currentNumber, specifier: "%.2f")")
+            Text("\(self.currentNumber, specifier: valueSpecifier)")
                 .font(.system(size: 18, weight: .bold))
                 .offset(x: 0, y:-110)
-                .animation(.spring())
+//                .animation(.spring())
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             if (self.colorScheme == .dark ){
                  RoundedRectangle(cornerRadius: 16)
@@ -127,6 +131,6 @@ struct MagnifierRect: View {
             }
            
 
-        }.animation(.linear)
+        }//.animation(.linear)
     }
 }

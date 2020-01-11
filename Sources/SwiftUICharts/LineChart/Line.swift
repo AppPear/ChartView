@@ -23,20 +23,23 @@ struct Line: View {
         return frame.size.width / CGFloat(data.points.count-1)
     }
     var stepHeight: CGFloat {
-        if let min = data.points.min(), let max = data.points.max(), min != max {
+        let points = self.data.onlyPoints()
+        if let min = points.min(), let max = points.max(), min != max {
             if (min <= 0){
-                return (frame.size.height-padding) / CGFloat(data.points.max()! - data.points.min()!)
+                return (frame.size.height-padding) / CGFloat(points.max()! - points.min()!)
             }else{
-                return (frame.size.height-padding) / CGFloat(data.points.max()! + data.points.min()!)
+                return (frame.size.height-padding) / CGFloat(points.max()! + points.min()!)
             }
         }
         return 0
     }
     var path: Path {
-        return Path.quadCurvedPathWithPoints(points: data.points, step: CGPoint(x: stepWidth, y: stepHeight))
+        let points = self.data.onlyPoints()
+        return Path.quadCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
     var closedPath: Path {
-        return Path.quadClosedCurvedPathWithPoints(points: data.points, step: CGPoint(x: stepWidth, y: stepHeight))
+        let points = self.data.onlyPoints()
+        return Path.quadClosedCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
     
     var body: some View {

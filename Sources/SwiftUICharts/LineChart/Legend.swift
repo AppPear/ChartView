@@ -22,7 +22,8 @@ struct Legend: View {
         return frame.size.width / CGFloat(data.points.count-1)
     }
     var stepHeight: CGFloat {
-        if let min = data.points.min(), let max = data.points.max(), min != max {
+        let points = self.data.onlyPoints()
+        if let min = points.min(), let max = points.max(), min != max {
             if (min < 0){
                 return (frame.size.height-padding) / CGFloat(max - min)
             }else{
@@ -33,7 +34,8 @@ struct Legend: View {
     }
     
     var min: CGFloat {
-        return CGFloat(data.points.min() ?? 0)
+        let points = self.data.onlyPoints()
+        return CGFloat(points.min() ?? 0)
     }
     
     var body: some View {
@@ -80,8 +82,9 @@ struct Legend: View {
     }
     
     func getYLegend() -> [Double]? {
-        guard let max = data.points.max() else { return nil }
-        guard let min = data.points.min() else { return nil }
+        let points = self.data.onlyPoints()
+        guard let max = points.max() else { return nil }
+        guard let min = points.min() else { return nil }
         let step = Double(max - min)/4
         return [min+step * 0, min+step * 1, min+step * 2, min+step * 3, min+step * 4]
     }

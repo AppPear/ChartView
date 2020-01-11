@@ -16,6 +16,7 @@ public struct LineChartView: View {
     public var style: ChartStyle
     public var formSize:CGSize
     public var dropShadow: Bool
+    public var valueSpecifier:String
 
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -31,7 +32,7 @@ public struct LineChartView: View {
     let frame = CGSize(width: 180, height: 120)
     private var rateValue: Int
     
-    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = ChartForm.medium ,rateValue: Int? = 14, dropShadow: Bool? = true){
+    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = ChartForm.medium ,rateValue: Int? = 14, dropShadow: Bool? = true, valueSpecifier: String? = "%.1f"){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
@@ -39,6 +40,7 @@ public struct LineChartView: View {
         self.formSize = form!
         self.rateValue = rateValue!
         self.dropShadow = dropShadow!
+        self.valueSpecifier = valueSpecifier!
     }
     
     public var body: some View {
@@ -66,7 +68,7 @@ public struct LineChartView: View {
                 }else{
                     HStack{
                         Spacer()
-                        Text("\(self.currentValue, specifier: "%.2f")")
+                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
                             .font(.system(size: 41, weight: .bold, design: .default))
                             .offset(x: 0, y: 30)
                         Spacer()
@@ -97,13 +99,14 @@ public struct LineChartView: View {
     }
     
     @discardableResult func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
-        let stepWidth: CGFloat = width / CGFloat(data.points.count-1)
-        let stepHeight: CGFloat = height / CGFloat(data.points.max()! + data.points.min()!)
+        let points = self.data.onlyPoints()
+        let stepWidth: CGFloat = width / CGFloat(points.count-1)
+        let stepHeight: CGFloat = height / CGFloat(points.max()! + points.min()!)
         
         let index:Int = Int(round((toPoint.x)/stepWidth))
-        if (index >= 0 && index < data.points.count){
-            self.currentValue = self.data.points[index]
-            return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(self.data.points[index])*stepHeight)
+        if (index >= 0 && index < points.count){
+            self.currentValue = points[index]
+            return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(points[index])*stepHeight)
         }
         return .zero
     }

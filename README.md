@@ -2,7 +2,7 @@
 
 Swift package for displaying charts effortlessly.
 
-![SwiftUI Charts](./showcase1.gif "SwiftUI Charts")
+![SwiftUI Charts](./Resources/showcase1.gif "SwiftUI Charts")
 
 It supports:
 * Line charts
@@ -29,7 +29,7 @@ Added an example project, with **iOS, watchOS** target: https://github.com/AppPe
 
 **New full screen view called LineView!!!**
 
-![Line Charts](./fullscreen2.gif "Line Charts")
+![Line Charts](./Resources/fullscreen2.gif "Line Charts")
 
 ```swift
  LineView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Full screen") // legend is optional, use optional .padding()
@@ -37,7 +37,7 @@ Added an example project, with **iOS, watchOS** target: https://github.com/AppPe
 
 Adopts to dark mode automatically 
 
-![Line Charts](./showcase3.gif "Line Charts")
+![Line Charts](./Resources/showcase3.gif "Line Charts")
 
 **Line chart is interactive, so you can drag across to reveal the data points**
 
@@ -51,24 +51,55 @@ You can add a line chart with the following code:
 
 
 ## Bar charts
-![Bar Charts](./showcase2.gif "Bar Charts")
+![Bar Charts](./Resources/showcase2.gif "Bar Charts")
 
+**[New feature] you can display labels also along values and points for each bar to descirbe your data better!**
 **Bar chart is interactive, so you can drag across to reveal the data points**
 
 You can add a bar chart with the following code: 
 
+Labels and points:
+
 ```swift
- BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", legend: "Legendary") // legend is optional
+ BarChartView(data: ChartData(values: [("2018 Q4",63150), ("2019 Q1",50900), ("2019 Q2",77550), ("2019 Q3",79600), ("2019 Q4",92550)]), title: "Sales", legend: "Quarterly") // legend is optional
 ```
+Only points:
+
+```swift
+ BarChartView(data: ChartData(points: [8,23,54,32,12,37,7,23,43]), title: "Title", legend: "Legendary") // legend is optional
+```
+
+**ChartData** structure
+Stores values in data pairs (actually tuple): `(String,Double)`
+* you can have duplicate values
+* keeps the data order
+
+You can initialise ChartData multiple ways:
+* For integer values: `ChartData(points: [8,23,54,32,12,37,7,23,43])`
+* For floating point values: `ChartData(points: [2.34,3.14,4.56])`
+* For label,value pairs: `ChartData(values: [("2018 Q4",63150), ("2019 Q1",50900)])`
+
 
 You can add different formats: 
 * Small `ChartForm.small`
 * Medium  `ChartForm.medium`
 * Large `ChartForm.large` 
 
- ```swift
- BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.small)
- ```
+```swift
+BarChartView(data: ChartData(points: [8,23,54,32,12,37,7,23,43]), title: "Title", form: ChartForm.small)
+```
+
+For floating point numbers, you can set a custom specifier: 
+
+```swift
+BarChartView(data: ChartData(points:[1.23,2.43,3.37]) ,title: "A", valueSpecifier: "%.2f")
+```
+For integers you can disable by passing: `valueSpecifier: "%.0f"`
+
+
+You can set your custom image in the upper right corner by passing in the initialiser: `cornerImage:Image(systemName: "waveform.path.ecg")` 
+
+
  **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
 
  ### You can customize styling of the chart with a ChartStyle object: 
@@ -98,9 +129,9 @@ You can access built-in styles:
 * barChartMidnightGreenLight
 * barChartMidnightGreenDark
 
-![Midnightgreen](./midnightgreen.gif "Midnightgreen")
+![Midnightgreen](./Resources/midnightgreen.gif "Midnightgreen")
 
-![Custom Charts](./showcase5.png "Custom Charts")
+![Custom Charts](./Resources/showcase5.png "Custom Charts")
 
 
 ### You can customize the size of the chart with a ChartForm object: 
@@ -117,10 +148,10 @@ BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.s
 
 ### WatchOS support for Bar charts: 
 
-![Pie Charts](./watchos1.png "Pie Charts")
+![Pie Charts](./Resources/watchos1.png "Pie Charts")
 
 ## Pie charts
-![Pie Charts](./showcase4.png "Pie Charts")
+![Pie Charts](./Resources/showcase4.png "Pie Charts")
 
 You can add a line chart with the following code: 
 
