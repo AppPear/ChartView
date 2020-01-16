@@ -129,8 +129,9 @@ public struct ChartStyle {
 }
 
 public class ChartData: ObservableObject {
-    @Published var points: [(String,Double)] = [(String,Double)]()
+    @Published var points: [(String,Double)]
     var valuesGiven: Bool = false
+
     public init<N: BinaryFloatingPoint>(points:[N]) {
         self.points = points.map{("", Double($0))}
     }
