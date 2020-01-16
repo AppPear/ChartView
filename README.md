@@ -153,7 +153,7 @@ BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.s
 ## Pie charts
 ![Pie Charts](./Resources/showcase4.png "Pie Charts")
 
-You can add a line chart with the following code: 
+You can add a pie chart with the following code: 
 
 ```swift
  PieChartView(data: [8,23,54,32], title: "Title", legend: "Legendary") // legend is optional
