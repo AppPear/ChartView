@@ -59,7 +59,7 @@ struct Line: View {
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .animation(.easeOut(duration: 1.2))
                 .onAppear(){
-                    self.showFull.toggle()
+                    self.showFull = true
             }.drawingGroup()
             if(self.showIndicator) {
                 IndicatorPoint()
