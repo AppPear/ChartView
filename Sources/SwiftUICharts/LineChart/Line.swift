@@ -58,9 +58,13 @@ struct Line: View {
                 .rotationEffect(.degrees(180), anchor: .center)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .animation(.easeOut(duration: 1.2))
-                .onAppear(){
-                    self.showFull.toggle()
-            }.drawingGroup()
+                .onAppear {
+                    self.showFull = true
+                }
+                .onDisappear {
+                    self.showFull = false
+                }
+            .drawingGroup()
             if(self.showIndicator) {
                 IndicatorPoint()
                     .position(self.getClosestPointOnPath(touchLocation: self.touchLocation))
