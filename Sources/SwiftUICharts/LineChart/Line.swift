@@ -75,8 +75,7 @@ struct Line: View {
     }
     
     func getClosestPointOnPath(touchLocation: CGPoint) -> CGPoint {
-        let percentage:CGFloat = min(max(touchLocation.x,0)/self.frame.width,1)
-        let closest = self.path.percentPoint(percentage)
+        let closest = self.path.point(to: touchLocation.x)
         return closest
     }
     
@@ -151,22 +150,6 @@ extension Path {
         path.closeSubpath()
         return path
     }
-    
-    func percentPoint(_ percent: CGFloat) -> CGPoint {
-        // percent difference between points
-        let diff: CGFloat = 0.001
-        let comp: CGFloat = 1 - diff
-        
-        // handle limits
-        let pct = percent > 1 ? 0 : (percent < 0 ? 1 : percent)
-        
-        let f = pct > comp ? comp : pct
-        let t = pct > comp ? 1 : pct + diff
-        let tp = self.trimmedPath(from: f, to: t)
-        
-        return CGPoint(x: tp.boundingRect.midX, y: tp.boundingRect.midY)
-    }
-    
 }
 
 struct Line_Previews: PreviewProvider {
