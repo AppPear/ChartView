@@ -37,15 +37,15 @@ public struct LineView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Group{
                     if (self.title != nil){
-                        Text(self.title!).font(.title).bold().foregroundColor(self.colorScheme == .dark ? Color.white : self.style.textColor)
+                        Text(self.title!).font(.title).bold().foregroundColor(self.style.textColor)
                     }
                     if (self.legend != nil){
-                        Text(self.legend!).font(.callout).foregroundColor(self.colorScheme == .dark ? Color.white : self.style.legendTextColor)
+                        Text(self.legend!).font(.callout).foregroundColor(self.style.legendTextColor)
                     }
                 }.offset(x: 0, y: 20)
                 ZStack{
                     GeometryReader{ reader in
-                        Rectangle().foregroundColor(self.style != nil ? self.style.backgroundColor : Color.clear)
+                        Rectangle().foregroundColor(self.style.backgroundColor)
                         if(self.showLegend){
                             Legend(data: self.data, frame: .constant(reader.frame(in: .local)), hideHorizontalLines: self.$hideHorizontalLines)
                                 .transition(.opacity)
