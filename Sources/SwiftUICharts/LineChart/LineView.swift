@@ -24,7 +24,7 @@ public struct LineView: View {
     @State private var currentDataNumber: Double = 0
     @State private var hideHorizontalLines: Bool = false
     
-    public init(data: [Double], title: String? = nil, legend: String? = nil, style: ChartStyle? = Styles.lineChartStyleOne, valueSpecifier: String? = "%.1f"){
+    public init(data: [Double], title: String? = nil, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, valueSpecifier: String? = "%.1f"){
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
