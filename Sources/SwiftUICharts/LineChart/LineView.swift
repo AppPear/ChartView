@@ -28,7 +28,7 @@ public struct LineView: View {
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
-        self.style = style!
+        self.style = style
         self.valueSpecifier = valueSpecifier!
     }
     
