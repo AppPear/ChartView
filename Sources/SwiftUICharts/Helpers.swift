@@ -86,6 +86,13 @@ public struct Styles {
         secondGradientColor: Colors.OrangeEnd,
         textColor: Color.black,
         legendTextColor: Color.gray)
+    
+    public static let lineViewDarkMode = ChartStyle(
+        backgroundColor: Color.black,
+        accentColor: Colors.OrangeStart,
+        secondGradientColor: Colors.OrangeEnd,
+        textColor: Color.white,
+        legendTextColor: Color.white)
 }
 
 public struct ChartForm {
@@ -110,6 +117,7 @@ public struct ChartStyle {
     public var secondGradientColor: Color
     public var textColor: Color
     public var legendTextColor: Color
+    public var darkModeStyle: ChartStyle?
     
     public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color){
         self.backgroundColor = backgroundColor
@@ -131,7 +139,7 @@ public struct ChartStyle {
 public class ChartData: ObservableObject {
     @Published var points: [(String,Double)]
     var valuesGiven: Bool = false
-
+    
     public init<N: BinaryFloatingPoint>(points:[N]) {
         self.points = points.map{("", Double($0))}
     }
@@ -160,11 +168,11 @@ public class ChartData: ObservableObject {
 public class TestData{
     static public var data:ChartData = ChartData(points: [37,72,51,22,39,47,66,85,50])
     static public var values:ChartData = ChartData(values: [("2017 Q3",220),
-    ("2017 Q4",1550),
-    ("2018 Q1",8180),
-    ("2018 Q2",18440),
-    ("2018 Q3",55840),
-    ("2018 Q4",63150), ("2019 Q1",50900), ("2019 Q2",77550), ("2019 Q3",79600), ("2019 Q4",92550)])
+                                                            ("2017 Q4",1550),
+                                                            ("2018 Q1",8180),
+                                                            ("2018 Q2",18440),
+                                                            ("2018 Q3",55840),
+                                                            ("2018 Q4",63150), ("2019 Q1",50900), ("2019 Q2",77550), ("2019 Q3",79600), ("2019 Q4",92550)])
     
 }
 

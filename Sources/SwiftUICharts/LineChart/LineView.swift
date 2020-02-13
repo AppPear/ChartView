@@ -13,6 +13,7 @@ public struct LineView: View {
     public var title: String?
     public var legend: String?
     public var style: ChartStyle
+    public var darkModeStyle: ChartStyle
     public var valueSpecifier:String
 
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -24,12 +25,18 @@ public struct LineView: View {
     @State private var currentDataNumber: Double = 0
     @State private var hideHorizontalLines: Bool = false
     
-    public init(data: [Double], title: String? = nil, legend: String? = nil, style: ChartStyle? = Styles.lineChartStyleOne, valueSpecifier: String? = "%.1f"){
+    public init(data: [Double],
+                title: String? = nil,
+                legend: String? = nil,
+                style: ChartStyle = Styles.lineChartStyleOne,
+                valueSpecifier: String? = "%.1f") {
+        
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
-        self.style = style!
+        self.style = style
         self.valueSpecifier = valueSpecifier!
+        self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
     }
     
    public var body: some View {
@@ -37,25 +44,36 @@ public struct LineView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Group{
                     if (self.title != nil){
-                        Text(self.title!).font(.title).bold().foregroundColor(self.colorScheme == .dark ? Color.white : self.style.textColor)
+                        Text(self.title!)
+                            .font(.title)
+                            .bold().foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }
                     if (self.legend != nil){
-                        Text(self.legend!).font(.callout).foregroundColor(self.colorScheme == .dark ? Color.white : self.style.legendTextColor)
+                        Text(self.legend!)
+                            .font(.callout)
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                     }
                 }.offset(x: 0, y: 20)
                 ZStack{
                     GeometryReader{ reader in
-                        Rectangle().foregroundColor(self.colorScheme == .dark ? Color.black : self.style.backgroundColor)
+                        Rectangle()
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                         if(self.showLegend){
-                            Legend(data: self.data, frame: .constant(reader.frame(in: .local)), hideHorizontalLines: self.$hideHorizontalLines)
+                            Legend(data: self.data,
+                                   frame: .constant(reader.frame(in: .local)), hideHorizontalLines: self.$hideHorizontalLines)
                                 .transition(.opacity)
                                 .animation(Animation.easeOut(duration: 1).delay(1))
                         }
-                        Line(data: self.data, frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)), touchLocation: self.$indicatorLocation,showIndicator: self.$hideHorizontalLines ,showBackground: false).offset(x: 30, y: 0)
+                        Line(data: self.data,
+                             frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                             touchLocation: self.$indicatorLocation,showIndicator: self.$hideHorizontalLines ,showBackground: false)
+                            .offset(x: 30, y: 0)
                             .onAppear(){
                                 self.showLegend.toggle()
                             }
-                    }.frame(width: geometry.frame(in: .local).size.width, height: 240).offset(x: 0, y: 40 )
+                    }
+                    .frame(width: geometry.frame(in: .local).size.width, height: 240)
+                    .offset(x: 0, y: 40 )
                     MagnifierRect(currentNumber: self.$currentDataNumber, valueSpecifier: self.valueSpecifier)
                         .opacity(self.opacity)
                         .offset(x: self.dragLocation.x - geometry.frame(in: .local).size.width/2, y: 36)
@@ -115,7 +133,6 @@ struct MagnifierRect: View {
             Text("\(self.currentNumber, specifier: valueSpecifier)")
                 .font(.system(size: 18, weight: .bold))
                 .offset(x: 0, y:-110)
-//                .animation(.spring())
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             if (self.colorScheme == .dark ){
                  RoundedRectangle(cornerRadius: 16)
@@ -131,6 +148,6 @@ struct MagnifierRect: View {
             }
            
 
-        }//.animation(.linear)
+        }
     }
 }

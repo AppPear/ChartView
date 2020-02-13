@@ -9,11 +9,13 @@
 import SwiftUI
 
 public struct LineChartView: View {
-//    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @ObservedObject var data:ChartData
     public var title: String
     public var legend: String?
     public var style: ChartStyle
+    public var darkModeStyle: ChartStyle
+
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
@@ -23,7 +25,6 @@ public struct LineChartView: View {
     @State private var currentValue: Double = 2 {
         didSet{
             if (oldValue != self.currentValue && showIndicatorDot) {
-//                selectionFeedbackGenerator.selectionChanged()
                 HapticFeedback.playSelection()
             }
             
@@ -32,11 +33,20 @@ public struct LineChartView: View {
     let frame = CGSize(width: 180, height: 120)
     private var rateValue: Int
     
-    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.lineChartStyleOne, form: CGSize? = ChartForm.medium ,rateValue: Int? = 14, dropShadow: Bool? = true, valueSpecifier: String? = "%.1f"){
+    public init(data: [Double],
+                title: String,
+                legend: String? = nil,
+                style: ChartStyle = Styles.lineChartStyleOne,
+                form: CGSize? = ChartForm.medium,
+                rateValue: Int? = 14,
+                dropShadow: Bool? = true,
+                valueSpecifier: String? = "%.1f") {
+        
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
         self.style = style
+        self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
         self.formSize = form!
         self.rateValue = rateValue!
         self.dropShadow = dropShadow!
@@ -45,13 +55,21 @@ public struct LineChartView: View {
     
     public var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 20).fill(self.style.backgroundColor).frame(width: frame.width, height: 240, alignment: .center).shadow(radius: self.dropShadow ? 8 : 0)
+            RoundedRectangle(cornerRadius: 20)
+                .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
+                .frame(width: frame.width, height: 240, alignment: .center)
+                .shadow(radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
                     VStack(alignment: .leading, spacing: 8){
-                        Text(self.title).font(.title).bold().foregroundColor(self.style.textColor)
+                        Text(self.title)
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                         if (self.legend != nil){
-                            Text(self.legend!).font(.callout).foregroundColor(self.style.legendTextColor)
+                            Text(self.legend!)
+                                .font(.callout)
+                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
                         }
                         HStack {
                             if (self.rateValue >= 0){
@@ -74,12 +92,12 @@ public struct LineChartView: View {
                         Spacer()
                     }
                     .transition(.scale)
-//                    .animation(.spring())
-                    
                 }
                 Spacer()
                 GeometryReader{ geometry in
-                    Line(data: self.data, frame: .constant(geometry.frame(in: .local)), touchLocation: self.$touchLocation, showIndicator: self.$showIndicatorDot)
+                    Line(data: self.data,
+                         frame: .constant(geometry.frame(in: .local)),
+                         touchLocation: self.$touchLocation, showIndicator: self.$showIndicatorDot)
                 }
                 .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
