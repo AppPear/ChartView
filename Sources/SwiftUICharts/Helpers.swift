@@ -111,13 +111,13 @@ public struct ChartForm {
     
 }
 
-public struct ChartStyle {
+public class ChartStyle {
     public var backgroundColor: Color
     public var accentColor: Color
     public var secondGradientColor: Color
     public var textColor: Color
     public var legendTextColor: Color
-    public var darkModeStyle: ChartStyle?
+    public weak var darkModeStyle: ChartStyle?
     
     public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color){
         self.backgroundColor = backgroundColor
