@@ -39,6 +39,14 @@ Adopts to dark mode automatically
 
 ![Line Charts](./Resources/showcase3.gif "Line Charts")
 
+You can add your custom darkmode style by specifying:
+
+```swift
+let myCustomStyle = ChartStyle(...)
+let myCutsomDarkModeStyle = ChartStyle(...)
+myCustomStyle.darkModeStyle = myCutsomDarkModeStyle
+```
+
 **Line chart is interactive, so you can drag across to reveal the data points**
 
 You can add a line chart with the following code: 
