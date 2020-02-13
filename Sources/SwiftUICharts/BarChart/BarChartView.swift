@@ -77,8 +77,8 @@ public struct BarChartView : View {
                         .font(.headline)
                         .foregroundColor(self.style.legendTextColor)
                         .padding()
-                }else if (self.data.valuesGiven) {
-                    LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation), title: .constant(self.getCurrentValue().0)).offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
+                }else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
+                    LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation), title: .constant(self.getCurrentValue()!.0)).offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
                 }
                 
             }
@@ -87,7 +87,7 @@ public struct BarChartView : View {
                 .onChanged({ value in
                     self.touchLocation = value.location.x/self.formSize.width
                     self.showValue = true
-                    self.currentValue = self.getCurrentValue().1
+                    self.currentValue = self.getCurrentValue()?.1 ?? 0
                     if(self.data.valuesGiven && self.formSize == ChartForm.medium) {
                         self.showLabelValue = true
                     }
@@ -117,7 +117,8 @@ public struct BarChartView : View {
         return min(self.formSize.width-110,max(10,(self.touchLocation * self.formSize.width) - 50))
     }
     
-    func getCurrentValue()-> (String,Double) {
+    func getCurrentValue() -> (String,Double)? {
+        guard self.data.points.count > 0 else { return nil}
         let index = max(0,min(self.data.points.count-1,Int(floor((self.touchLocation*self.formSize.width)/(self.formSize.width/CGFloat(self.data.points.count))))))
         return self.data.points[index]
     }
