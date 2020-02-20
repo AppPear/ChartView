@@ -13,9 +13,9 @@ public struct Line: View {
     @Binding var frame: CGRect
     @Binding var touchLocation: CGPoint
     @Binding var showIndicator: Bool
-    @Binding var accentColor: Color = Colors.GradientPurple
-    @Binding var secondGradientColor: Color = Colors.GradientNeonBlue
-    @Binding var backgroundColor: Color = Colors.GradientUpperBlue
+    @Binding var accentColor: Color? = .constant(Colors.GradientPurple)
+    @Binding var secondGradientColor: Color? = .constant(Colors.GradientNeonBlue)
+    @Binding var backgroundColor: Color? = .constant(Colors.GradientUpperBlue)
     @State private var showFull: Bool = false
     @State var showBackground: Bool = true
     let padding:CGFloat = 30
