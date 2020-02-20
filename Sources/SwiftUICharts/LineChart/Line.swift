@@ -8,11 +8,14 @@
 
 import SwiftUI
 
-struct Line: View {
+public struct Line: View {
     @ObservedObject var data: ChartData
     @Binding var frame: CGRect
     @Binding var touchLocation: CGPoint
     @Binding var showIndicator: Bool
+    @Binding var accentColor: Color = Colors.GradientPurple
+    @Binding var secondGradientColor: Color = Colors.GradientNeonBlue
+    @Binding var backgroundColor: Color = Colors.GradientUpperBlue
     @State private var showFull: Bool = false
     @State var showBackground: Bool = true
     let padding:CGFloat = 30
@@ -46,7 +49,7 @@ struct Line: View {
         ZStack {
             if(self.showFull && self.showBackground){
                 self.closedPath
-                    .fill(LinearGradient(gradient: Gradient(colors: [Colors.GradientUpperBlue, .white]), startPoint: .bottom, endPoint: .top))
+                    .fill(LinearGradient(gradient: Gradient(colors: [backgroundColor, .white]), startPoint: .bottom, endPoint: .top))
                     .rotationEffect(.degrees(180), anchor: .center)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                     .transition(.opacity)
@@ -54,7 +57,7 @@ struct Line: View {
             }
             self.path
                 .trim(from: 0, to: self.showFull ? 1:0)
-                .stroke(LinearGradient(gradient: Gradient(colors: [Colors.GradientPurple, Colors.GradientNeonBlue]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
+                .stroke(LinearGradient(gradient: Gradient(colors: [accentColor, secondGradientColor]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
                 .rotationEffect(.degrees(180), anchor: .center)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .animation(.easeOut(duration: 1.2))
