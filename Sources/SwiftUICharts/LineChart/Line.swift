@@ -20,26 +20,15 @@ public struct Line: View {
     @State var showBackground: Bool = true
     let padding:CGFloat = 30
     
-    public init (data: ChartData, frame: Binding<CGRect>, touchLocation: Binding<CGPoint>, showIndicator: Binding<Bool>, accentColor: Color?, secondGradientColor: Color?, backgroundColor: Color?) {
+    public init (data: ChartData, frame: Binding<CGRect>, touchLocation: Binding<CGPoint>, showIndicator: Binding<Bool>, accentColor: Color = Colors.GradientPurple, secondGradientColor: Color = Colors.GradientNeonBlue, backgroundColor: Color = Colors.GradientUpperBlue, showBackground: Bool = true) {
         self.data = data
         self._frame = frame
         self._touchLocation = touchLocation
         self._showIndicator = showIndicator
-        self.accentColor = accentColor ?? Colors.GradientPurple
-        self.secondGradientColor = secondGradientColor ?? Colors.GradientNeonBlue
-        self.backgroundColor = backgroundColor ?? Colors.GradientUpperBlue
-    }
-    
-    public init (data: ChartData, frame: Binding<CGRect>, touchLocation: Binding<CGPoint>, showIndicator: Binding<Bool>) {
-        self.init(
-            data: data,
-            frame: frame,
-            touchLocation: touchLocation,
-            showIndicator: showIndicator,
-            accentColor: nil,
-            secondGradientColor: nil,
-            backgroundColor: nil
-        )
+        self.accentColor = accentColor
+        self.secondGradientColor = secondGradientColor
+        self.backgroundColor = backgroundColor
+        self.showBackground = showBackground
     }
     
     var stepWidth: CGFloat {
