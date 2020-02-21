@@ -13,12 +13,35 @@ public struct Line: View {
     @Binding var frame: CGRect
     @Binding var touchLocation: CGPoint
     @Binding var showIndicator: Bool
-    var accentColor: Color?
-    var secondGradientColor: Color?
-    var backgroundColor: Color?
+    var accentColor: Color
+    var secondGradientColor: Color
+    var backgroundColor: Color
     @State private var showFull: Bool = false
     @State var showBackground: Bool = true
     let padding:CGFloat = 30
+    
+    public init (data: ChartData, frame: Binding<CGRect>, touchLocation: Binding<CGPoint>, showIndicator: Binding<Bool>, accentColor: Color?, secondGradientColor: Color?, backgroundColor: Color?) {
+        self.data = data
+        self._frame = frame
+        self._touchLocation = touchLocation
+        self._showIndicator = showIndicator
+        self.accentColor = accentColor ?? Colors.GradientPurple
+        self.secondGradientColor = secondGradientColor ?? Colors.GradientNeonBlue
+        self.backgroundColor = backgroundColor ?? Colors.GradientUpperBlue
+    }
+    
+    public init (data: ChartData, frame: Binding<CGRect>, touchLocation: Binding<CGPoint>, showIndicator: Binding<Bool>) {
+        self.init(
+            data: data,
+            frame: frame,
+            touchLocation: touchLocation,
+            showIndicator: showIndicator,
+            accentColor: nil,
+            secondGradientColor: nil,
+            backgroundColor: nil
+        )
+    }
+    
     var stepWidth: CGFloat {
         if data.points.count < 2 {
             return 0
@@ -49,7 +72,7 @@ public struct Line: View {
         ZStack {
             if(self.showFull && self.showBackground){
                 self.closedPath
-                    .fill(LinearGradient(gradient: Gradient(colors: [backgroundColor ?? Colors.GradientUpperBlue, .white]), startPoint: .bottom, endPoint: .top))
+                    .fill(LinearGradient(gradient: Gradient(colors: [backgroundColor, .white]), startPoint: .bottom, endPoint: .top))
                     .rotationEffect(.degrees(180), anchor: .center)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                     .transition(.opacity)
@@ -57,7 +80,7 @@ public struct Line: View {
             }
             self.path
                 .trim(from: 0, to: self.showFull ? 1:0)
-                .stroke(LinearGradient(gradient: Gradient(colors: [accentColor ?? Colors.GradientPurple, secondGradientColor ?? Colors.GradientNeonBlue]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
+                .stroke(LinearGradient(gradient: Gradient(colors: [accentColor, secondGradientColor]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
                 .rotationEffect(.degrees(180), anchor: .center)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .animation(.easeOut(duration: 1.2))
