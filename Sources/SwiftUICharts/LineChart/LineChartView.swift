@@ -97,7 +97,9 @@ public struct LineChartView: View {
                 GeometryReader{ geometry in
                     Line(data: self.data,
                          frame: .constant(geometry.frame(in: .local)),
-                         touchLocation: self.$touchLocation, showIndicator: self.$showIndicatorDot)
+                         touchLocation: self.$touchLocation, showIndicator: self.$showIndicatorDot,
+                         accentColor: self.style.accentColor, secondGradientColor: self.style.secondGradientColor,
+                         backgroundColor: self.style.backgroundColor)
                 }
                 .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
