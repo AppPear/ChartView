@@ -41,7 +41,7 @@ public struct LineView: View {
     
    public var body: some View {
         GeometryReader{ geometry in
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: HorizontalAlignment.leading, spacing: 8) {
                 Group{
                     if (self.title != nil){
                         Text(self.title!)
@@ -66,7 +66,7 @@ public struct LineView: View {
                         }
                         Line(data: self.data,
                              frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
-                             touchLocation: self.$indicatorLocation,showIndicator: self.$hideHorizontalLines ,showBackground: false)
+                             touchLocation: self.$indicatorLocation,showIndicator: self.$hideHorizontalLines, accentColor: self.style.accentColor, secondGradientColor: self.style.secondGradientColor, backgroundColor: self.style.backgroundColor, showBackground: false)
                             .offset(x: 30, y: 0)
                             .onAppear(){
                                 self.showLegend.toggle()

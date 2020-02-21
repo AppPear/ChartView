@@ -54,7 +54,7 @@ public struct LineChartView: View {
     }
     
     public var body: some View {
-        ZStack(alignment: .center){
+        ZStack(alignment: Alignment.center){
             RoundedRectangle(cornerRadius: 20)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .frame(width: frame.width, height: 240, alignment: .center)

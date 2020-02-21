@@ -13,9 +13,9 @@ public struct Line: View {
     @Binding var frame: CGRect
     @Binding var touchLocation: CGPoint
     @Binding var showIndicator: Bool
-    @Binding var accentColor: Color? = .constant(Colors.GradientPurple)
-    @Binding var secondGradientColor: Color? = .constant(Colors.GradientNeonBlue)
-    @Binding var backgroundColor: Color? = .constant(Colors.GradientUpperBlue)
+    var accentColor: Color?
+    var secondGradientColor: Color?
+    var backgroundColor: Color?
     @State private var showFull: Bool = false
     @State var showBackground: Bool = true
     let padding:CGFloat = 30
@@ -45,11 +45,11 @@ public struct Line: View {
         return Path.quadClosedCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             if(self.showFull && self.showBackground){
                 self.closedPath
-                    .fill(LinearGradient(gradient: Gradient(colors: [backgroundColor, .white]), startPoint: .bottom, endPoint: .top))
+                    .fill(LinearGradient(gradient: Gradient(colors: [backgroundColor ?? Colors.GradientUpperBlue, .white]), startPoint: .bottom, endPoint: .top))
                     .rotationEffect(.degrees(180), anchor: .center)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                     .transition(.opacity)
@@ -57,7 +57,7 @@ public struct Line: View {
             }
             self.path
                 .trim(from: 0, to: self.showFull ? 1:0)
-                .stroke(LinearGradient(gradient: Gradient(colors: [accentColor, secondGradientColor]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
+                .stroke(LinearGradient(gradient: Gradient(colors: [accentColor ?? Colors.GradientPurple, secondGradientColor ?? Colors.GradientNeonBlue]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
                 .rotationEffect(.degrees(180), anchor: .center)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .animation(.easeOut(duration: 1.2))
