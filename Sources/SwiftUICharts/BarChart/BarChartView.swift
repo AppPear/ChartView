@@ -85,7 +85,9 @@ public struct BarChartView : View {
                         .padding()
                 }else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
                     LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation),
-                              title: .constant(self.getCurrentValue()!.0)).offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
+                              title: .constant(self.getCurrentValue()!.0))
+                        .offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
+                        .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                 }
                 
             }
