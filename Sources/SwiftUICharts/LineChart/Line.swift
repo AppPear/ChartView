@@ -13,9 +13,13 @@ struct Line: View {
     @Binding var frame: CGRect
     @Binding var touchLocation: CGPoint
     @Binding var showIndicator: Bool
+//    @Binding var minDataValue: Double?
+//    @Binding var maxDataValue: Double?
     @State private var showFull: Bool = false
     @State var showBackground: Bool = true
+    var gradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
     let padding:CGFloat = 30
+    var curvedLines: Bool = true
     var stepWidth: CGFloat {
         if data.points.count < 2 {
             return 0
@@ -35,11 +39,11 @@ struct Line: View {
     }
     var path: Path {
         let points = self.data.onlyPoints()
-        return Path.quadCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
+        return curvedLines ? Path.quadCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight)) : Path.linePathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
     var closedPath: Path {
         let points = self.data.onlyPoints()
-        return Path.quadClosedCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
+        return curvedLines ? Path.quadClosedCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight)) : Path.closedLinePathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
     
     var body: some View {
@@ -54,16 +58,16 @@ struct Line: View {
             }
             self.path
                 .trim(from: 0, to: self.showFull ? 1:0)
-                .stroke(LinearGradient(gradient: Gradient(colors: [Colors.GradientPurple, Colors.GradientNeonBlue]), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3))
+                .stroke(LinearGradient(gradient: gradient.getGradient(), startPoint: .leading, endPoint: .trailing) ,style: StrokeStyle(lineWidth: 3, lineJoin: .round))
                 .rotationEffect(.degrees(180), anchor: .center)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 .animation(.easeOut(duration: 1.2))
                 .onAppear {
                     self.showFull = true
-                }
-                .onDisappear {
-                    self.showFull = false
-                }
+            }
+            .onDisappear {
+                self.showFull = false
+            }
             .drawingGroup()
             if(self.showIndicator) {
                 IndicatorPoint()
@@ -115,8 +119,7 @@ extension Path {
         if (points.count < 2){
             return path
         }
-        guard var offset = points.min() else { return path }
-//        offset -= 3
+        guard let offset = points.min() else { return path }
         var p1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
         path.move(to: p1)
         for pointIndex in 1..<points.count {
@@ -134,8 +137,7 @@ extension Path {
         if (points.count < 2){
             return path
         }
-        guard var offset = points.min() else { return path }
-//        offset -= 3
+        guard let offset = points.min() else { return path }
         path.move(to: .zero)
         var p1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
         path.addLine(to: p1)
@@ -150,6 +152,39 @@ extension Path {
         path.closeSubpath()
         return path
     }
+    
+    static func linePathWithPoints(points:[Double], step:CGPoint) -> Path {
+        var path = Path()
+        if (points.count < 2){
+            return path
+        }
+        guard let offset = points.min() else { return path }
+        let p1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
+        path.move(to: p1)
+        for pointIndex in 1..<points.count {
+            let p2 = CGPoint(x: step.x * CGFloat(pointIndex), y: step.y*CGFloat(points[pointIndex]-offset))
+            path.addLine(to: p2)
+        }
+        return path
+    }
+    
+    static func closedLinePathWithPoints(points:[Double], step:CGPoint) -> Path {
+        var path = Path()
+        if (points.count < 2){
+            return path
+        }
+        guard let offset = points.min() else { return path }
+        var p1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
+        path.move(to: p1)
+        for pointIndex in 1..<points.count {
+            p1 = CGPoint(x: step.x * CGFloat(pointIndex), y: step.y*CGFloat(points[pointIndex]-offset))
+            path.addLine(to: p1)
+        }
+        path.addLine(to: CGPoint(x: p1.x, y: 0))
+        path.closeSubpath()
+        return path
+    }
+    
 }
 
 struct Line_Previews: PreviewProvider {
