@@ -15,8 +15,8 @@ public struct Colors {
     public static let color2Accent:Color = Color(hexString: "#4266E8")
     public static let color3:Color = Color(hexString: "#FCECEA")
     public static let color3Accent:Color = Color(hexString: "#E1614C")
-    public static let OrangeStart:Color = Color(hexString: "#FF782C")
-    public static let OrangeEnd:Color = Color(hexString: "#EC2301")
+    public static let OrangeEnd:Color = Color(hexString: "#FF782C")
+    public static let OrangeStart:Color = Color(hexString: "#EC2301")
     public static let LegendText:Color = Color(hexString: "#A7A6A8")
     public static let LegendColor:Color = Color(hexString: "#E8E7EA")
     public static let LegendDarkColor:Color = Color(hexString: "#545454")
@@ -28,6 +28,25 @@ public struct Colors {
     public static let GradientLowerBlue:Color = Color(hexString: "#F1F9FF")
     public static let DarkPurple:Color = Color(hexString: "#1B205E")
     public static let BorderBlue:Color = Color(hexString: "#4EBCFF")
+}
+
+public struct GradientColor {
+    public let start: Color
+    public let end: Color
+    
+    init(start: Color, end: Color) {
+        self.start = start
+        self.end = end
+    }
+    
+    public func getGradient() -> Gradient {
+        return Gradient(colors: [start, end])
+    }
+}
+
+public struct GradientColors {
+    public static let orange = GradientColor(start: Colors.OrangeStart, end: Colors.OrangeEnd)
+    public static let blue = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
 }
 
 public struct Styles {
@@ -82,8 +101,8 @@ public struct Styles {
     
     public static let pieChartStyleOne = ChartStyle(
         backgroundColor: Color.white,
-        accentColor: Colors.OrangeStart,
-        secondGradientColor: Colors.OrangeEnd,
+        accentColor: Colors.OrangeEnd,
+        secondGradientColor: Colors.OrangeStart,
         textColor: Color.black,
         legendTextColor: Color.gray)
     
@@ -114,7 +133,7 @@ public struct ChartForm {
 public class ChartStyle {
     public var backgroundColor: Color
     public var accentColor: Color
-    public var secondGradientColor: Color
+    public var gradientColor: GradientColor
     public var textColor: Color
     public var legendTextColor: Color
     public weak var darkModeStyle: ChartStyle?
@@ -122,7 +141,15 @@ public class ChartStyle {
     public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color){
         self.backgroundColor = backgroundColor
         self.accentColor = accentColor
-        self.secondGradientColor = secondGradientColor
+        self.gradientColor = GradientColor(start: accentColor, end: secondGradientColor)
+        self.textColor = textColor
+        self.legendTextColor = legendTextColor
+    }
+    
+    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor, textColor: Color, legendTextColor: Color){
+        self.backgroundColor = backgroundColor
+        self.accentColor = accentColor
+        self.gradientColor = gradientColor
         self.textColor = textColor
         self.legendTextColor = legendTextColor
     }
@@ -130,15 +157,16 @@ public class ChartStyle {
     public init(formSize: CGSize){
         self.backgroundColor = Color.white
         self.accentColor = Colors.OrangeStart
-        self.secondGradientColor = Colors.OrangeEnd
+        self.gradientColor = GradientColors.orange
         self.legendTextColor = Color.gray
         self.textColor = Color.black
     }
 }
 
-public class ChartData: ObservableObject {
+public class ChartData: ObservableObject, Identifiable {
     @Published var points: [(String,Double)]
     var valuesGiven: Bool = false
+    var ID = UUID()
     
     public init<N: BinaryFloatingPoint>(points:[N]) {
         self.points = points.map{("", Double($0))}
@@ -162,6 +190,24 @@ public class ChartData: ObservableObject {
     
     public func onlyPoints() -> [Double] {
         return self.points.map{ $0.1 }
+    }
+}
+
+public class MultiLineChartData: ChartData {
+    var gradient: GradientColor
+    
+    public init<N: BinaryFloatingPoint>(points:[N], gradient: GradientColor) {
+        self.gradient = gradient
+        super.init(points: points)
+    }
+    
+    public init<N: BinaryFloatingPoint>(points:[N], color: Color) {
+        self.gradient = GradientColor(start: color, end: color)
+        super.init(points: points)
+    }
+    
+    public func getGradient() -> GradientColor {
+        return self.gradient
     }
 }
 
