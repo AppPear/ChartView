@@ -14,7 +14,6 @@ public struct MultiLineChartView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
@@ -29,6 +28,21 @@ public struct MultiLineChartView: View {
             
         }
     }
+    
+    var globalMin:Double {
+        if let min = data.flatMap({$0.onlyPoints()}).min() {
+            return min
+        }
+        return 0
+    }
+    
+    var globalMax:Double {
+        if let max = data.flatMap({$0.onlyPoints()}).max() {
+            return max
+        }
+        return 0
+    }
+    
     let frame = CGSize(width: 180, height: 120)
     private var rateValue: Int
     
@@ -100,6 +114,8 @@ public struct MultiLineChartView: View {
                                  frame: .constant(geometry.frame(in: .local)),
                                  touchLocation: self.$touchLocation,
                                  showIndicator: self.$showIndicatorDot,
+                                 minDataValue: .constant(self.globalMin),
+                                 maxDataValue: .constant(self.globalMax),
                                  showBackground: false,
                                  gradient: elements.getGradient())
                         }

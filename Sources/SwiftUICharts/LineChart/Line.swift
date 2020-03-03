@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct Line: View {
+public struct Line: View {
     @ObservedObject var data: ChartData
     @Binding var frame: CGRect
     @Binding var touchLocation: CGPoint
     @Binding var showIndicator: Bool
-//    @Binding var minDataValue: Double?
-//    @Binding var maxDataValue: Double?
+    @Binding var minDataValue: Double?
+    @Binding var maxDataValue: Double?
     @State private var showFull: Bool = false
     @State var showBackground: Bool = true
     var gradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
@@ -27,12 +27,23 @@ struct Line: View {
         return frame.size.width / CGFloat(data.points.count-1)
     }
     var stepHeight: CGFloat {
+        var min: Double?
+        var max: Double?
         let points = self.data.onlyPoints()
-        if let min = points.min(), let max = points.max(), min != max {
+        if minDataValue != nil && maxDataValue != nil {
+            min = minDataValue!
+            max = maxDataValue!
+        }else if let minPoint = points.min(), let maxPoint = points.max(), minPoint != maxPoint {
+            min = minPoint
+            max = maxPoint
+        }else {
+            return 0
+        }
+        if let min = min, let max = max, min != max {
             if (min <= 0){
-                return (frame.size.height-padding) / CGFloat(points.max()! - points.min()!)
+                return (frame.size.height-padding) / CGFloat(max - min)
             }else{
-                return (frame.size.height-padding) / CGFloat(points.max()! + points.min()!)
+                return (frame.size.height-padding) / CGFloat(max + min)
             }
         }
         return 0
@@ -46,7 +57,7 @@ struct Line: View {
         return curvedLines ? Path.quadClosedCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight)) : Path.closedLinePathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             if(self.showFull && self.showBackground){
                 self.closedPath
@@ -190,7 +201,7 @@ extension Path {
 struct Line_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in
-            Line(data: ChartData(points: [12,-230,10,54]), frame: .constant(geometry.frame(in: .local)), touchLocation: .constant(CGPoint(x: 100, y: 12)), showIndicator: .constant(true))
+            Line(data: ChartData(points: [12,-230,10,54]), frame: .constant(geometry.frame(in: .local)), touchLocation: .constant(CGPoint(x: 100, y: 12)), showIndicator: .constant(true), minDataValue: .constant(nil), maxDataValue: .constant(nil))
         }.frame(width: 320, height: 160)
     }
 }

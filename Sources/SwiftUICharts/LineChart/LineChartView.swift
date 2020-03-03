@@ -15,11 +15,11 @@ public struct LineChartView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-
+    
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
-
+    
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
     @State private var currentValue: Double = 2 {
@@ -96,8 +96,12 @@ public struct LineChartView: View {
                 Spacer()
                 GeometryReader{ geometry in
                     Line(data: self.data,
-                         frame: .constant(geometry.frame(in: .local)),
-                         touchLocation: self.$touchLocation, showIndicator: self.$showIndicatorDot)
+                        frame: .constant(geometry.frame(in: .local)),
+                        touchLocation: self.$touchLocation,
+                        showIndicator: self.$showIndicatorDot,
+                        minDataValue: .constant(nil),
+                        maxDataValue: .constant(nil)
+                    )
                 }
                 .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
