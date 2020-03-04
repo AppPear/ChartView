@@ -27,7 +27,28 @@ Added an example project, with **iOS, watchOS** target: https://github.com/AppPe
 
 ## Line charts
 
-**New full screen view called LineView!!!**
+**LineChartView with multiple lines!**
+First release of this feature, interaction is disabled for now, I'll figure it out how could be the best to interact with multiple lines with a single touch.
+![Multiine Charts](./Resources/multiline1.gif "Multiine Charts")
+
+Usage:
+```swift
+MultiLineChartView(data: [([8,32,11,23,40,28], GradientColors.green), ([90,99,78,111,70,60,77], GradientColors.purple), ([34,56,72,38,43,100,50], GradientColors.orngPink)], title: "Title")
+```
+Gradient colors are now under the `GradientColor` struct you can create your own gradient by `GradientColor(start: Color, end: Color)`
+
+Available preset gradients: 
+* orange 
+* blue
+* green
+* blu 
+* bluPurpl
+* purple
+* prplPink 
+* prplNeon
+* orngPink
+
+**Full screen view called LineView!!!**
 
 ![Line Charts](./Resources/fullscreen2.gif "Line Charts")
 
