@@ -17,7 +17,6 @@ public struct BarChartView : View {
     public var darkModeStyle: ChartStyle
     public var formSize:CGSize
     public var dropShadow: Bool
-    public var dropShadowColor: Color
     public var cornerImage: Image
     public var valueSpecifier:String
     
@@ -34,14 +33,13 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == ChartForm.large
     }
-    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, dropShadowColor: Color? = Color.gray, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
+    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
         self.data = data
         self.title = title
         self.legend = legend
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
         self.formSize = form!
-        self.dropShadow = dropShadow!
         self.dropShadowColor = dropShadowColor!
         self.cornerImage = cornerImage!
         self.valueSpecifier = valueSpecifier!
@@ -52,7 +50,7 @@ public struct BarChartView : View {
             Rectangle()
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .cornerRadius(20)
-                .shadow(color: dropShadowColor, radius: self.dropShadow ? 8 : 0)
+                .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 HStack{
                     if(!showValue){

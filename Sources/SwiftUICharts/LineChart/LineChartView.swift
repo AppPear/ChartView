@@ -18,7 +18,6 @@ public struct LineChartView: View {
     
     public var formSize:CGSize
     public var dropShadow: Bool
-    public var dropShadowColor: Color
     public var valueSpecifier:String
     
     @State private var touchLocation:CGPoint = .zero
@@ -41,7 +40,6 @@ public struct LineChartView: View {
                 form: CGSize? = ChartForm.medium,
                 rateValue: Int? = 14,
                 dropShadow: Bool? = true,
-                dropShadowColor: Color? = Color.gray,
                 valueSpecifier: String? = "%.1f") {
         
         self.data = ChartData(points: data)
@@ -52,7 +50,6 @@ public struct LineChartView: View {
         self.formSize = form!
         self.rateValue = rateValue!
         self.dropShadow = dropShadow!
-        self.dropShadowColor = dropShadowColor!
         self.valueSpecifier = valueSpecifier!
     }
     
@@ -61,7 +58,7 @@ public struct LineChartView: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .frame(width: frame.width, height: 240, alignment: .center)
-                .shadow(color: dropShadowColor, radius: self.dropShadow ? 8 : 0)
+                .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
                     VStack(alignment: .leading, spacing: 8){
