@@ -47,6 +47,16 @@ public struct GradientColor {
 public struct GradientColors {
     public static let orange = GradientColor(start: Colors.OrangeStart, end: Colors.OrangeEnd)
     public static let blue = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
+    
+    public static let green = GradientColor(start: Color(hexString: "0BCDF7"), end: Color(hexString: "A2FEAE"))
+    public static let blu = GradientColor(start: Color(hexString: "0591FF"), end: Color(hexString: "29D9FE"))
+    public static let bluPurpl = GradientColor(start: Color(hexString: "4ABBFB"), end: Color(hexString: "8C00FF"))
+    public static let purple = GradientColor(start: Color(hexString: "741DF4"), end: Color(hexString: "C501B0"))
+    public static let prplPink = GradientColor(start: Color(hexString: "BC05AF"), end: Color(hexString: "FF1378"))
+    public static let prplNeon = GradientColor(start: Color(hexString: "FE019A"), end: Color(hexString: "FE0BF4"))
+    public static let orngPink = GradientColor(start: Color(hexString: "FF8E2D"), end: Color(hexString: "FF4E7A"))
+
+
 }
 
 public struct Styles {

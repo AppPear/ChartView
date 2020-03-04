@@ -109,15 +109,16 @@ public struct MultiLineChartView: View {
                 Spacer()
                 GeometryReader{ geometry in
                     ZStack{
-                        ForEach(self.data) { elements in
-                            Line(data: elements,
+                        ForEach(0..<self.data.count) { i in
+                            Line(data: self.data[i],
                                  frame: .constant(geometry.frame(in: .local)),
                                  touchLocation: self.$touchLocation,
                                  showIndicator: self.$showIndicatorDot,
                                  minDataValue: .constant(self.globalMin),
                                  maxDataValue: .constant(self.globalMax),
                                  showBackground: false,
-                                 gradient: elements.getGradient())
+                                 gradient: self.data[i].getGradient(),
+                                 index: i)
                         }
                     }
                 }
@@ -128,8 +129,8 @@ public struct MultiLineChartView: View {
         }
         .gesture(DragGesture()
         .onChanged({ value in
-            self.touchLocation = value.location
-            self.showIndicatorDot = true
+//            self.touchLocation = value.location
+//            self.showIndicatorDot = true
 //            self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
         })
             .onEnded({ value in
