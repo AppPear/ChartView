@@ -40,7 +40,7 @@ public struct BarChartView : View {
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
         self.formSize = form!
-        self.dropShadowColor = dropShadowColor!
+        self.dropShadow = dropShadow
         self.cornerImage = cornerImage!
         self.valueSpecifier = valueSpecifier!
     }
