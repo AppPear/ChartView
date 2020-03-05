@@ -40,7 +40,7 @@ public struct BarChartView : View {
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
         self.formSize = form!
-        self.dropShadow = dropShadow!
+        self.dropShadow = dropShadow
         self.cornerImage = cornerImage!
         self.valueSpecifier = valueSpecifier!
     }
@@ -50,7 +50,7 @@ public struct BarChartView : View {
             Rectangle()
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                 .cornerRadius(20)
-                .shadow(color: Color.gray, radius: self.dropShadow ? 8 : 0)
+                .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 HStack{
                     if(!showValue){
