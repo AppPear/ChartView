@@ -34,7 +34,7 @@ public struct GradientColor {
     public let start: Color
     public let end: Color
     
-    init(start: Color, end: Color) {
+    public init(start: Color, end: Color) {
         self.start = start
         self.end = end
     }
