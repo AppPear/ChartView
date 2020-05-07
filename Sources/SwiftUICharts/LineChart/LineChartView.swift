@@ -31,7 +31,7 @@ public struct LineChartView: View {
         }
     }
     let frame = CGSize(width: 180, height: 120)
-    private var rateValue: Int
+    private var rateValue: Int?
     
     public init(data: [Double],
                 title: String,
@@ -48,9 +48,9 @@ public struct LineChartView: View {
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
         self.formSize = form!
-        self.rateValue = rateValue!
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
+        self.rateValue = rateValue
     }
     
     public var body: some View {
@@ -72,12 +72,16 @@ public struct LineChartView: View {
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
                         }
                         HStack {
-                            if (self.rateValue >= 0){
-                                Image(systemName: "arrow.up")
-                            }else{
-                                Image(systemName: "arrow.down")
+                            
+                            if (self.rateValue ?? 0 != 0)
+                            {
+                                if (self.rateValue ?? 0 >= 0){
+                                    Image(systemName: "arrow.up")
+                                }else{
+                                    Image(systemName: "arrow.down")
+                                }
+                                Text("\(self.rateValue!)%")
                             }
-                            Text("\(self.rateValue)%")
                         }
                     }
                     .transition(.opacity)
@@ -96,11 +100,11 @@ public struct LineChartView: View {
                 Spacer()
                 GeometryReader{ geometry in
                     Line(data: self.data,
-                        frame: .constant(geometry.frame(in: .local)),
-                        touchLocation: self.$touchLocation,
-                        showIndicator: self.$showIndicatorDot,
-                        minDataValue: .constant(nil),
-                        maxDataValue: .constant(nil)
+                         frame: .constant(geometry.frame(in: .local)),
+                         touchLocation: self.$touchLocation,
+                         showIndicator: self.$showIndicatorDot,
+                         minDataValue: .constant(nil),
+                         maxDataValue: .constant(nil)
                     )
                 }
                 .frame(width: frame.width, height: frame.height + 30)
