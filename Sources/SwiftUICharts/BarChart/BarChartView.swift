@@ -17,7 +17,7 @@ public struct BarChartView : View {
     public var darkModeStyle: ChartStyle
     public var formSize:CGSize
     public var dropShadow: Bool
-    public var cornerImage: Image
+    public var cornerImage: Image?
     public var valueSpecifier:String
     
     @State private var touchLocation: CGFloat = -1.0
@@ -41,7 +41,7 @@ public struct BarChartView : View {
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
         self.formSize = form!
         self.dropShadow = dropShadow!
-        self.cornerImage = cornerImage!
+        self.cornerImage = cornerImage
         self.valueSpecifier = valueSpecifier!
     }
     
