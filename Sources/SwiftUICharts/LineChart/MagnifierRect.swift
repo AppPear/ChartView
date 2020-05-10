@@ -9,14 +9,21 @@ import SwiftUI
 
 public struct MagnifierRect: View {
     @Binding var currentNumber: Double
+    @Binding var currentDataLabel: String
     var valueSpecifier:String
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     public var body: some View {
         ZStack{
-            Text("\(self.currentNumber, specifier: valueSpecifier)")
+            VStack {
+                Text("\(self.currentNumber, specifier: valueSpecifier)")
+                    .font(.system(size: 18, weight: .bold))
+                    .offset(x: 0, y:-110)
+                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                Text(currentDataLabel)
                 .font(.system(size: 18, weight: .bold))
                 .offset(x: 0, y:-110)
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+            }
             if (self.colorScheme == .dark ){
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.white, lineWidth: self.colorScheme == .dark ? 2 : 0)

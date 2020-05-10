@@ -92,7 +92,6 @@ public struct LineChartView: View {
                         Spacer()
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
                             .font(.system(size: 41, weight: .bold, design: .default))
-                            .offset(x: 0, y: 30)
                         Spacer()
                     }
                     .transition(.scale)
@@ -109,7 +108,7 @@ public struct LineChartView: View {
                 }
                 .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .offset(x: 0, y: 0)
+                .offset(x: 0, y: -30)
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
         .gesture(DragGesture()
