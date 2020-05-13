@@ -188,5 +188,7 @@ You can add a pie chart with the following code:
  PieChartView(data: [8,23,54,32], title: "Title", legend: "Legendary") // legend is optional
 ```
 
+You can use multiple colours per slice by defining your own ChartStyle.
+
 **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
 

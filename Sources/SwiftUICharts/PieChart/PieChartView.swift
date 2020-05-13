@@ -41,7 +41,7 @@ public struct PieChartView : View {
                         .imageScale(.large)
                         .foregroundColor(self.style.legendTextColor)
                 }.padding()
-                PieChartRow(data: data, backgroundColor: self.style.backgroundColor, accentColor: self.style.accentColor)
+                PieChartRow(data: data, backgroundColor: self.style.backgroundColor, accentColors: self.style.accentColors)
                     .foregroundColor(self.style.accentColor).padding(self.legend != nil ? 0 : 12).offset(y:self.legend != nil ? 0 : -10)
                 if(self.legend != nil) {
                     Text(self.legend!)
@@ -58,7 +58,46 @@ public struct PieChartView : View {
 #if DEBUG
 struct PieChartView_Previews : PreviewProvider {
     static var previews: some View {
-        PieChartView(data:[56,78,53,65,54], title: "Title", legend: "Legend")
+        Group {
+            
+            //Default
+            PieChartView(data:[56,78,53,65,54], title: "Title", legend: "Legend")
+            
+            //1 Accent Color
+            PieChartView(data:[56,78,53,65,54], title: "", style: styleOneAccentColor )
+            
+            //2 Accent Color
+            PieChartView(data:[56,78,53,65,54], title: "", style: styleTwoAccentColor )
+            
+            //N Accent Color
+            PieChartView(data:[56,78,53,65,54], title: "", style: styleFiveAccentColor )
+            
+        }.previewLayout(.fixed(width: 250, height: 400))
     }
 }
+
+private let styleOneAccentColor = ChartStyle(
+    backgroundColor: Color.white,
+    accentColor: Color.yellow,
+    secondGradientColor: Colors.OrangeStart,
+    textColor: Color.black,
+    legendTextColor: Color.gray,
+    dropShadowColor: Color.gray)
+
+private let styleTwoAccentColor = ChartStyle(
+   backgroundColor: Color.white,
+   accentColors: [Color.yellow, Color.red],
+   secondGradientColor: Colors.OrangeStart,
+   textColor: Color.black,
+   legendTextColor: Color.gray,
+   dropShadowColor: Color.gray)
+
+private let styleFiveAccentColor = ChartStyle(
+backgroundColor: Color.white,
+accentColors: [Color.yellow, Color.red, Color.blue, Color.purple, Color.green],
+secondGradientColor: Colors.OrangeStart,
+textColor: Color.black,
+legendTextColor: Color.gray,
+dropShadowColor: Color.gray)
+
 #endif

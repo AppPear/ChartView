@@ -8,6 +8,28 @@
 import Foundation
 import SwiftUI
 
+// MARK: EXTENSIONS
+extension Color {
+    init(hexString: String) {
+        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int = UInt64()
+        Scanner(string: hex).scanHexInt64(&int)
+        let r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (r, g, b) = (int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (r, g, b) = (0, 0, 0)
+        }
+        self.init(red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
+    }
+}
+
+// MARK: COLORS
 public struct Colors {
     public static let color1:Color = Color(hexString: "#E2FAE7")
     public static let color1Accent:Color = Color(hexString: "#72BF82")
@@ -30,6 +52,7 @@ public struct Colors {
     public static let BorderBlue:Color = Color(hexString: "#4EBCFF")
 }
 
+// MARK: GRADIENT COLORS
 public struct GradientColor {
     public let start: Color
     public let end: Color
@@ -54,6 +77,63 @@ public struct GradientColors {
     public static let prplPink = GradientColor(start: Color(hexString: "BC05AF"), end: Color(hexString: "FF1378"))
     public static let prplNeon = GradientColor(start: Color(hexString: "FE019A"), end: Color(hexString: "FE0BF4"))
     public static let orngPink = GradientColor(start: Color(hexString: "FF8E2D"), end: Color(hexString: "FF4E7A"))
+}
+
+// MARK: STYLES
+public class ChartStyle {
+    public var backgroundColor: Color
+    public var accentColor: Color
+    public var accentColors: [Color]
+    public var gradientColor: GradientColor
+    public var textColor: Color
+    public var legendTextColor: Color
+    public var dropShadowColor: Color
+    public weak var darkModeStyle: ChartStyle?
+    
+    public init(
+        backgroundColor: Color = Color.white,
+        accentColor: Color = Colors.OrangeStart, accentColors: [Color] = [Color](),
+        secondGradientColor: Color,
+        textColor: Color,
+        legendTextColor: Color,
+        dropShadowColor: Color){
+        
+        self.backgroundColor = backgroundColor
+        self.accentColor = accentColor
+        self.accentColors = accentColors.isEmpty ? [accentColor] : accentColors
+        self.gradientColor = GradientColor(start: accentColor, end: secondGradientColor)
+        self.textColor = textColor
+        self.legendTextColor = legendTextColor
+        self.dropShadowColor = dropShadowColor
+    }
+    
+    public init(
+        backgroundColor: Color = Color.white,
+        accentColor: Color = Colors.OrangeStart, accentColors: [Color] = [Color](),
+        gradientColor: GradientColor,
+        textColor: Color,
+        legendTextColor: Color,
+        dropShadowColor: Color){
+        self.backgroundColor = backgroundColor
+        self.accentColor = accentColor
+        self.accentColors = accentColors.isEmpty ? [accentColor] : accentColors
+        self.gradientColor = gradientColor
+        self.textColor = textColor
+        self.legendTextColor = legendTextColor
+        self.dropShadowColor = dropShadowColor
+    }
+    
+    
+    
+    public init(formSize: CGSize){
+        self.backgroundColor = Color.white
+        self.accentColor = Colors.OrangeStart
+        self.accentColors = [Colors.OrangeStart]
+        self.gradientColor = GradientColors.orange
+        self.legendTextColor = Color.gray
+        self.textColor = Color.black
+        self.dropShadowColor = Color.gray
+    }
 }
 
 public struct Styles {
@@ -130,6 +210,7 @@ public struct Styles {
         dropShadowColor: Color.gray)
 }
 
+// MARK: CHART FORM
 public struct ChartForm {
     #if os(watchOS)
     public static let small = CGSize(width:120, height:90)
@@ -146,43 +227,7 @@ public struct ChartForm {
     
 }
 
-public class ChartStyle {
-    public var backgroundColor: Color
-    public var accentColor: Color
-    public var gradientColor: GradientColor
-    public var textColor: Color
-    public var legendTextColor: Color
-    public var dropShadowColor: Color
-    public weak var darkModeStyle: ChartStyle?
-    
-    public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color, dropShadowColor: Color){
-        self.backgroundColor = backgroundColor
-        self.accentColor = accentColor
-        self.gradientColor = GradientColor(start: accentColor, end: secondGradientColor)
-        self.textColor = textColor
-        self.legendTextColor = legendTextColor
-        self.dropShadowColor = dropShadowColor
-    }
-    
-    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor, textColor: Color, legendTextColor: Color, dropShadowColor: Color){
-        self.backgroundColor = backgroundColor
-        self.accentColor = accentColor
-        self.gradientColor = gradientColor
-        self.textColor = textColor
-        self.legendTextColor = legendTextColor
-        self.dropShadowColor = dropShadowColor
-    }
-    
-    public init(formSize: CGSize){
-        self.backgroundColor = Color.white
-        self.accentColor = Colors.OrangeStart
-        self.gradientColor = GradientColors.orange
-        self.legendTextColor = Color.gray
-        self.textColor = Color.black
-        self.dropShadowColor = Color.gray
-    }
-}
-
+// MARK: CHART DATA
 public class ChartData: ObservableObject, Identifiable {
     @Published var points: [(String,Double)]
     var valuesGiven: Bool = false
@@ -231,6 +276,7 @@ public class MultiLineChartData: ChartData {
     }
 }
 
+// MARK: TEST DATA
 public class TestData{
     static public var data:ChartData = ChartData(points: [37,72,51,22,39,47,66,85,50])
     static public var values:ChartData = ChartData(values: [("2017 Q3",220),
@@ -242,26 +288,7 @@ public class TestData{
     
 }
 
-extension Color {
-    init(hexString: String) {
-        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int = UInt64()
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (r, g, b) = (int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (r, g, b) = (0, 0, 0)
-        }
-        self.init(red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
-    }
-}
-
+// MARK: HAPTIC
 class HapticFeedback {
     #if os(watchOS)
     //watchOS implementation
@@ -276,3 +303,4 @@ class HapticFeedback {
     }
     #endif
 }
+
