@@ -14,6 +14,7 @@ public struct PieChartView : View {
     public var legend: String?
     public var style: ChartStyle
     public var formSize:CGSize
+    public var cornerImage: Image
     public var dropShadow: Bool
 
     public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true){
@@ -23,6 +24,7 @@ public struct PieChartView : View {
         self.style = style
         self.formSize = form!
         self.dropShadow = dropShadow!
+        self.cornerImage = cornerImage!
     }
     
     public var body: some View {
@@ -37,7 +39,7 @@ public struct PieChartView : View {
                         .font(.headline)
                         .foregroundColor(self.style.textColor)
                     Spacer()
-                    Image(systemName: "chart.pie.fill")
+                    self.cornerImage
                         .imageScale(.large)
                         .foregroundColor(self.style.legendTextColor)
                 }.padding()
