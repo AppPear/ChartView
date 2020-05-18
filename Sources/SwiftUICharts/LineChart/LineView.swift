@@ -70,7 +70,8 @@ public struct LineView: View {
                              showIndicator: self.$hideHorizontalLines,
                              minDataValue: .constant(nil),
                              maxDataValue: .constant(nil),
-                             showBackground: false
+                             showBackground: false,
+                             gradient: self.style.gradientColor
                         )
                         .offset(x: 30, y: 0)
                         .onAppear(){
