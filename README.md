@@ -53,8 +53,10 @@ Available preset gradients:
 ![Line Charts](./Resources/fullscreen2.gif "Line Charts")
 
 ```swift
- LineView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Full screen") // legend is optional, use optional .padding()
+LineView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Full screen", height: 200)  
 ```
+
+`height`, `legend` and `title` are optional. `height` will default to 240 is not set. You may also use optional `.padding()`
 
 Adopts to dark mode automatically 
 

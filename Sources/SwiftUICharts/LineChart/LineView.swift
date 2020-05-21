@@ -123,7 +123,7 @@ public struct LineView: View {
 
 struct LineView_Previews: PreviewProvider {
     static var previews: some View {
-        LineView(data: [8,23,54,32,12,37,7,23,43], title: "Full chart", height: 1000, style: Styles.lineChartStyleOne).previewLayout(.fixed(width: 2000, height: 1000))
+        LineView(data: [8,23,54,32,12,37,7,23,43], title: "Full chart", height: 1000, style: Styles.lineChartStyleOne).padding(.top, -10).previewLayout(.fixed(width: 2000, height: 1000))
     }
 }
 
