@@ -1,3 +1,12 @@
+---
+name: Feature request
+about: Ask for a new feature
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 <!--- Provide a general summary of the issue in the Title above -->
 
 ## Detailed Description
