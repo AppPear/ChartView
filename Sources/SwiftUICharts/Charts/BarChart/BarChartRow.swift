@@ -8,7 +8,8 @@ public struct BarChartRow: View {
         static let spacing: CGFloat = 16.0
     }
 
-    var gradientColor: ColorGradient
+    var style: ChartStyle
+    
     var maxValue: Double {
         data.max() ?? 0
     }
@@ -17,14 +18,14 @@ public struct BarChartRow: View {
         GeometryReader { geometry in
             HStack(alignment: .bottom,
                    spacing: (geometry.frame(in: .local).width - Constant.spacing) / CGFloat(self.data.count * 3)) {
-                ForEach(0..<self.data.count, id: \.self) { i in
-                    BarChartCell(value: self.normalizedValue(index: i),
-                                 index: i,
+                ForEach(0..<self.data.count, id: \.self) { index in
+                    BarChartCell(value: self.normalizedValue(index: index),
+                                 index: index,
                                  width: Float(geometry.frame(in: .local).width - Constant.spacing),
                                  numberOfDataPoints: self.data.count,
-                                 gradientColor: self.gradientColor,
+                                 gradientColor: self.style.foregroundColor.rotate(for: index),
                                  touchLocation: self.$touchLocation)
-                        .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: i), anchor: .bottom)
+                        .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
                         .animation(.spring())
                     
                 }
@@ -52,19 +53,26 @@ public struct BarChartRow: View {
         }
         return CGSize(width: 1, height: 1)
     }
+    
 }
 
 struct BarChartRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             Group {
-                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.greenRed)
-                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.whiteBlack)
+                BarChartRow(data: [1, 2, 3], style: styleGreenRed)
+                BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)
             }
             Group {
-                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.greenRed)
-                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.whiteBlack)
+                BarChartRow(data: [1, 2, 3], style: styleGreenRed)
+                BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)
             }.environment(\.colorScheme, .dark)
         }
     }
 }
+
+private let styleGreenRed = ChartStyle(backgroundColor: .white, foregroundColor: .greenRed)
+
+private let styleGreenRedWhiteBlack = ChartStyle(
+    backgroundColor: ColorGradient.init(.white),
+    foregroundColor: [ColorGradient.redBlack, ColorGradient.whiteBlack])

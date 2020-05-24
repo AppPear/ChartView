@@ -3,7 +3,7 @@ import SwiftUI
 public struct Line: View {
     @State var frame: CGRect = .zero
     @State var data: [Double]
-    var gradientColor: ColorGradient
+    var style: ChartStyle
 
     @State var showIndicator: Bool = false
     @State var touchLocation: CGPoint = .zero
@@ -79,7 +79,7 @@ extension Line {
 
     private func getBackgroundPathView() -> some View {
         self.closedPath
-            .fill(LinearGradient(gradient: gradientColor.gradient, startPoint: .bottom, endPoint: .top))
+            .fill(style.backgroundColor.linearGradient(from: .bottom, to: .top))
             .rotationEffect(.degrees(180), anchor: .center)
             .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
             .transition(.opacity)
@@ -89,7 +89,7 @@ extension Line {
     private func getLinePathView() -> some View {
         self.path
             .trim(from: 0, to: self.showFull ? 1:0)
-            .stroke(LinearGradient(gradient: gradientColor.gradient,
+            .stroke(LinearGradient(gradient: style.foregroundColor.first?.gradient ?? ColorGradient.orangeBright.gradient,
                                    startPoint: .leading,
                                    endPoint: .trailing),
                     style: StrokeStyle(lineWidth: 3, lineJoin: .round))
@@ -105,3 +105,15 @@ extension Line {
             .drawingGroup()
     }
 }
+
+struct Line_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            Line(data: [1, 2, 3, 1, 2, 5, 7], style: blackLineStyle)
+            Line(data: [1, 2, 3, 1, 2, 5, 7], style: redLineStyle)
+        }
+    }
+}
+
+private let blackLineStyle = ChartStyle(backgroundColor: ColorGradient(.white), foregroundColor: ColorGradient(.black))
+private let redLineStyle = ChartStyle(backgroundColor: .whiteBlack, foregroundColor: ColorGradient(.red))
