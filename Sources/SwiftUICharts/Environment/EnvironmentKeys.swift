@@ -6,8 +6,8 @@ struct ChartTypeKey: EnvironmentKey {
 
 struct ChartStyleKey: EnvironmentKey {
     static let defaultValue: ChartStyle = ChartStyle(backgroundColor: .white,
-                                                     foregroundColor: ColorGradient(ChartColors.orangeBright,
-                                                                                    ChartColors.orangeDark))
+                                                     foregroundColor: ColorGradient(ChartColors.orangeDark,
+                                                                                    ChartColors.orangeBright))
 }
 
 struct ChartLabelKey: EnvironmentKey {

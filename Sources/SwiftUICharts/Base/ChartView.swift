@@ -8,8 +8,15 @@ public struct ChartView: View {
     @Environment(\.chartStyle) private var chartStyle
     @Environment(\.title) private var title
 
+    private var configuration: ChartTypeConfiguration
+
     public var body: some View {
-           Text("aa")
-       }
+        self.chartType.makeChart(configuration: configuration, style: chartStyle)
+    }
 }
 
+extension ChartView {
+    public init(data: [Double]) {
+        self.configuration = ChartTypeConfiguration(data: data)
+    }
+}
