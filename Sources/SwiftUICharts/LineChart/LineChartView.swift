@@ -15,8 +15,7 @@ public struct LineChartView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    
-    public var formSize:CGSize
+    public var chartForm: ChartForm
     public var dropShadow: Bool
     public var valueSpecifier:String
     
@@ -37,7 +36,7 @@ public struct LineChartView: View {
                 title: String,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
-                form: CGSize? = ChartForm.medium,
+                chartForm: ChartForm = .medium,
                 rateValue: Int? = 14,
                 dropShadow: Bool? = true,
                 valueSpecifier: String? = "%.1f") {
@@ -47,7 +46,7 @@ public struct LineChartView: View {
         self.legend = legend
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
-        self.formSize = form!
+        self.chartForm = chartForm
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
@@ -110,7 +109,7 @@ public struct LineChartView: View {
                 .frame(width: frame.width, height: frame.height + 30)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .offset(x: 0, y: 0)
-            }.frame(width: self.formSize.width, height: self.formSize.height)
+            }.frame(width: chartForm.size.width, height: chartForm.size.height)
         }
         .gesture(DragGesture()
         .onChanged({ value in

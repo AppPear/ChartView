@@ -130,20 +130,52 @@ public struct Styles {
         dropShadowColor: Color.gray)
 }
 
-public struct ChartForm {
-    #if os(watchOS)
-    public static let small = CGSize(width:120, height:90)
-    public static let medium = CGSize(width:120, height:160)
-    public static let large = CGSize(width:180, height:90)
-    public static let detail = CGSize(width:180, height:160)
-    #else
-    public static let small = CGSize(width:180, height:120)
-    public static let medium = CGSize(width:180, height:240)
-    public static let large = CGSize(width:360, height:120)
-    public static let detail = CGSize(width:180, height:120)
-    #endif
+public enum ChartForm: Comparable, Equatable {
+    case small
+    case medium
+    case large
+    case detail
+    case custom(width: CGFloat, height: CGFloat)
     
+    var size: CGSize {
+        let width: CGFloat = { UIScreen.main.bounds.size.width }()
+        let height: CGFloat = { UIScreen.main.bounds.size.height }()
+        #if os(watchOS)
+        switch self {
+        case .small:
+            return CGSize(width: 120, height: 90)
+        case .medium:
+            return CGSize(width: 120, height: 160)
+        case .large:
+            return CGSize(width: 180, height: 90)
+        case .detail:
+            return CGSize(width: 180, height: 160)
+        case .custom(width: let width, height: let height):
+            return CGSize(width: width, height: height)
+        }
+        #else
+        switch self {
+        case .small:
+            return CGSize(width: width / 4, height: height / 4)
+        case .medium:
+            return CGSize(width: width / 2, height: height / 2)
+        case .large:
+            return CGSize(width: width, height: height)
+        case .detail:
+            return CGSize(width:180, height:120)
+        case .custom(width: let width, height: let height):
+            return CGSize(width: width, height: height)
+        }
+        #endif
+    }
     
+    public static func < (lhs: ChartForm, rhs: ChartForm) -> Bool {
+        return lhs.size.width < rhs.size.width && lhs.size.height < rhs.size.height
+    }
+    
+    public static func == (lhs: ChartForm, rhs: ChartForm) -> Bool {
+        return lhs.size.width == rhs.size.width && lhs.size.height == rhs.size.height
+    }
 }
 
 public class ChartStyle {

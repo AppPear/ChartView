@@ -28,24 +28,26 @@ public struct Line: View {
         return frame.size.width / CGFloat(data.points.count-1)
     }
     var stepHeight: CGFloat {
-        var min: Double?
-        var max: Double?
+        var min: Double = 0
+        var max: Double = 0
         let points = self.data.onlyPoints()
         if minDataValue != nil && maxDataValue != nil {
             min = minDataValue!
             max = maxDataValue!
             print(min,max)
-        }else if let minPoint = points.min(), let maxPoint = points.max(), minPoint != maxPoint {
+        } else if
+            let minPoint = points.min(),
+            let maxPoint = points.max(), minPoint != maxPoint {
             min = minPoint
             max = maxPoint
-        }else {
+        } else {
             return 0
         }
-        if let min = min, let max = max, min != max {
+        if min != max {
             if (min <= 0){
-                return (frame.size.height-padding) / CGFloat(max - min)
+                return (frame.size.height - padding) / CGFloat(max - min)
             }else{
-                return (frame.size.height-padding) / CGFloat(max + min)
+                return (frame.size.height - padding) / CGFloat(max + min)
             }
         }
         return 0

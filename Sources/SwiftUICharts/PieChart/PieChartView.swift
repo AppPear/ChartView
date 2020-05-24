@@ -13,15 +13,20 @@ public struct PieChartView : View {
     public var title: String
     public var legend: String?
     public var style: ChartStyle
-    public var formSize:CGSize
+    public var chartForm: ChartForm
     public var dropShadow: Bool
 
-    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true){
+    public init(data: [Double],
+                title: String,
+                legend: String? = nil,
+                style: ChartStyle = Styles.pieChartStyleOne,
+                chartForm: ChartForm = .medium,
+                dropShadow: Bool? = true){
         self.data = data
         self.title = title
         self.legend = legend
         self.style = style
-        self.formSize = form!
+        self.chartForm = chartForm
         self.dropShadow = dropShadow!
     }
     
@@ -51,7 +56,7 @@ public struct PieChartView : View {
                 }
                 
             }
-        }.frame(width: self.formSize.width, height: self.formSize.height)
+        }.frame(width: chartForm.size.width, height: chartForm.size.width)
     }
 }
 
