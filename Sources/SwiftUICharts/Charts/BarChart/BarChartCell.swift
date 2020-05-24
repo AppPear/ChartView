@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct BarChartCell : View {
+public struct BarChartCell: View {
     @State var value: Double
     @State var index: Int = 0
     @State var width: Float
@@ -13,6 +13,7 @@ public struct BarChartCell : View {
 
     @State var scaleValue: Double = 0
     @Binding var touchLocation: CGFloat
+    
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)
@@ -24,5 +25,24 @@ public struct BarChartCell : View {
                 self.scaleValue = self.value
             }
         .animation(Animation.spring().delay(self.touchLocation < 0 ?  Double(self.index) * 0.04 : 0))
+    }
+}
+
+struct BarChartCell_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            Group {
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: .constant(CGFloat()))
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient(.purple), touchLocation: .constant(CGFloat()))
+            }
+            
+            Group {
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: .constant(CGFloat()))
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient(.purple), touchLocation: .constant(CGFloat()))
+            }.environment(\.colorScheme, .dark)
+        }
+        
     }
 }

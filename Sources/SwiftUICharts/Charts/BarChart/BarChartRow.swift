@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct BarChartRow : View {
+public struct BarChartRow: View {
     @State var data: [Double] = []
     @State var touchLocation: CGFloat = -1.0
 
@@ -51,5 +51,20 @@ public struct BarChartRow : View {
             return CGSize(width: 1.4, height: 1.1)
         }
         return CGSize(width: 1, height: 1)
+    }
+}
+
+struct BarChartRow_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            Group {
+                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.greenRed)
+                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.whiteBlack)
+            }
+            Group {
+                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.greenRed)
+                BarChartRow(data:[1,2,3], gradientColor: ColorGradient.whiteBlack)
+            }.environment(\.colorScheme, .dark)
+        }
     }
 }
