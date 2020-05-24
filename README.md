@@ -4,6 +4,10 @@ Swift package for displaying charts effortlessly.
 
 ![SwiftUI Charts](./Resources/showcase1.gif "SwiftUI Charts")
 
+### Note: 
+A version 2.0 is coming soon, so please hold off your PRs for a while. I'm writing a new code base with more sleek code architecture with an option for easier expansion. I'll make beta releases so you can test betas, also soon I'll make issues for this new release so if you'd like, you can contribute so it can be released quicker. 
+More info: [https://github.com/AppPear/ChartView/pull/89](https://github.com/AppPear/ChartView/pull/89)
+
 It supports:
 * Line charts
 * Bar charts
