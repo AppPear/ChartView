@@ -38,7 +38,7 @@ public struct PieChartRow: View {
                             endDeg: self.slices[index].endDeg,
                             index: index,
                             backgroundColor: self.style.backgroundColor.startColor,
-                            accentColor: self.style.foregroundColor.rotate(for: index)
+                            accentColor: self.style.foregroundColor.first!
                         )
                 }
                 
