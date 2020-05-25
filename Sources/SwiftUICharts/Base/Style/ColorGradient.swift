@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct ColorGradient {
+public struct ColorGradient: Equatable {
     public let startColor: Color
     public let endColor: Color
 
