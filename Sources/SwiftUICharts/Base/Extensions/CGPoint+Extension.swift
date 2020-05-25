@@ -19,14 +19,14 @@ extension CGPoint {
         if let minPoint = data.min(), let maxPoint = data.max(), minPoint != maxPoint {
             min = minPoint
             max = maxPoint
-        }else {
+        } else {
             return .zero
         }
         if let min = min, let max = max, min != max {
-            if (min <= 0){
-                stepHeight = (frame.size.height-padding) / CGFloat(max - min)
-            }else{
-                stepHeight = (frame.size.height-padding) / CGFloat(max + min)
+            if (min <= 0) {
+                stepHeight = (frame.size.height - padding) / CGFloat(max - min)
+            } else {
+                stepHeight = (frame.size.height - padding) / CGFloat(max + min)
             }
         }
 
