@@ -38,7 +38,7 @@ public struct PieChartRow: View {
                             endDeg: self.slices[index].endDeg,
                             index: index,
                             backgroundColor: self.style.backgroundColor.startColor,
-                            accentColor: self.style.foregroundColor.first!
+                            accentColor: self.style.foregroundColor.rotate(for: index)
                         )
                 }
                 
@@ -56,6 +56,12 @@ struct PieChartRow_Previews: PreviewProvider {
                 data: [8, 23, 32, 7, 23, 43],
                 style: defaultMultiColorChartStyle)
                 .frame(width: 100, height: 100)
+            
+            PieChartRow(
+                data: [8, 23, 32, 7, 23, 43],
+                style: multiColorChartStyle)
+            .   frame(width: 100, height: 100)
+            
         }.previewLayout(.fixed(width: 125, height: 125))
         
     }
@@ -64,3 +70,7 @@ struct PieChartRow_Previews: PreviewProvider {
 private let defaultMultiColorChartStyle = ChartStyle(
     backgroundColor: Color.white,
     foregroundColor: [ColorGradient]())
+
+private let multiColorChartStyle = ChartStyle(
+backgroundColor: Color.purple,
+foregroundColor: [ColorGradient.greenRed, ColorGradient.whiteBlack])

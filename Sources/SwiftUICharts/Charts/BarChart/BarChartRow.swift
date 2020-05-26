@@ -23,7 +23,7 @@ public struct BarChartRow: View {
                                  index: index,
                                  width: Float(geometry.frame(in: .local).width - Constant.spacing),
                                  numberOfDataPoints: self.data.count,
-                                 gradientColor: self.style.foregroundColor.first!,
+                                 gradientColor: self.style.foregroundColor.rotate(for: index),
                                  touchLocation: self.$touchLocation)
                         .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
                         .animation(.spring())
