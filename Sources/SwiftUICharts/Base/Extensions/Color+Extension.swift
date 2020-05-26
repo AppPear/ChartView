@@ -12,6 +12,8 @@ extension Color {
         case 6: // RGB (24-bit)
             (red, green, blue) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
         case 8: // ARGB (32-bit)
+            // FIXME: I think we need an an alpha value on this one. See link below.
+            // https://stackoverflow.com/a/56874327/4475605
             (red, green, blue) = (int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
             (red, green, blue) = (0, 0, 0)
