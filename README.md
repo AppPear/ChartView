@@ -13,6 +13,11 @@ It supports:
 * Bar charts
 * Pie charts
 
+### Slack
+Join our Slack channel for day to day conversation and more insights:
+
+[Slack invite link](https://join.slack.com/t/swiftuichartview/shared_invite/zt-el5pnmba-FvyraEsI~EwxqWHNfHZWZg)
+
 ### Installation:
 
 It requires iOS 13 and Xcode 11!
