@@ -25,6 +25,12 @@ You can display a Chart by adding a chart view to your parent view:
 
 Added an example project, with **iOS, watchOS** target: https://github.com/AppPear/ChartViewDemo
 
+### Slack
+ Join our Slack channel for day to day conversation and more insights:
+
+ [Slack invite link](https://join.slack.com/t/swiftuichartview/shared_invite/zt-el5pnmba-FvyraEsI~EwxqWHNfHZWZg)
+
+
 ## Line charts
 
 **LineChartView with multiple lines!**
