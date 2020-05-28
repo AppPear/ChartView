@@ -23,7 +23,7 @@ extension CGPoint {
             return .zero
         }
         if let min = min, let max = max, min != max {
-            if (min <= 0) {
+            if min <= 0 {
                 stepHeight = (frame.size.height - padding) / CGFloat(max - min)
             } else {
                 stepHeight = (frame.size.height - padding) / CGFloat(max + min)

@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension View {
-    public func type<S>(_ type: S) -> some View where S : ChartType {
+    public func type<S>(_ type: S) -> some View where S: ChartType {
         self.environment(\.chartType, AnyChartType(type))
     }
 
