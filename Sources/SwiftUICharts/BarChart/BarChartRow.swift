@@ -12,8 +12,12 @@ public struct BarChartRow : View {
     var data: [Double]
     var accentColor: Color
     var gradient: GradientColor?
+    
     var maxValue: Double {
-        data.max() ?? 0
+        guard let max = data.max() else {
+            return 1
+        }
+        return max != 0 ? max : 1
     }
     @Binding var touchLocation: CGFloat
     public var body: some View {
@@ -44,7 +48,10 @@ public struct BarChartRow : View {
 #if DEBUG
 struct ChartRow_Previews : PreviewProvider {
     static var previews: some View {
-        BarChartRow(data: [8,23,54,32,12,37,7], accentColor: Colors.OrangeStart, touchLocation: .constant(-1))
+        Group {
+            BarChartRow(data: [0], accentColor: Colors.OrangeStart, touchLocation: .constant(-1))
+            BarChartRow(data: [8,23,54,32,12,37,7], accentColor: Colors.OrangeStart, touchLocation: .constant(-1))
+        }
     }
 }
 #endif
