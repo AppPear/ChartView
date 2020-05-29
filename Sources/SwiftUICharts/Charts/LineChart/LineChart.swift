@@ -11,6 +11,9 @@ public struct LineChart: ChartType {
 struct LineChart_Previews: PreviewProvider {
     static var previews: some View {
         Group {
+            LineChart().makeChart(
+            configuration: .init(data: [0]),
+            style: .init(backgroundColor: .white, foregroundColor: ColorGradient(.black)))
             Group {
                 LineChart().makeChart(
                     configuration: .init(data: [1, 2, 3, 5, 1]),
