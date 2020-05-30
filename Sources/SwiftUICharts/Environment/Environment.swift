@@ -18,13 +18,4 @@ extension EnvironmentValues {
             self[ChartStyleKey.self] = newValue
         }
     }
-
-    var title: AnyChartLabel {
-        get {
-            return self[ChartLabelKey.self]
-        }
-        set {
-            self[ChartLabelKey.self] = newValue
-        }
-    }
 }
