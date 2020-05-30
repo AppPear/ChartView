@@ -11,7 +11,10 @@ public struct BarChartRow: View {
     var style: ChartStyle
     
     var maxValue: Double {
-        data.max() ?? 0
+        guard let max = data.max() else {
+            return 1
+        }
+        return max != 0 ? max : 1
     }
 
     public var body: some View {
@@ -59,6 +62,7 @@ public struct BarChartRow: View {
 struct BarChartRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
+            BarChartRow(data: [0], style: styleGreenRed)
             Group {
                 BarChartRow(data: [1, 2, 3], style: styleGreenRed)
                 BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)

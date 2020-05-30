@@ -12,7 +12,6 @@ struct PieSlice: Identifiable {
     var startDeg: Double
     var endDeg: Double
     var value: Double
-    //var normalizedValue: Double
 }
 
 public struct PieChartCell: View {
@@ -47,7 +46,7 @@ public struct PieChartCell: View {
         Group {
             path
                 .fill(self.accentColor.linearGradient(from: .bottom, to: .top))
-                .overlay(path.stroke(self.backgroundColor, lineWidth: 2))
+                .overlay(path.stroke(self.backgroundColor, lineWidth: (startDeg == 0 && endDeg == 0 ? 0 : 2)))
                 .scaleEffect(self.show ? 1 : 0)
                 .animation(Animation.spring().delay(Double(self.index) * 0.04))
                 .onAppear {
@@ -97,6 +96,16 @@ struct PieChartCell_Previews: PreviewProvider {
                 rect: geometry.frame(in: .local),
                 startDeg: 185.0,
                 endDeg: 290.0,
+                index: 1,
+                backgroundColor: Color.purple,
+                accentColor: ColorGradient(.purple))
+            }.frame(width: 100, height: 100)
+            
+            GeometryReader { geometry in
+            PieChartCell(
+                rect: geometry.frame(in: .local),
+                startDeg: 0,
+                endDeg: 0,
                 index: 0,
                 backgroundColor: Color.purple,
                 accentColor: ColorGradient(.purple))

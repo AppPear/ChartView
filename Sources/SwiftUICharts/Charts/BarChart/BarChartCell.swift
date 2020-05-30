@@ -31,6 +31,7 @@ public struct BarChartCell: View {
 struct BarChartCell_Previews: PreviewProvider {
     static var previews: some View {
         Group {
+            BarChartCell(value: 0, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
             Group {
                 BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
                 BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: .constant(CGFloat()))

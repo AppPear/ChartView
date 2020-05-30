@@ -17,6 +17,10 @@ public struct PieChart: ChartType {
 struct PieChart_Previews: PreviewProvider {
     static var previews: some View {
         Group {
+            PieChart().makeChart(
+                configuration: .init(data: [0]),
+            style: styleOneColor)
+            
             Group {
                 PieChart().makeChart(
                     configuration: .init(data: [56, 78, 53, 65, 54]),
