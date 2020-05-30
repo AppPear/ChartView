@@ -9,7 +9,3 @@ struct ChartStyleKey: EnvironmentKey {
                                                      foregroundColor: ColorGradient(ChartColors.orangeDark,
                                                                                     ChartColors.orangeBright))
 }
-
-struct ChartLabelKey: EnvironmentKey {
-    static let defaultValue: AnyChartLabel = AnyChartLabel(TitleLabel())
-}

@@ -6,7 +6,6 @@ import SwiftUI
 public struct ChartView: View {
     @Environment(\.chartType) private var chartType
     @Environment(\.chartStyle) private var chartStyle
-    @Environment(\.title) private var title
 
     private var configuration: ChartTypeConfiguration
 
