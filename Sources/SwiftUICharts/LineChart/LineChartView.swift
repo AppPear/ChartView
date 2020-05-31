@@ -30,7 +30,7 @@ public struct LineChartView: View {
             
         }
     }
-    let frame = CGSize(width: 180, height: 120)
+    var frame = CGSize(width: 180, height: 120)
     private var rateValue: Int?
     
     public init(data: [Double],
@@ -48,6 +48,7 @@ public struct LineChartView: View {
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
         self.formSize = form!
+        frame = CGSize(width: self.formSize.width, height: self.formSize.height/2)
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue

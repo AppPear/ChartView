@@ -22,6 +22,9 @@ public struct PieChartView : View {
         self.legend = legend
         self.style = style
         self.formSize = form!
+        if self.formSize == ChartForm.large {
+            self.formSize = ChartForm.extraLarge
+        }
         self.dropShadow = dropShadow!
     }
     
