@@ -7,15 +7,16 @@ public struct ChartView: View {
     @Environment(\.chartType) private var chartType
     @Environment(\.chartStyle) private var chartStyle
 
-    private var configuration: ChartTypeConfiguration
+    @Binding var configuration: ChartTypeConfiguration
 
     public var body: some View {
-        self.chartType.makeChart(configuration: configuration, style: chartStyle)
+        self.chartType.makeChart(configuration: $configuration, style: chartStyle)
     }
 }
 
 extension ChartView {
-    public init(data: [Double]) {
-        self.configuration = ChartTypeConfiguration(data: data)
+    public init(data: Binding<ChartTypeConfiguration>) {
+        self._configuration = data
     }
+
 }

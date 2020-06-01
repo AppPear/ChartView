@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct Line: View {
     @State var frame: CGRect = .zero
-    @State var data: [Double]
+    @Binding var data: [Double]
     var style: ChartStyle
 
     @State var showIndicator: Bool = false
@@ -109,8 +109,8 @@ extension Line {
 struct Line_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            Line(data: [1, 2, 3, 1, 2, 5, 7], style: blackLineStyle)
-            Line(data: [1, 2, 3, 1, 2, 5, 7], style: redLineStyle)
+            Line(data: .constant([1, 2, 3, 1, 2, 5, 7]), style: blackLineStyle)
+            Line(data: .constant([1, 2, 3, 1, 2, 5, 7]), style: redLineStyle)
         }
     }
 }

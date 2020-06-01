@@ -1,7 +1,8 @@
 import SwiftUI
 
 public struct BarChartRow: View {
-    @State var data: [Double] = []
+    
+    @Binding var data: [Double]
     @State var touchLocation: CGFloat = -1.0
 
     enum Constant {
@@ -9,29 +10,23 @@ public struct BarChartRow: View {
     }
 
     var style: ChartStyle
-    
-    var maxValue: Double {
-        guard let max = data.max() else {
-            return 1
-        }
-        return max != 0 ? max : 1
-    }
 
     public var body: some View {
         GeometryReader { geometry in
             HStack(alignment: .bottom,
                    spacing: (geometry.frame(in: .local).width - Constant.spacing) / CGFloat(self.data.count * 3)) {
-                ForEach(0..<self.data.count, id: \.self) { index in
-                    BarChartCell(value: self.normalizedValue(index: index),
-                                 index: index,
-                                 width: Float(geometry.frame(in: .local).width - Constant.spacing),
-                                 numberOfDataPoints: self.data.count,
-                                 gradientColor: self.style.foregroundColor.rotate(for: index),
-                                 touchLocation: self.$touchLocation)
-                        .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
-                        .animation(.spring())
-                    
-                }
+                    HStack {
+                        ForEach(0..<self.data.count, id: \.self) { index in
+                            BarChartCell(values: self.$data,
+                                     index: index,
+                                     width: Float(geometry.frame(in: .local).width - Constant.spacing),
+                                     gradientColor: self.style.foregroundColor.rotate(for: index),
+                                     touchLocation: self.$touchLocation)
+                            .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
+                            .animation(.spring())
+                        
+                        }
+                    }
             }
             .padding([.top, .leading, .trailing], 10)
             .gesture(DragGesture()
@@ -43,10 +38,7 @@ public struct BarChartRow: View {
                 })
             )
         }
-    }
-    
-    func normalizedValue(index: Int) -> Double {
-        return Double(data[index])/Double(maxValue)
+ 
     }
 
     func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
@@ -62,14 +54,14 @@ public struct BarChartRow: View {
 struct BarChartRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            BarChartRow(data: [0], style: styleGreenRed)
+            BarChartRow(data: .constant([0, 1, 2]), style: styleGreenRed)
             Group {
-                BarChartRow(data: [1, 2, 3], style: styleGreenRed)
-                BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)
+                BarChartRow(data: .constant([0, 1, 2]), style: styleGreenRed)
+                BarChartRow(data: .constant([2, 0.2, 1]), style: styleGreenRedWhiteBlack)
             }
             Group {
-                BarChartRow(data: [1, 2, 3], style: styleGreenRed)
-                BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)
+                BarChartRow(data: .constant([0.2, 1, 2]), style: styleGreenRed)
+                BarChartRow(data: .constant([2, 0.3, 2]), style: styleGreenRedWhiteBlack)
             }.environment(\.colorScheme, .dark)
         }
     }
@@ -80,3 +72,4 @@ private let styleGreenRed = ChartStyle(backgroundColor: .white, foregroundColor:
 private let styleGreenRedWhiteBlack = ChartStyle(
     backgroundColor: ColorGradient.init(.white),
     foregroundColor: [ColorGradient.redBlack, ColorGradient.whiteBlack])
+

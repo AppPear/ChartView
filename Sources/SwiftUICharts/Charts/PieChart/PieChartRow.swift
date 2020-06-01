@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct PieChartRow: View {
-    var data: [Double]
+    @Binding var data: [Double]
     
     var style: ChartStyle
 
@@ -53,17 +53,17 @@ struct PieChartRow_Previews: PreviewProvider {
         Group {
             //Empty Array - Default Colors.OrangeStart
             PieChartRow(
-                data: [8, 23, 32, 7, 23, 43],
+                data: .constant([8, 23, 32, 7, 23, 43]),
                 style: defaultMultiColorChartStyle)
             .frame(width: 100, height: 100)
             
             PieChartRow(
-                data: [8, 23, 32, 7, 23, 43],
+                data: .constant([8, 23, 32, 7, 23, 43]),
                 style: multiColorChartStyle)
             .frame(width: 100, height: 100)
             
             PieChartRow(
-                data: [0],
+                data: .constant([0]),
                 style: multiColorChartStyle)
             .frame(width: 100, height: 100)
             

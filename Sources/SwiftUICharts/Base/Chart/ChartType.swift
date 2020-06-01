@@ -6,6 +6,6 @@ public protocol ChartType {
 
     func makeChart(configuration: Self.Configuration, style: Self.Style) -> Self.Body
 
-    typealias Configuration = ChartTypeConfiguration
+    typealias Configuration = Binding<ChartTypeConfiguration>
     typealias Style = ChartStyle
 }
