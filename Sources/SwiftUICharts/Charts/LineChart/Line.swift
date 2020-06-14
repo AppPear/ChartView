@@ -2,7 +2,8 @@ import SwiftUI
 
 public struct Line: View {
     @State var frame: CGRect = .zero
-    @State var data: [Double]
+    @ObservedObject var chartData: ChartData
+
     var style: ChartStyle
 
     @State var showIndicator: Bool = false
@@ -11,11 +12,11 @@ public struct Line: View {
     @State var showBackground: Bool = true
     var curvedLines: Bool = true
     var step: CGPoint {
-        return CGPoint.getStep(frame: frame, data: data)
+        return CGPoint.getStep(frame: frame, data: chartData.data)
     }
 
     var path: Path {
-        let points = data
+        let points = chartData.data
 
         if curvedLines {
             return Path.quadCurvedPathWithPoints(points: points,
@@ -27,7 +28,7 @@ public struct Line: View {
     }
     
     var closedPath: Path {
-        let points = data
+        let points = chartData.data
 
         if curvedLines {
             return Path.quadClosedCurvedPathWithPoints(points: points,
@@ -109,8 +110,8 @@ extension Line {
 struct Line_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            Line(data: [1, 2, 3, 1, 2, 5, 7], style: blackLineStyle)
-            Line(data: [1, 2, 3, 1, 2, 5, 7], style: redLineStyle)
+            Line(chartData:  ChartData([8, 23, 32, 7, 23, 43]), style: blackLineStyle)
+            Line(chartData:  ChartData([8, 23, 32, 7, 23, 43]), style: redLineStyle)
         }
     }
 }

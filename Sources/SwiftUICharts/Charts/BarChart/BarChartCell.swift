@@ -1,26 +1,40 @@
 import SwiftUI
 
 public struct BarChartCell: View {
-    @State var value: Double
-    @State var index: Int = 0
-    @State var width: Float
-    @State var numberOfDataPoints: Int
+    var value: Double
+    var index: Int = 0
+    var width: Float
+    var numberOfDataPoints: Int
     var gradientColor: ColorGradient
+    var touchLocation: CGFloat
 
     var cellWidth: Double {
         return Double(width)/(Double(numberOfDataPoints) * 1.5)
     }
 
     @State var scaleValue: Double = 0
-    @Binding var touchLocation: CGFloat
-    
+
+    public init( value: Double,
+                 index: Int = 0,
+                 width: Float,
+                 numberOfDataPoints: Int,
+                 gradientColor: ColorGradient,
+                 touchLocation: CGFloat) {
+        self.value = value
+        self.index = index
+        self.width = width
+        self.numberOfDataPoints = numberOfDataPoints
+        self.gradientColor = gradientColor
+        self.touchLocation = touchLocation
+    }
+
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)
                 .fill(gradientColor.linearGradient(from: .bottom, to: .top))
             }
             .frame(width: CGFloat(self.cellWidth))
-            .scaleEffect(CGSize(width: 1, height: self.scaleValue), anchor: .bottom)
+            .scaleEffect(CGSize(width: 1, height: self.value), anchor: .bottom)
             .onAppear {
                 self.scaleValue = self.value
             }
@@ -31,19 +45,19 @@ public struct BarChartCell: View {
 struct BarChartCell_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            BarChartCell(value: 0, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
             Group {
-                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
-                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: .constant(CGFloat()))
-                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient(.purple), touchLocation: .constant(CGFloat()))
+                BarChartCell(value: 0, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: CGFloat())
+
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: CGFloat())
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: CGFloat())
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient(.purple), touchLocation: CGFloat())
             }
-            
+
             Group {
-                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: .constant(CGFloat()))
-                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: .constant(CGFloat()))
-                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient(.purple), touchLocation: .constant(CGFloat()))
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.greenRed, touchLocation: CGFloat())
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient.whiteBlack, touchLocation: CGFloat())
+                BarChartCell(value: 1, width: 50, numberOfDataPoints: 1, gradientColor: ColorGradient(.purple), touchLocation: CGFloat())
             }.environment(\.colorScheme, .dark)
         }
-        
     }
 }
