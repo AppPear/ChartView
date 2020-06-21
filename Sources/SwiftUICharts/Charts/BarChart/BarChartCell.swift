@@ -12,7 +12,7 @@ public struct BarChartCell: View {
         return Double(width)/(Double(numberOfDataPoints) * 1.5)
     }
 
-    @State var scaleValue: Double = 0
+    @State var firstDisplay: Bool = true
 
     public init( value: Double,
                  index: Int = 0,
@@ -32,13 +32,17 @@ public struct BarChartCell: View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)
                 .fill(gradientColor.linearGradient(from: .bottom, to: .top))
-            }
-            .frame(width: CGFloat(self.cellWidth))
-            .scaleEffect(CGSize(width: 1, height: self.value), anchor: .bottom)
-            .onAppear {
-                self.scaleValue = self.value
-            }
-        .animation(Animation.spring().delay(self.touchLocation < 0 ?  Double(self.index) * 0.04 : 0))
+        }
+        .frame(width: CGFloat(self.cellWidth))
+        .scaleEffect(CGSize(width: 1, height: self.firstDisplay ? 0.0 : self.value), anchor: .bottom)
+        .onAppear {
+            self.firstDisplay = false
+        }
+        .onDisappear {
+            self.firstDisplay = true
+        }
+        .transition(.slide)
+        .animation(Animation.spring().delay(self.touchLocation < 0 || !firstDisplay ? Double(self.index) * 0.04 : 0))
     }
 }
 

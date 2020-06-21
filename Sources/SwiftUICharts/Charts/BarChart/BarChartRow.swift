@@ -22,17 +22,16 @@ public struct BarChartRow: View {
             HStack(alignment: .bottom,
                    spacing: (geometry.frame(in: .local).width - Constant.spacing) / CGFloat(self.chartData.data.count * 3)) {
                     ForEach(0..<self.chartData.data.count, id: \.self) { index in
-                    BarChartCell(value: self.normalizedValue(index: index),
-                                 index: index,
-                                 width: Float(geometry.frame(in: .local).width - Constant.spacing),
-                                 numberOfDataPoints: self.chartData.data.count,
-                                 gradientColor: self.style.foregroundColor.rotate(for: index),
-                                 touchLocation: self.touchLocation)
-                        .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
-                        .animation(.spring())
-                    }.onReceive(self.chartData.objectWillChange) { _ in
-                        print("new data")
+                        BarChartCell(value: self.normalizedValue(index: index),
+                                     index: index,
+                                     width: Float(geometry.frame(in: .local).width - Constant.spacing),
+                                     numberOfDataPoints: self.chartData.data.count,
+                                     gradientColor: self.style.foregroundColor.rotate(for: index),
+                                     touchLocation: self.touchLocation)
+                            .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
+                            .animation(Animation.easeIn(duration: 0.2))
                     }
+//                   .drawingGroup()
             }
             .padding([.top, .leading, .trailing], 10)
             .gesture(DragGesture()
