@@ -4,8 +4,8 @@ import SwiftUI
 public protocol ChartType {
     associatedtype Body: View
 
-    func makeChart(configuration: Self.Configuration, style: Self.Style) -> Self.Body
+    func makeChart(data: Self.Data, style: Self.Style) -> Self.Body
 
-    typealias Configuration = ChartTypeConfiguration
+    typealias Data = ChartData
     typealias Style = ChartStyle
 }

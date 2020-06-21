@@ -8,8 +8,8 @@
 import SwiftUI
 
 public struct PieChart: ChartType {
-    public func makeChart(configuration: Self.Configuration, style: Self.Style) -> some View {
-        PieChartRow(data: configuration.data, style: style)
+    public func makeChart(data: Self.Data, style: Self.Style) -> some View {
+        PieChartRow(chartData: data, style: style)
     }
     public init() {}
 }
@@ -18,30 +18,30 @@ struct PieChart_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PieChart().makeChart(
-                configuration: .init(data: [0]),
+                data: .init([0]),
             style: styleOneColor)
             
             Group {
                 PieChart().makeChart(
-                    configuration: .init(data: [56, 78, 53, 65, 54]),
+                    data: .init([56, 78, 53, 65, 54]),
                 style: styleOneColor)
                 PieChart().makeChart(
-                    configuration: .init(data: [56, 78, 53, 65, 54]),
+                    data: .init([56, 78, 53, 65, 54]),
                 style: styleTwoColor)
                 PieChart().makeChart(
-                    configuration: .init(data: [1, 1, 1, 1, 1, 1]),
+                    data: .init([1, 1, 1, 1, 1, 1]),
                 style: trivialPursuit)
             }.environment(\.colorScheme, .light)
             
             Group {
                 PieChart().makeChart(
-                    configuration: .init(data: [56, 78, 53, 65, 54]),
+                    data: .init([56, 78, 53, 65, 54]),
                 style: styleOneColor)
                 PieChart().makeChart(
-                    configuration: .init(data: [56, 78, 53, 65, 54]),
+                    data: .init([56, 78, 53, 65, 54]),
                 style: styleTwoColor)
                 PieChart().makeChart(
-                    configuration: .init(data: [1, 1, 1, 1, 1, 1]),
+                    data: .init([1, 1, 1, 1, 1, 1]),
                 style: trivialPursuit)
             }.environment(\.colorScheme, .dark)
             
