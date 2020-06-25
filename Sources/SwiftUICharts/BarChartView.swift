@@ -58,7 +58,8 @@ public struct BarChartView : View {
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }else{
-                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
+//                        Text("\(self.currentValue, specifier: self.valueSpecifier)") // The text when bar is selected original
+                        Text("\(self.getCurrentValue()!.0)")
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }
@@ -85,7 +86,8 @@ public struct BarChartView : View {
                         .padding()
                 }else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
                     LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation),
-                              title: .constant(self.getCurrentValue()!.0))
+//                              title: .constant(self.getCurrentValue()!.0)) // Original
+                            title: .constant("\(self.currentValue)"))
                         .offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
                         .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                 }
@@ -111,6 +113,7 @@ public struct BarChartView : View {
                 })
         )
             .gesture(TapGesture()
+                        
         )
     }
     
