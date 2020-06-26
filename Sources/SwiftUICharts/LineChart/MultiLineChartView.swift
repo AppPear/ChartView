@@ -14,7 +14,7 @@ public struct MultiLineChartView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    public var formSize:CGSize
+    public var formSize: CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
     
@@ -44,27 +44,27 @@ public struct MultiLineChartView: View {
     }
     
     var frame = CGSize(width: 180, height: 120)
-    private var rateValue: Int
+    private var rateValue: Int?
     
     public init(data: [([Double], GradientColor)],
                 title: String,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
-                form: CGSize? = ChartForm.medium,
-                rateValue: Int? = 14,
-                dropShadow: Bool? = true,
-                valueSpecifier: String? = "%.1f") {
+                form: CGSize = ChartForm.medium,
+                rateValue: Int? = nil,
+                dropShadow: Bool = true,
+                valueSpecifier: String = "%.1f") {
         
         self.data = data.map({ MultiLineChartData(points: $0.0, gradient: $0.1)})
         self.title = title
         self.legend = legend
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
-        self.formSize = form!
+        self.formSize = form
         frame = CGSize(width: self.formSize.width, height: self.formSize.height/2)
-        self.rateValue = rateValue!
-        self.dropShadow = dropShadow!
-        self.valueSpecifier = valueSpecifier!
+        self.rateValue = rateValue
+        self.dropShadow = dropShadow
+        self.valueSpecifier = valueSpecifier
     }
     
     public var body: some View {
@@ -85,13 +85,15 @@ public struct MultiLineChartView: View {
                                 .font(.callout)
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                         }
-                        HStack {
-                            if (self.rateValue >= 0){
-                                Image(systemName: "arrow.up")
-                            }else{
-                                Image(systemName: "arrow.down")
+                        if let rateValue = rateValue {
+                            HStack {
+                                if (rateValue >= 0){
+                                    Image(systemName: "arrow.up")
+                                }else{
+                                    Image(systemName: "arrow.down")
+                                }
+                                Text("\(rateValue)%")
                             }
-                            Text("\(self.rateValue)%")
                         }
                     }
                     .transition(.opacity)
