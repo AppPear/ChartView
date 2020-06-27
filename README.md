@@ -2,6 +2,8 @@
 
 Swift package for displaying charts effortlessly.
 
+**First release of version 2.0 is coming soon! Also iOS 14 WidgetKit support is coming. I will update current charts and possibly extend with some new chart types to provide the best support for building informative and beautiful widgets for the new home screen 🥳 Stay tuned!** 
+
 ![SwiftUI Charts](./Resources/showcase1.gif "SwiftUI Charts")
 
 ### Note: 
