@@ -4,15 +4,13 @@ public enum ChartLabelType {
     case title
     case subTitle
     case largeTitle
-    case custom(size: CGFloat)
+    case custom(size: CGFloat, padding: EdgeInsets, color: Color)
     case legend
 }
 
 public struct ChartLabel: View {
-    @Environment(\.chartValue) private var chartValue: ChartValue
-
-    @State var textToDisplay = ""
-    @State var isInteractionInProgress: Bool = false
+    @EnvironmentObject var chartValue: ChartValue
+    @State var textToDisplay:String = ""
 
     private var title: String
 
@@ -26,8 +24,23 @@ public struct ChartLabel: View {
             return 24.0
         case .largeTitle:
             return 38.0
-        case .custom(let size):
+        case .custom(let size, _, _):
             return size
+        }
+    }
+
+    private var labelPadding: EdgeInsets {
+        switch labelType {
+        case .title:
+            return EdgeInsets(top: 16.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+        case .legend:
+            return EdgeInsets(top: 4.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+        case .subTitle:
+            return EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+        case .largeTitle:
+            return EdgeInsets(top: 24.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+        case .custom(_, let padding, _):
+            return padding
         }
     }
 
@@ -43,8 +56,8 @@ public struct ChartLabel: View {
             return .black
         case .largeTitle:
             return .black
-        case .custom(_):
-            return .black
+        case .custom(_, _, let color):
+            return color
         }
     }
 
@@ -55,18 +68,21 @@ public struct ChartLabel: View {
     }
 
     public var body: some View {
-        VStack (alignment: self.isInteractionInProgress ? .center : .leading) {
+        HStack {
             Text(textToDisplay)
                 .font(.system(size: labelSize))
                 .bold()
                 .foregroundColor(self.labelColor)
+                .padding(self.labelPadding)
                 .onAppear {
-                    self.textToDisplay = title
+                    self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
                     self.textToDisplay = self.chartValue.interactionInProgress ? String(format: "%.01f", self.chartValue.currentValue) : self.title
-                    self.isInteractionInProgress = self.chartValue.interactionInProgress
                 }
+            if !self.chartValue.interactionInProgress {
+                Spacer()
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
 import SwiftUI
 
-public struct CardView<Content: View>: View {
-    @Environment(\.chartStyle) private var chartStyle
-
+public struct CardView<Content: View>: View, ChartBase {
+    public var chartData = ChartData()
     let content: () -> Content
+
+    @EnvironmentObject var style: ChartStyle
 
     public init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
@@ -11,9 +12,8 @@ public struct CardView<Content: View>: View {
 
     public var body: some View {
         ZStack{
-            Rectangle()
+            RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)
-                .cornerRadius(20)
                 .shadow(color: Color.gray, radius: 8)
             VStack {
                 self.content()

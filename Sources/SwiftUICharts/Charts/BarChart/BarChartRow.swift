@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct BarChartRow: View {
-    @Environment(\.chartValue) private var chartValue: ChartValue
+    @EnvironmentObject var chartValue: ChartValue
     @ObservedObject var chartData: ChartData
     @State var touchLocation: CGFloat = -1.0
 
@@ -39,7 +39,7 @@ public struct BarChartRow: View {
                 .onChanged({ value in
                     let width = geometry.frame(in: .local).width
                     self.touchLocation = value.location.x/width
-                    if let currentValue = getCurrentValue(width: width) {
+                    if let currentValue = self.getCurrentValue(width: width) {
                         self.chartValue.currentValue = currentValue
                         self.chartValue.interactionInProgress = true
                     }
@@ -70,25 +70,3 @@ public struct BarChartRow: View {
             return self.chartData.data[index]
         }
 }
-
-//struct BarChartRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            BarChartRow(data: [0], style: styleGreenRed)
-//            Group {
-//                BarChartRow(data: [1, 2, 3], style: styleGreenRed)
-//                BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)
-//            }
-//            Group {
-//                BarChartRow(data: [1, 2, 3], style: styleGreenRed)
-//                BarChartRow(data: [1, 2, 3], style: styleGreenRedWhiteBlack)
-//            }.environment(\.colorScheme, .dark)
-//        }
-//    }
-//}
-//
-//private let styleGreenRed = ChartStyle(backgroundColor: .white, foregroundColor: .greenRed)
-//
-//private let styleGreenRedWhiteBlack = ChartStyle(
-//    backgroundColor: ColorGradient.init(.white),
-//    foregroundColor: [ColorGradient.redBlack, ColorGradient.whiteBlack])
