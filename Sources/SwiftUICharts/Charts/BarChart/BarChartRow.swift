@@ -1,6 +1,7 @@
 import SwiftUI
 
 public struct BarChartRow: View {
+    @Environment(\.chartValue) private var chartValue: ChartValue
     @ObservedObject var chartData: ChartData
     @State var touchLocation: CGFloat = -1.0
 
@@ -36,9 +37,15 @@ public struct BarChartRow: View {
             .padding([.top, .leading, .trailing], 10)
             .gesture(DragGesture()
                 .onChanged({ value in
-                    self.touchLocation = value.location.x/geometry.frame(in: .local).width
+                    let width = geometry.frame(in: .local).width
+                    self.touchLocation = value.location.x/width
+                    if let currentValue = getCurrentValue(width: width) {
+                        self.chartValue.currentValue = currentValue
+                        self.chartValue.interactionInProgress = true
+                    }
                 })
                 .onEnded({ value in
+                    self.chartValue.interactionInProgress = false
                     self.touchLocation = -1
                 })
             )
@@ -46,7 +53,6 @@ public struct BarChartRow: View {
     }
     
     func normalizedValue(index: Int) -> Double {
-        print(chartData.data[index])
         return Double(chartData.data[index])/Double(maxValue)
     }
 
@@ -57,7 +63,12 @@ public struct BarChartRow: View {
         }
         return CGSize(width: 1, height: 1)
     }
-    
+
+    func getCurrentValue(width: CGFloat) -> Double? {
+        guard self.chartData.data.count > 0 else { return nil}
+            let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))
+            return self.chartData.data[index]
+        }
 }
 
 //struct BarChartRow_Previews: PreviewProvider {

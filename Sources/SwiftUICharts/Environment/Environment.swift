@@ -18,4 +18,13 @@ extension EnvironmentValues {
             self[ChartStyleKey.self] = newValue
         }
     }
+
+    var chartValue: ChartValue {
+        get {
+            return self[ChartValueKey.self]
+        }
+        set {
+            self[ChartValueKey.self] = newValue
+        }
+    }
 }

@@ -12,12 +12,13 @@ public struct CardView<Content: View>: View {
     public var body: some View {
         ZStack{
             Rectangle()
-                .fill(self.chartStyle.backgroundColor.linearGradient(from: .bottom, to: .top))
+                .fill(Color.white)
                 .cornerRadius(20)
                 .shadow(color: Color.gray, radius: 8)
             VStack {
                 self.content()
             }
+            .clipShape(RoundedRectangle(cornerRadius: 20))
         }
     }
 }

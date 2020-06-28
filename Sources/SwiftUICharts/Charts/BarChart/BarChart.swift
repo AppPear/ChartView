@@ -4,6 +4,7 @@ public struct BarChart: ChartType {
     public func makeChart(data: Self.Data, style: Self.Style) -> some View {
         BarChartRow(chartData: data, style: style)
     }
+
     public init() {}
 }
 

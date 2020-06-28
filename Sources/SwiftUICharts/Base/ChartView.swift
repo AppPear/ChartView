@@ -1,6 +1,3 @@
-//  ChartView.swift
-//  Created by Samu András on 2020. 05. 22..
-
 import SwiftUI
 
 public struct ChartView: View {
@@ -19,9 +16,7 @@ public struct ChartView: View {
 }
 
 extension ChartView {
-//    public init(data: [Double]) {
-//        self.configuration = ChartTypeConfiguration(data: data)
-//    }
-
-
+    public init(points: [Double]) {
+        self.data = ChartData(points)
+    }
 }

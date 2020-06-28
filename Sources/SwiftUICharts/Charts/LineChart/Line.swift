@@ -1,6 +1,7 @@
 import SwiftUI
 
 public struct Line: View {
+    @Environment(\.chartValue) private var chartValue: ChartValue
     @State var frame: CGRect = .zero
     @ObservedObject var chartData: ChartData
 
@@ -60,10 +61,13 @@ public struct Line: View {
                 .onChanged({ value in
                     self.touchLocation = value.location
                     self.showIndicator = true
+                    self.getClosestDataPoint(point: self.getClosestPointOnPath(touchLocation: value.location))
+                    self.chartValue.interactionInProgress = true
                 })
                 .onEnded({ value in
                     self.touchLocation = .zero
                     self.showIndicator = false
+                    self.chartValue.interactionInProgress = false
                 })
             )
         }
@@ -76,6 +80,13 @@ extension Line {
     private func getClosestPointOnPath(touchLocation: CGPoint) -> CGPoint {
         let closest = self.path.point(to: touchLocation.x)
         return closest
+    }
+
+    private func getClosestDataPoint(point: CGPoint) {
+        let index = Int(round((point.x)/step.x))
+        if (index >= 0 && index < self.chartData.data.count){
+            self.chartValue.currentValue = self.chartData.data[index]
+        }
     }
 
     private func getBackgroundPathView() -> some View {
