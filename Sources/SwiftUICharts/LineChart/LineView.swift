@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct LineView: View {
     @ObservedObject var data: ChartData
     public var title: String?
@@ -119,6 +120,7 @@ public struct LineView: View {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct LineView_Previews: PreviewProvider {
     static var previews: some View {
         Group {

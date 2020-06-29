@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct BarChartRow : View {
     var data: [Double]
     var accentColor: Color
@@ -46,6 +46,7 @@ public struct BarChartRow : View {
 }
 
 #if DEBUG
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct ChartRow_Previews : PreviewProvider {
     static var previews: some View {
         Group {

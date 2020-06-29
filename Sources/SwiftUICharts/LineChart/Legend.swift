@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct Legend: View {
     @ObservedObject var data: ChartData
     @Binding var frame: CGRect
@@ -90,6 +91,7 @@ struct Legend: View {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct Legend_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in

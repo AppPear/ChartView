@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct PieChartRow : View {
     var data: [Double]
     var backgroundColor: Color
@@ -37,6 +37,7 @@ public struct PieChartRow : View {
 }
 
 #if DEBUG
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct PieChartRow_Previews : PreviewProvider {
     static var previews: some View {
         Group {

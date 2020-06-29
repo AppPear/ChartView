@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct Colors {
     public static let color1:Color = Color(hexString: "#E2FAE7")
     public static let color1Accent:Color = Color(hexString: "#72BF82")
@@ -29,7 +30,7 @@ public struct Colors {
     public static let DarkPurple:Color = Color(hexString: "#1B205E")
     public static let BorderBlue:Color = Color(hexString: "#4EBCFF")
 }
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct GradientColor {
     public let start: Color
     public let end: Color
@@ -43,7 +44,7 @@ public struct GradientColor {
         return Gradient(colors: [start, end])
     }
 }
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct GradientColors {
     public static let orange = GradientColor(start: Colors.OrangeStart, end: Colors.OrangeEnd)
     public static let blue = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
@@ -55,7 +56,7 @@ public struct GradientColors {
     public static let prplNeon = GradientColor(start: Color(hexString: "FE019A"), end: Color(hexString: "FE0BF4"))
     public static let orngPink = GradientColor(start: Color(hexString: "FF8E2D"), end: Color(hexString: "FF4E7A"))
 }
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct Styles {
     public static let lineChartStyleOne = ChartStyle(
         backgroundColor: Color.white,
@@ -145,7 +146,7 @@ public struct ChartForm {
     public static let detail = CGSize(width:180, height:120)
     #endif
 }
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public class ChartStyle {
     public var backgroundColor: Color
     public var accentColor: Color
@@ -183,6 +184,7 @@ public class ChartStyle {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public class ChartData: ObservableObject, Identifiable {
     @Published var points: [(String,Double)]
     var valuesGiven: Bool = false
@@ -213,6 +215,7 @@ public class ChartData: ObservableObject, Identifiable {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public class MultiLineChartData: ChartData {
     var gradient: GradientColor
     
@@ -231,6 +234,7 @@ public class MultiLineChartData: ChartData {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public class TestData{
     static public var data:ChartData = ChartData(points: [37,72,51,22,39,47,66,85,50])
     static public var values:ChartData = ChartData(values: [("2017 Q3",220),
@@ -242,6 +246,7 @@ public class TestData{
     
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 extension Color {
     init(hexString: String) {
         let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -263,14 +268,13 @@ extension Color {
 }
 
 class HapticFeedback {
+
     #if os(watchOS)
-    //watchOS implementation
     static func playSelection() -> Void {
         WKInterfaceDevice.current().play(.click)
     }
-    #else
-    //iOS implementation
-    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+    #endif
+    #if os(iOS)
     static func playSelection() -> Void {
         UISelectionFeedbackGenerator().selectionChanged()
     }

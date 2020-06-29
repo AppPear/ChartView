@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct PieChartView : View {
     public var data: [Double]
     public var title: String
@@ -40,9 +40,12 @@ public struct PieChartView : View {
                         .font(.headline)
                         .foregroundColor(self.style.textColor)
                     Spacer()
+                    #if os(macOS)
+                    #else
                     Image(systemName: "chart.pie.fill")
                         .imageScale(.large)
                         .foregroundColor(self.style.legendTextColor)
+                    #endif
                 }.padding()
                 PieChartRow(data: data, backgroundColor: self.style.backgroundColor, accentColor: self.style.accentColor)
                     .foregroundColor(self.style.accentColor).padding(self.legend != nil ? 0 : 12).offset(y:self.legend != nil ? 0 : -10)
@@ -59,6 +62,7 @@ public struct PieChartView : View {
 }
 
 #if DEBUG
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct PieChartView_Previews : PreviewProvider {
     static var previews: some View {
         PieChartView(data:[56,78,53,65,54], title: "Title", legend: "Legend")

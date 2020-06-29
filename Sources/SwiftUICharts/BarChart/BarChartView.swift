@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct BarChartView : View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     private var data: ChartData
@@ -19,21 +19,23 @@ public struct BarChartView : View {
     public var dropShadow: Bool
     public var cornerImage: Image
     public var valueSpecifier:String
-    
+
     @State private var touchLocation: CGFloat = -1.0
     @State private var showValue: Bool = false
     @State private var showLabelValue: Bool = false
     @State private var currentValue: Double = 0 {
         didSet{
             if(oldValue != self.currentValue && self.showValue) {
+                #if !os(macOS)
                 HapticFeedback.playSelection()
+                #endif
             }
         }
     }
     var isFullWidth:Bool {
         return self.formSize == ChartForm.large
     }
-    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
+    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage: Image? = nil, valueSpecifier: String? = "%.1f"){
         self.data = data
         self.title = title
         self.legend = legend
@@ -71,8 +73,11 @@ public struct BarChartView : View {
                     }
                     Spacer()
                     self.cornerImage
+                    #if os(macOS)
+                    #else
                         .imageScale(.large)
                         .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
+                    #endif
                 }.padding()
                 BarChartRow(data: data.points.map{$0.1},
                             accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
@@ -137,6 +142,7 @@ public struct BarChartView : View {
 }
 
 #if DEBUG
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 struct ChartView_Previews : PreviewProvider {
     static var previews: some View {
         BarChartView(data: TestData.values ,

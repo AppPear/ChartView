@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct MultiLineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var data:[MultiLineChartData]
@@ -23,12 +24,23 @@ public struct MultiLineChartView: View {
     @State private var currentValue: Double = 2 {
         didSet{
             if (oldValue != self.currentValue && showIndicatorDot) {
+                #if !os(macOS)
                 HapticFeedback.playSelection()
+                #endif
             }
             
         }
     }
-    
+
+    #if os(macOS)
+    let upImage = Text("↑")
+    let downImage = Text("↓")
+    #else
+    let upImage = Image(systemName: "arrow.up")
+    let downImage = Image(systemName: "arrow.down")
+    #endif
+
+
     var globalMin:Double {
         if let min = data.flatMap({$0.onlyPoints()}).min() {
             return min
@@ -66,7 +78,7 @@ public struct MultiLineChartView: View {
         self.dropShadow = dropShadow
         self.valueSpecifier = valueSpecifier
     }
-    
+    @ViewBuilder
     public var body: some View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 20)
@@ -85,14 +97,14 @@ public struct MultiLineChartView: View {
                                 .font(.callout)
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                         }
-                        if let rateValue = rateValue {
+                        rateValue.map { value in
                             HStack {
-                                if (rateValue >= 0){
-                                    Image(systemName: "arrow.up")
+                                if (value >= 0){
+                                    upImage
                                 }else{
-                                    Image(systemName: "arrow.down")
+                                    downImage
                                 }
-                                Text("\(rateValue)%")
+                                Text("\(rateValue!)%")
                             }
                         }
                     }
@@ -129,7 +141,7 @@ public struct MultiLineChartView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width, height: self.formSize.height)
-        }
+            }
         .gesture(DragGesture()
         .onChanged({ value in
 //            self.touchLocation = value.location
@@ -156,6 +168,7 @@ public struct MultiLineChartView: View {
 //    }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct MultiWidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {

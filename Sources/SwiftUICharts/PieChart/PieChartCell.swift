@@ -15,7 +15,7 @@ struct PieSlice: Identifiable {
     var value: Double
     var normalizedValue: Double
 }
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct PieChartCell : View {
     @State private var show:Bool = false
     var rect: CGRect
@@ -54,6 +54,7 @@ extension CGRect {
 }
 
 #if DEBUG
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct PieChartCell_Previews : PreviewProvider {
     static var previews: some View {
         GeometryReader { geometry in

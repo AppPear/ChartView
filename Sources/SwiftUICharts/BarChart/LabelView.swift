@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct LabelView: View {
     @Binding var arrowOffset: CGFloat
     @Binding var title:String
@@ -28,6 +29,7 @@ struct LabelView: View {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct ArrowUp: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -39,6 +41,7 @@ struct ArrowUp: Shape {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct LabelView_Previews: PreviewProvider {
     static var previews: some View {
         LabelView(arrowOffset: .constant(0), title: .constant("Tesla model 3"))

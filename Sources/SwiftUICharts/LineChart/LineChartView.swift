@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 public struct LineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @ObservedObject var data:ChartData
@@ -25,7 +25,9 @@ public struct LineChartView: View {
     @State private var currentValue: Double = 2 {
         didSet{
             if (oldValue != self.currentValue && showIndicatorDot) {
+                #if !os(macOS)
                 HapticFeedback.playSelection()
+                #endif
             }
             
         }
@@ -53,7 +55,14 @@ public struct LineChartView: View {
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
     }
-    
+
+    #if os(macOS)
+    let upImage = Text("↑")
+    let downImage = Text("↓")
+    #else
+    let upImage = Image(systemName: "arrow.up")
+    let downImage = Image(systemName: "arrow.down")
+    #endif
     public var body: some View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 20)
@@ -77,9 +86,9 @@ public struct LineChartView: View {
                             if (self.rateValue ?? 0 != 0)
                             {
                                 if (self.rateValue ?? 0 >= 0){
-                                    Image(systemName: "arrow.up")
+                                    upImage
                                 }else{
-                                    Image(systemName: "arrow.down")
+                                    downImage
                                 }
                                 Text("\(self.rateValue!)%")
                             }
@@ -139,6 +148,7 @@ public struct LineChartView: View {
     }
 }
 
+@available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 struct WidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
