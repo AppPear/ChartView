@@ -15,11 +15,12 @@ public struct BarChartView : View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    public var formSize:CGSize
+    public var formSize: CGSize
     public var dropShadow: Bool
     public var cornerImage: Image
-    public var valueSpecifier:String
+    public var valueSpecifier: String
     
+    @State public var hideArrow: Bool = true
     @State private var touchLocation: CGFloat = -1.0
     @State private var showValue: Bool = false
     @State private var showLabelValue: Bool = false
@@ -58,7 +59,6 @@ public struct BarChartView : View {
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }else{
-//                        Text("\(self.currentValue, specifier: self.valueSpecifier)") // The text when bar is selected original
                         Text("\(self.getCurrentValue()!.0)")
                             .font(.headline)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
@@ -79,6 +79,7 @@ public struct BarChartView : View {
                             accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
                             gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
                             touchLocation: self.$touchLocation)
+                    .padding(.leading, 16.0)
                 if self.legend != nil  && self.formSize == ChartForm.medium && !self.showLabelValue{
                     Text(self.legend!)
                         .font(.headline)
@@ -86,22 +87,21 @@ public struct BarChartView : View {
                         .padding()
                 }else if (self.data.valuesGiven && self.getCurrentValue() != nil) {
                     LabelView(arrowOffset: self.getArrowOffset(touchLocation: self.touchLocation),
-//                              title: .constant(self.getCurrentValue()!.0)) // Original
-                            title: .constant("\(self.currentValue)"))
+                              title: .constant("\(self.currentValue)"), hideArrow: $hideArrow)
                         .offset(x: self.getLabelViewOffset(touchLocation: self.touchLocation), y: -6)
                         .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                 }
-                
             }
         }.frame(minWidth:self.formSize.width,
                 maxWidth: self.isFullWidth ? .infinity : self.formSize.width,
                 minHeight:self.formSize.height,
                 maxHeight:self.formSize.height)
-            .gesture(DragGesture()
+            .gesture(DragGesture(minimumDistance: 0)
                 .onChanged({ value in
                     self.touchLocation = value.location.x/self.formSize.width
                     self.showValue = true
                     self.currentValue = self.getCurrentValue()?.1 ?? 0
+                    self.hideArrow = false
                     if(self.data.valuesGiven && self.formSize == ChartForm.medium) {
                         self.showLabelValue = true
                     }
@@ -110,10 +110,8 @@ public struct BarChartView : View {
                     self.showValue = false
                     self.showLabelValue = false
                     self.touchLocation = -1
+                    self.hideArrow = true
                 })
-        )
-            .gesture(TapGesture()
-                        
         )
     }
     
@@ -142,10 +140,7 @@ public struct BarChartView : View {
 #if DEBUG
 struct ChartView_Previews : PreviewProvider {
     static var previews: some View {
-        BarChartView(data: TestData.values ,
-                     title: "Model 3 sales",
-                     legend: "Quarterly",
-                     valueSpecifier: "%.0f")
+        BarChartView(data: ChartData(values: [("A moral compass", 5), ("What you most cherish", 9), ("An ethical code", 13), ("An ethical code", 13), ("A set of guiding priciples", 2)]), title: "How do you think about personal values?", legend: "Quarterly", form: ChartForm.extraLarge) // legend is optional
     }
 }
 #endif
