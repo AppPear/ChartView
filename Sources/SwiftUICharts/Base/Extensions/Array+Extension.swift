@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Nicolas Savoini on 2020-05-25.
-//
-
 import Foundation
 
 extension Array where Element == ColorGradient {

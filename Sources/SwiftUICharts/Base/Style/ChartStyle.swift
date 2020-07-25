@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct ChartStyle {
+public class ChartStyle: ObservableObject {
 
     public let backgroundColor: ColorGradient
     public let foregroundColor: [ColorGradient]

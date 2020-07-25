@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct Line: View {
-    @Environment(\.chartValue) private var chartValue: ChartValue
+    @EnvironmentObject var chartValue: ChartValue
     @State var frame: CGRect = .zero
     @ObservedObject var chartData: ChartData
 
@@ -91,9 +91,15 @@ extension Line {
 
     private func getBackgroundPathView() -> some View {
         self.closedPath
-            .fill(style.backgroundColor.linearGradient(from: .bottom, to: .top))
+            .fill(LinearGradient(gradient: Gradient(colors: [
+                                                        style.foregroundColor.first?.startColor ?? .white,
+                                                        style.foregroundColor.first?.endColor ?? .white,
+                                                        .white]),
+                                 startPoint: .bottom,
+                                 endPoint: .top))
             .rotationEffect(.degrees(180), anchor: .center)
             .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            .opacity(0.2)
             .transition(.opacity)
             .animation(.easeIn(duration: 1.6))
     }

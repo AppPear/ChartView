@@ -6,4 +6,8 @@ public class ChartData: ObservableObject {
     public init(_ data: [Double]) {
         self.data = data
     }
+
+    public init() {
+        self.data = []
+    }
 }

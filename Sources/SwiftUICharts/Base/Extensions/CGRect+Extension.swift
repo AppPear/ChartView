@@ -1,10 +1,3 @@
-//
-//  CGRect+Extension.swift
-//  SwiftUICharts
-//
-//  Created by Nicolas Savoini on 2020-05-24.
-//
-
 import Foundation
 import SwiftUI
 
