@@ -23,7 +23,7 @@ public struct CardView<Content: View>: View, ChartBase {
             VStack {
                 self.content()
             }
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .clipShape(RoundedRectangle(cornerRadius: showShadow ? 20 : 0))
         }
     }
 }
