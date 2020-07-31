@@ -94,7 +94,7 @@ extension Line {
             .fill(LinearGradient(gradient: Gradient(colors: [
                                                         style.foregroundColor.first?.startColor ?? .white,
                                                         style.foregroundColor.first?.endColor ?? .white,
-                                                        .white]),
+                                                        .clear]),
                                  startPoint: .bottom,
                                  endPoint: .top))
             .rotationEffect(.degrees(180), anchor: .center)
