@@ -43,7 +43,7 @@ public struct PieChartRow : View {
             ZStack{
                 ForEach(0..<self.slices.count){ i in
                     PieChartCell(rect: geometry.frame(in: .local), startDeg: self.slices[i].startDeg, endDeg: self.slices[i].endDeg, index: i, backgroundColor: self.backgroundColor,accentColor: self.accentColor)
-                        .scaleEffect(currentTouchedIndex == i ? 1.1 : 1)
+                        .scaleEffect(self.currentTouchedIndex == i ? 1.1 : 1)
                         .animation(Animation.spring())
                 }
             }
@@ -53,13 +53,13 @@ public struct PieChartRow : View {
                             let isTouchInPie = isPointInCircle(point: value.location, circleRect: rect)
                             if isTouchInPie {
                                 let touchDegree = degree(for: value.location, inCircleRect: rect)
-                                currentTouchedIndex = slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
+                                self.currentTouchedIndex = self.slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
                             } else {
-                                currentTouchedIndex = -1
+                                self.currentTouchedIndex = -1
                             }
                         })
                         .onEnded({ value in
-                            currentTouchedIndex = -1
+                            self.currentTouchedIndex = -1
                         }))
         }
     }
