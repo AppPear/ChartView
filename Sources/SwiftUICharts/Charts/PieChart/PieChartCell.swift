@@ -1,10 +1,3 @@
-//
-//  PieChartCell.swift
-//  SwiftUICharts
-//
-//  Created by Nicolas Savoini on 2020-05-24.
-//
-
 import SwiftUI
 
 /// One slice of a `PieChartRow`
