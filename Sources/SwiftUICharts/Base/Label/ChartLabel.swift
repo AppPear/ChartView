@@ -11,6 +11,7 @@ public enum ChartLabelType {
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
     @State var textToDisplay:String = ""
+    var format: String = "%.01f"
 
     private var title: String
 
@@ -62,9 +63,11 @@ public struct ChartLabel: View {
     }
 
     public init (_ title: String,
-                 type: ChartLabelType = .title) {
+                 type: ChartLabelType = .title,
+                 format: String = "%.01f") {
         self.title = title
         labelType = type
+        self.format = format
     }
 
     public var body: some View {
@@ -78,7 +81,7 @@ public struct ChartLabel: View {
                     self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: "%.01f", self.chartValue.currentValue) : self.title
+                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: format, self.chartValue.currentValue) : self.title
                 }
             if !self.chartValue.interactionInProgress {
                 Spacer()
