@@ -1,14 +1,8 @@
-//
-//  PieChartRow.swift
-//  SwiftUICharts
-//
-//  Created by Nicolas Savoini on 2020-05-24.
-//
-
 import SwiftUI
 
 public struct PieChartRow: View {
     @ObservedObject var chartData: ChartData
+    @EnvironmentObject var chartValue: ChartValue
 
     var style: ChartStyle
 
@@ -27,55 +21,48 @@ public struct PieChartRow: View {
         
         return tempSlices
     }
+
+    @State private var currentTouchedIndex = -1 {
+        didSet {
+            if oldValue != currentTouchedIndex {
+                chartValue.interactionInProgress = currentTouchedIndex != -1
+                guard currentTouchedIndex != -1 else { return }
+                chartValue.currentValue = slices[currentTouchedIndex].value
+            }
+        }
+    }
     
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
                 ForEach(0..<self.slices.count) { index in
                     PieChartCell(
-                            rect: geometry.frame(in: .local),
-                            startDeg: self.slices[index].startDeg,
-                            endDeg: self.slices[index].endDeg,
-                            index: index,
-                            backgroundColor: self.style.backgroundColor.startColor,
-                            accentColor: self.style.foregroundColor.rotate(for: index)
-                        )
+                        rect: geometry.frame(in: .local),
+                        startDeg: self.slices[index].startDeg,
+                        endDeg: self.slices[index].endDeg,
+                        index: index,
+                        backgroundColor: self.style.backgroundColor.startColor,
+                        accentColor: self.style.foregroundColor.rotate(for: index)
+                    )
+                    .scaleEffect(currentTouchedIndex == index ? 1.1 : 1)
+                    .animation(Animation.spring())
                 }
-                
             }
+            .gesture(DragGesture()
+                        .onChanged({ value in
+                            let rect = geometry.frame(in: .local)
+                            let isTouchInPie = isPointInCircle(point: value.location, circleRect: rect)
+                            if isTouchInPie {
+                                let touchDegree = degree(for: value.location, inCircleRect: rect)
+                                currentTouchedIndex = slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
+                            } else {
+                                currentTouchedIndex = -1
+                            }
+                        })
+                        .onEnded({ value in
+                            currentTouchedIndex = -1
+                        })
+            )
         }
     }
-
 }
-
-struct PieChartRow_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            //Empty Array - Default Colors.OrangeStart
-            PieChartRow(
-                chartData: ChartData([8, 23, 32, 7, 23, 43]),
-                style: defaultMultiColorChartStyle)
-            .frame(width: 100, height: 100)
-            
-            PieChartRow(
-                chartData:  ChartData([8, 23, 32, 7, 23, 43]),
-                style: multiColorChartStyle)
-            .frame(width: 100, height: 100)
-            
-            PieChartRow(
-                chartData:  ChartData([8, 23, 32, 7, 23, 43]),
-                style: multiColorChartStyle)
-            .frame(width: 100, height: 100)
-            
-        }.previewLayout(.fixed(width: 125, height: 125))
-        
-    }
-}
-
-private let defaultMultiColorChartStyle = ChartStyle(
-    backgroundColor: Color.white,
-    foregroundColor: [ColorGradient]())
-
-private let multiColorChartStyle = ChartStyle(
-backgroundColor: Color.purple,
-foregroundColor: [ColorGradient.greenRed, ColorGradient.whiteBlack])
