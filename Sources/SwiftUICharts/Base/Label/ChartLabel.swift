@@ -12,7 +12,12 @@ public enum ChartLabelType {
 /// A chart may contain any number of labels in pre-set positions based on their `ChartLabelType`
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
+<<<<<<< HEAD
     @State private var textToDisplay:String = ""
+=======
+    @State var textToDisplay:String = ""
+    var format: String = "%.01f"
+>>>>>>> Add custom string format for ChartLabel when interactionInProgress = true (#151)
 
     private var title: String
 
@@ -74,10 +79,12 @@ public struct ChartLabel: View {
 	/// - Parameters:
 	///   - title: Any `String`
 	///   - type: Which `ChartLabelType` to use
-    public init(_ title: String,
-                 type: ChartLabelType = .title) {
+    public init (_ title: String,
+                 type: ChartLabelType = .title,
+                 format: String = "%.01f") {
         self.title = title
         labelType = type
+        self.format = format
     }
 
 	/// The content and behavior of the `ChartLabel`.
@@ -94,7 +101,7 @@ public struct ChartLabel: View {
                     self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: "%.01f", self.chartValue.currentValue) : self.title
+                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: format, self.chartValue.currentValue) : self.title
                 }
             if !self.chartValue.interactionInProgress {
                 Spacer()
