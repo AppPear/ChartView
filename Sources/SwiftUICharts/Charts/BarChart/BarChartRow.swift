@@ -26,6 +26,7 @@ public struct BarChartRow: View {
                         BarChartCell(value: self.normalizedValue(index: index),
                                      index: index,
                                      width: Float(geometry.frame(in: .local).width - Constant.spacing),
+                                     height: Float(geometry.frame(in: .local).height),
                                      numberOfDataPoints: self.chartData.data.count,
                                      gradientColor: self.style.foregroundColor.rotate(for: index),
                                      touchLocation: self.touchLocation)
