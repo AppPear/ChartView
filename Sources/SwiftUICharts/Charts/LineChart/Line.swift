@@ -41,6 +41,13 @@ public struct Line: View {
     }
     
     public var body: some View {
+
+		let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
+			.makeConnectable()
+			.autoconnect()	// see https://stackoverflow.com/a/62370919
+		// This lets geometry be recalculated when device rotates. However it doesn't cover issue of app changing
+		// from full screen to split view. Not possible in SwiftUI? Feedback submitted to apple FB8451194.
+
         GeometryReader { geometry in
             ZStack {
                 if self.showFull && self.showBackground {
@@ -56,7 +63,16 @@ public struct Line: View {
             }
             .onAppear {
                 self.frame = geometry.frame(in: .local)
+
             }
+			.onReceive(orientationChanged) { _ in
+				// When we receive notification here, the geometry is still the old value
+				// so delay evaluation to get the new frame!
+				DispatchQueue.main.async {
+					self.frame = geometry.frame(in: .local)	// recalculate layout with new frame
+				}
+			}
+			
             .gesture(DragGesture()
                 .onChanged({ value in
                     self.touchLocation = value.location
