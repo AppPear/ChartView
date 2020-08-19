@@ -7,7 +7,8 @@ public struct BarChart: View, ChartBase {
     @EnvironmentObject var data: ChartData
     @EnvironmentObject var style: ChartStyle
 
-	public var body: some View {
+	/// <#Body#>
+    public var body: some View {
         BarChartRow(chartData: data, style: style)
     }
 

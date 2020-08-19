@@ -14,6 +14,9 @@ public struct ChartGrid<Content: View>: View, ChartBase {
         self.content = content
     }
 
+	/// The content and behavior of the `ChartGrid`.
+	///
+	/// TODO: Explain why this is in a `ZStack`
     public var body: some View {
         ZStack{
             self.content()

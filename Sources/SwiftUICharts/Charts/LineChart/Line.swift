@@ -48,6 +48,11 @@ public struct Line: View {
         return Path.closedLinePathWithPoints(points: points, step: step)
     }
     
+	/// The content and behavior of the `Line`.
+	///
+	/// Draw the background if showing the full line (?) and the `showBackground` option is set. Above that draw the line, and then the data indicator if the graph is currently being touched.
+	/// On appear, set the frame so that the data graph metrics can be calculated. On a drag (touch) gesture, highlight the closest touched data point.
+	/// TODO: explain rotation
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -123,7 +128,7 @@ extension Line {
     }
 
 	/// Get the view representing the line stroked in the `foregroundColor`
-	/// 
+	///
 	/// TODO: Explain how `showFull` works
 	/// TODO: explain rotations
 	/// - Returns: SwiftUI `View`

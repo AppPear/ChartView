@@ -19,6 +19,11 @@ public struct BarChartRow: View {
         return max != 0 ? max : 1
     }
 
+	/// The content and behavior of the `BarChartRow`.
+	///
+	/// Shows each `BarChartCell` in an `HStack`; may be scaled up if it's the one currently being touched.
+	/// Not using a drawing group for optimizing animation.
+	/// As touched (dragged) the `touchLocation` is updated and the current value is highlighted.
     public var body: some View {
         GeometryReader { geometry in
             HStack(alignment: .bottom,

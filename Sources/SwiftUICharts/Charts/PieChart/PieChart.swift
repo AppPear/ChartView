@@ -7,6 +7,9 @@ public struct PieChart: View, ChartBase {
     @EnvironmentObject var data: ChartData
     @EnvironmentObject var style: ChartStyle
 
+	/// The content and behavior of the `PieChart`.
+	///
+	///
     public var body: some View {
         PieChartRow(chartData: data, style: style)
     }

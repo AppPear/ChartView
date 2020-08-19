@@ -80,6 +80,9 @@ public struct ChartLabel: View {
         labelType = type
     }
 
+	/// The content and behavior of the `ChartLabel`.
+	///
+	/// Displays current value if chart is currently being touched along a data point, otherwise the specified text.
     public var body: some View {
         HStack {
             Text(textToDisplay)

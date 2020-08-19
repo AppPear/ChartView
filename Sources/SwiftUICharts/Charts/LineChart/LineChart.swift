@@ -7,6 +7,9 @@ public struct LineChart: View, ChartBase {
     @EnvironmentObject var data: ChartData
     @EnvironmentObject var style: ChartStyle
 
+	/// The content and behavior of the `LineChart`.
+	///
+	///
     public var body: some View {
         Line(chartData: data, style: style)
     }

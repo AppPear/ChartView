@@ -28,7 +28,10 @@ public struct PieChartRow: View {
         
         return tempSlices
     }
-    
+
+	/// The content and behavior of the `PieChartRow`.
+	///
+	///
     public var body: some View {
         GeometryReader { geometry in
             ZStack {

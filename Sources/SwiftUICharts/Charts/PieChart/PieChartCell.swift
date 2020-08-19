@@ -46,6 +46,9 @@ public struct PieChartCell: View {
     // Section color
     var accentColor: ColorGradient
     
+	/// The content and behavior of the `PieChartCell`.
+	///
+	/// Fills and strokes with 2-pixel line (unless start/end degrees not yet set). Animates by scaling up to 100% when first appears.
     public var body: some View {
         Group {
             path

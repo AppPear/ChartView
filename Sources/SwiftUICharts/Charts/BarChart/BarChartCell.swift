@@ -29,6 +29,9 @@ public struct BarChartCell: View {
         self.touchLocation = touchLocation
     }
 
+	/// The content and behavior of the `BarChartCell`.
+	///
+	/// Animated when first displayed, using the `firstDisplay` variable, with an increasing delay through the data set.
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)

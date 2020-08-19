@@ -18,6 +18,9 @@ public struct CardView<Content: View>: View, ChartBase {
         self.content = content
     }
 
+	/// The content and behavior of the `CardView`.
+	///
+	///
     public var body: some View {
         ZStack{
             if showShadow {
