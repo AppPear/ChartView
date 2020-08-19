@@ -1,19 +1,30 @@
 import SwiftUI
 
+/// <#Description#>
 public struct ColorGradient: Equatable {
-    public let startColor: Color
+	/// <#Description#>
+	public let startColor: Color
+	/// <#Description#>
     public let endColor: Color
 
+	/// <#Description#>
+	/// - Parameter color: <#color description#>
     public init(_ color: Color) {
         self.startColor = color
         self.endColor = color
     }
-    
-    public init (_ startColor: Color, _ endColor: Color) {
+
+	/// <#Description#>
+	/// - Parameters:
+	///   - startColor: <#startColor description#>
+	///   - endColor: <#endColor description#>
+    public init(_ startColor: Color, _ endColor: Color) {
         self.startColor = startColor
         self.endColor = endColor
     }
 
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
     public var gradient: Gradient {
         return Gradient(colors: [startColor, endColor])
     }

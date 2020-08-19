@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// A single vertical bar in a bar chart
 public struct BarChartCell: View {
     var value: Double
     var index: Int = 0
@@ -12,8 +13,16 @@ public struct BarChartCell: View {
         return Double(width)/(Double(numberOfDataPoints) * 1.5)
     }
 
-    @State var firstDisplay: Bool = true
+    @State private var firstDisplay: Bool = true
 
+	/// <#Description#>
+	/// - Parameters:
+	///   - value: <#value description#>
+	///   - index: <#index description#>
+	///   - width: <#width description#>
+	///   - numberOfDataPoints: <#numberOfDataPoints description#>
+	///   - gradientColor: <#gradientColor description#>
+	///   - touchLocation: <#touchLocation description#>
     public init( value: Double,
                  index: Int = 0,
                  width: Float,

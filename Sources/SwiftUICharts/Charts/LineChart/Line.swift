@@ -1,21 +1,27 @@
 import SwiftUI
 
+/// A single line of data, a view in a LineChart.
 public struct Line: View {
     @EnvironmentObject var chartValue: ChartValue
-    @State var frame: CGRect = .zero
+    @State private var frame: CGRect = .zero
     @ObservedObject var chartData: ChartData
 
     var style: ChartStyle
 
-    @State var showIndicator: Bool = false
-    @State var touchLocation: CGPoint = .zero
+    @State private var showIndicator: Bool = false
+    @State private var touchLocation: CGPoint = .zero
     @State private var showFull: Bool = false
-    @State var showBackground: Bool = true
+    @State private var showBackground: Bool = true
     var curvedLines: Bool = true
-    var step: CGPoint {
+
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
+	var step: CGPoint {
         return CGPoint.getStep(frame: frame, data: chartData.data)
     }
 
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
     var path: Path {
         let points = chartData.data
 
@@ -28,6 +34,8 @@ public struct Line: View {
         return Path.linePathWithPoints(points: points, step: step)
     }
     
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
     var closedPath: Path {
         let points = chartData.data
 
@@ -77,11 +85,17 @@ public struct Line: View {
 // MARK: - Private functions
 
 extension Line {
+
+	/// <#Description#>
+	/// - Parameter touchLocation: <#touchLocation description#>
+	/// - Returns: <#description#>
     private func getClosestPointOnPath(touchLocation: CGPoint) -> CGPoint {
         let closest = self.path.point(to: touchLocation.x)
         return closest
     }
 
+	/// <#Description#>
+	/// - Parameter point: <#point description#>
     private func getClosestDataPoint(point: CGPoint) {
         let index = Int(round((point.x)/step.x))
         if (index >= 0 && index < self.chartData.data.count){
@@ -89,6 +103,8 @@ extension Line {
         }
     }
 
+	/// <#Description#>
+	/// - Returns: <#description#>
     private func getBackgroundPathView() -> some View {
         self.closedPath
             .fill(LinearGradient(gradient: Gradient(colors: [
@@ -104,6 +120,8 @@ extension Line {
             .animation(.easeIn(duration: 1.6))
     }
 
+	/// <#Description#>
+	/// - Returns: <#description#>
     private func getLinePathView() -> some View {
         self.path
             .trim(from: 0, to: self.showFull ? 1:0)
@@ -133,5 +151,7 @@ struct Line_Previews: PreviewProvider {
     }
 }
 
+/// <#Description#>
 private let blackLineStyle = ChartStyle(backgroundColor: ColorGradient(.white), foregroundColor: ColorGradient(.black))
+/// <#Description#>
 private let redLineStyle = ChartStyle(backgroundColor: .whiteBlack, foregroundColor: ColorGradient(.red))

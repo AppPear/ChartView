@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// <#Description#>
 public enum ChartLabelType {
     case title
     case subTitle
@@ -8,12 +9,15 @@ public enum ChartLabelType {
     case legend
 }
 
+/// <#Description#>
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
-    @State var textToDisplay:String = ""
+    @State private var textToDisplay:String = ""
 
     private var title: String
 
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
     private var labelSize: CGFloat {
         switch labelType {
         case .title:
@@ -29,6 +33,8 @@ public struct ChartLabel: View {
         }
     }
 
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
     private var labelPadding: EdgeInsets {
         switch labelType {
         case .title:
@@ -44,8 +50,11 @@ public struct ChartLabel: View {
         }
     }
 
+	/// <#Description#>
     private let labelType: ChartLabelType
 
+/// <#Description#>
+	/// - Returns: the coordinate for a rectangle center
     private var labelColor: Color {
         switch labelType {
         case .title:
@@ -61,7 +70,11 @@ public struct ChartLabel: View {
         }
     }
 
-    public init (_ title: String,
+	/// <#Description#>
+	/// - Parameters:
+	///   - title: <#title description#>
+	///   - type: <#type description#>
+    public init(_ title: String,
                  type: ChartLabelType = .title) {
         self.title = title
         labelType = type

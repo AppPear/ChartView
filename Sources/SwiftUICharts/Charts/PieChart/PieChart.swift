@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// A type of chart that displays a slice of "pie" for each data point
 public struct PieChart: View, ChartBase {
     public var chartData = ChartData()
 

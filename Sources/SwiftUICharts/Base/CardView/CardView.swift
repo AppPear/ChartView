@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// <#Description#>
 public struct CardView<Content: View>: View, ChartBase {
     public var chartData = ChartData()
     let content: () -> Content
@@ -8,6 +9,10 @@ public struct CardView<Content: View>: View, ChartBase {
 
     @EnvironmentObject var style: ChartStyle
 
+	/// <#Description#>
+	/// - Parameters:
+	///   - showShadow: <#showShadow description#>
+	///   - content: <#content description#>
     public init(showShadow: Bool = true, @ViewBuilder content: @escaping () -> Content) {
         self.showShadow = showShadow
         self.content = content

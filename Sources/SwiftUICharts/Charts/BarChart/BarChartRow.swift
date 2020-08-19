@@ -1,9 +1,10 @@
 import SwiftUI
 
+/// A single row of data, a view in a BarChart.
 public struct BarChartRow: View {
     @EnvironmentObject var chartValue: ChartValue
     @ObservedObject var chartData: ChartData
-    @State var touchLocation: CGFloat = -1.0
+    @State private var touchLocation: CGFloat = -1.0
 
     enum Constant {
         static let spacing: CGFloat = 16.0
@@ -51,11 +52,19 @@ public struct BarChartRow: View {
             )
         }
     }
-    
+
+	/// <#Description#>
+	/// - Parameter index: <#index description#>
+	/// - Returns: <#description#>
     func normalizedValue(index: Int) -> Double {
         return Double(chartData.data[index])/Double(maxValue)
     }
 
+	/// <#Description#>
+	/// - Parameters:
+	///   - touchLocation: <#touchLocation description#>
+	///   - index: <#index description#>
+	/// - Returns: <#description#>
     func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
         if touchLocation > CGFloat(index)/CGFloat(chartData.data.count) &&
            touchLocation < CGFloat(index+1)/CGFloat(chartData.data.count) {
@@ -64,6 +73,9 @@ public struct BarChartRow: View {
         return CGSize(width: 1, height: 1)
     }
 
+	/// <#Description#>
+	/// - Parameter width: <#width description#>
+	/// - Returns: <#description#>
     func getCurrentValue(width: CGFloat) -> Double? {
         guard self.chartData.data.count > 0 else { return nil}
             let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))

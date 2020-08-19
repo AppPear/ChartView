@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// <#Description#>
 public enum ChartColors {
     // Orange
     public static let orangeBright = Color(hexString: "#FF782C")

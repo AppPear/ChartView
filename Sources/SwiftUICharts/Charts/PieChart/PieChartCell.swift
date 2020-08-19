@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// <#Description#>
 struct PieSlice: Identifiable {
     var id = UUID()
     var startDeg: Double
@@ -14,6 +15,7 @@ struct PieSlice: Identifiable {
     var value: Double
 }
 
+/// A single row of data, a view in a PieChart.
 public struct PieChartCell: View {
     @State private var show: Bool = false
     var rect: CGRect
@@ -21,7 +23,9 @@ public struct PieChartCell: View {
         return min(rect.width, rect.height)/2
     }
     var startDeg: Double
-    var endDeg: Double
+	var endDeg: Double
+
+	/// <#Description#>
     var path: Path {
         var path = Path()
         path.addArc(

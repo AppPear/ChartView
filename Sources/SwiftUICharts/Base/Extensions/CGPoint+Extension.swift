@@ -1,6 +1,12 @@
 import SwiftUI
 
 extension CGPoint {
+	
+	/// <#Description#>
+	/// - Parameters:
+	///   - frame: <#frame description#>
+	///   - data: <#data description#>
+	/// - Returns: <#description#>
     static func getStep(frame: CGRect, data: [Double]) -> CGPoint {
         let padding: CGFloat = 30.0
 
