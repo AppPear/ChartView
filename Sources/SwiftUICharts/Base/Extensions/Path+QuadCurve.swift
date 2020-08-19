@@ -2,24 +2,28 @@ import SwiftUI
 
 extension Path {
 
-	/// <#Description#>
-	/// - Parameter percent: <#percent description#>
-	/// - Returns: <#description#>
+	/// Returns a tiny segment of path based on percentage along the path
+	///
+	/// TODO: Explain why > 1 gets 0 and why < 0 gets 1
+	/// - Parameter percent: fraction along data set, between 0.0 and 1.0 (underflow and overflow are handled)
+	/// - Returns: tiny path right around the requested fraction
     func trimmedPath(for percent: CGFloat) -> Path {
-        // percent difference between points
         let boundsDistance: CGFloat = 0.001
         let completion: CGFloat = 1 - boundsDistance
         
         let pct = percent > 1 ? 0 : (percent < 0 ? 1 : percent)
-        
+
+		// Start/end points centered around given percentage, but capped if right at the very end
         let start = pct > completion ? completion : pct - boundsDistance
         let end = pct > completion ? 1 : pct + boundsDistance
         return trimmedPath(from: start, to: end)
     }
 
-	/// <#Description#>
-	/// - Parameter percent: <#percent description#>
-	/// - Returns: <#description#>
+	/// Find the `CGPoint` for the given fraction along the path.
+	///
+	/// This works by requesting a very tiny trimmed section of the path, then getting the center of the bounds rectangle
+	/// - Parameter percent: fraction along data set, between 0.0 and 1.0 (underflow and overflow are handled)
+	/// - Returns: a `CGPoint` representing the location of that section of the path
     func point(for percent: CGFloat) -> CGPoint {
         let path = trimmedPath(for: percent)
         return CGPoint(x: path.boundingRect.midX, y: path.boundingRect.midY)
