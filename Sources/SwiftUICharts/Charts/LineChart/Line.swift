@@ -14,13 +14,13 @@ public struct Line: View {
     @State private var showBackground: Bool = true
     var curvedLines: Bool = true
 
-/// <#Description#>
+	/// Step for plotting through data
 	/// - Returns: X and Y delta between each data point based on data and view's frame
 	var step: CGPoint {
         return CGPoint.getStep(frame: frame, data: chartData.data)
     }
 
-/// <#Description#>
+/// Path of line graph
 	/// - Returns: A path for stroking representing the data
     var path: Path {
         let points = chartData.data
@@ -34,7 +34,7 @@ public struct Line: View {
         return Path.linePathWithPoints(points: points, step: step)
     }
     
-/// <#Description#>
+/// Path of linegraph, but also closed at the bottom side
 	/// - Returns: A path for filling representing the data
     var closedPath: Path {
         let points = chartData.data
@@ -104,7 +104,7 @@ extension Line {
     }
 
 	/// <#Description#>
-	/// - Returns: <#description#>
+	/// - Returns: SwiftUI `View`
     private func getBackgroundPathView() -> some View {
         self.closedPath
             .fill(LinearGradient(gradient: Gradient(colors: [
@@ -120,8 +120,9 @@ extension Line {
             .animation(.easeIn(duration: 1.6))
     }
 
-	/// <#Description#>
-	/// - Returns: <#description#>
+	/// Draw the line stroked in the `foregroundColor`
+	/// TODO: Explain how `showFull` works
+	/// - Returns: SwiftUI `View`
     private func getLinePathView() -> some View {
         self.path
             .trim(from: 0, to: self.showFull ? 1:0)

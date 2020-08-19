@@ -8,37 +8,37 @@ public class ChartStyle: ObservableObject {
 	/// colors for foreground fill of chart
     public let foregroundColor: [ColorGradient]
 
-	/// <#Description#>
+	/// Initialize with a single background color and an array of `ColorGradient` for the foreground
 	/// - Parameters:
-	///   - backgroundColor: <#backgroundColor description#>
-	///   - foregroundColor: <#foregroundColor description#>
+	///   - backgroundColor: a `Color`
+	///   - foregroundColor: array of `ColorGradient`
     public init(backgroundColor: Color, foregroundColor: [ColorGradient]) {
         self.backgroundColor = ColorGradient.init(backgroundColor)
         self.foregroundColor = foregroundColor
     }
 
-	/// <#Description#>
+	/// Initialize with a single background color and a single `ColorGradient` for the foreground
 	/// - Parameters:
-	///   - backgroundColor: <#backgroundColor description#>
-	///   - foregroundColor: <#foregroundColor description#>
+	///   - backgroundColor: a `Color`
+	///   - foregroundColor: a `ColorGradient`
     public init(backgroundColor: Color, foregroundColor: ColorGradient) {
         self.backgroundColor = ColorGradient.init(backgroundColor)
         self.foregroundColor = [foregroundColor]
     }
 
-	/// <#Description#>
+	/// Initialize with a single background `ColorGradient` and a single `ColorGradient` for the foreground
 	/// - Parameters:
-	///   - backgroundColor: <#backgroundColor description#>
-	///   - foregroundColor: <#foregroundColor description#>
+	///   - backgroundColor: a `ColorGradient`
+	///   - foregroundColor: a `ColorGradient`
     public init(backgroundColor: ColorGradient, foregroundColor: ColorGradient) {
         self.backgroundColor = backgroundColor
         self.foregroundColor = [foregroundColor]
     }
 
-	/// <#Description#>
+	/// Initialize with a  single background `ColorGradient` and an array of `ColorGradient` for the foreground
 	/// - Parameters:
-	///   - backgroundColor: <#backgroundColor description#>
-	///   - foregroundColor: <#foregroundColor description#>
+	///   - backgroundColor: a `ColorGradient`
+	///   - foregroundColor: array of `ColorGradient`
     public init(backgroundColor: ColorGradient, foregroundColor: [ColorGradient]) {
         self.backgroundColor = backgroundColor
         self.foregroundColor = foregroundColor

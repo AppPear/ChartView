@@ -15,7 +15,7 @@ public struct BarChartCell: View {
 
     @State private var firstDisplay: Bool = true
 
-	/// <#Description#>
+	/// Initialize
 	/// - Parameters:
 	///   - value: <#value description#>
 	///   - index: <#index description#>

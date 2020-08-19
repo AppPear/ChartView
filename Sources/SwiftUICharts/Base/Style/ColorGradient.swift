@@ -1,29 +1,27 @@
 import SwiftUI
 
-/// <#Description#>
+/// An encapsulation of a simple gradient between one color and another
 public struct ColorGradient: Equatable {
-	/// <#Description#>
 	public let startColor: Color
-	/// <#Description#>
     public let endColor: Color
 
-	/// <#Description#>
-	/// - Parameter color: <#color description#>
+	/// Initialize as a solid color
+	/// - Parameter color: a  single `Color` (no gradient effect visible)
     public init(_ color: Color) {
         self.startColor = color
         self.endColor = color
     }
 
-	/// <#Description#>
+	/// Initialize a color gradient from two specified colors
 	/// - Parameters:
-	///   - startColor: <#startColor description#>
-	///   - endColor: <#endColor description#>
+	///   - startColor: starting color
+	///   - endColor: ending color
     public init(_ startColor: Color, _ endColor: Color) {
         self.startColor = startColor
         self.endColor = endColor
     }
 
-/// <#Description#>
+	/// Convert to a  `Gradient` object (more complicated than just two colors)
 	/// - Returns: a `Gradient` between the specified start and end colors
     public var gradient: Gradient {
         return Gradient(colors: [startColor, endColor])
@@ -31,7 +29,7 @@ public struct ColorGradient: Equatable {
 }
 
 extension ColorGradient {
-    /// Convenience method to return a LinearGradient from the ColorGradient
+    /// Convenience method to return a SwiftUI LinearGradient view from the ColorGradient
     /// - Parameters:
     ///   - startPoint: starting point
     ///   - endPoint: ending point

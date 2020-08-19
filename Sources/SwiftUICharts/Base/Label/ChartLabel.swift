@@ -53,7 +53,7 @@ public struct ChartLabel: View {
 	/// Which type (color, size, position) for label
     private let labelType: ChartLabelType
 
-/// <#Description#>
+/// Foreground color for this label
 	/// - Returns: Color of label based on its `ChartLabelType`
     private var labelColor: Color {
         switch labelType {
@@ -70,10 +70,10 @@ public struct ChartLabel: View {
         }
     }
 
-	/// <#Description#>
+	/// Initialize
 	/// - Parameters:
-	///   - title: <#title description#>
-	///   - type: <#type description#>
+	///   - title: Any `String`
+	///   - type: Which `ChartLabelType` to use
     public init(_ title: String,
                  type: ChartLabelType = .title) {
         self.title = title

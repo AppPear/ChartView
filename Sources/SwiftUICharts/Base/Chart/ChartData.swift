@@ -4,8 +4,8 @@ import SwiftUI
 public class ChartData: ObservableObject {
     @Published public var data: [Double] = []
 
-	/// <#Description#>
-	/// - Parameter data: <#data description#>
+	/// Initialize with data array
+	/// - Parameter data: Array of `Double`
     public init(_ data: [Double]) {
         self.data = data
     }

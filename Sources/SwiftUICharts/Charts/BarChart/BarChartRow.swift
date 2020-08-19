@@ -53,18 +53,18 @@ public struct BarChartRow: View {
         }
     }
 
-	/// <#Description#>
-	/// - Parameter index: <#index description#>
-	/// - Returns: <#description#>
+	/// Value relative to maximum value
+	/// - Parameter index: index into array of data
+	/// - Returns: data value at given index, divided by data maximum
     func normalizedValue(index: Int) -> Double {
         return Double(chartData.data[index])/Double(maxValue)
     }
 
-	/// <#Description#>
+	/// Size to scale the touch indicator
 	/// - Parameters:
-	///   - touchLocation: <#touchLocation description#>
-	///   - index: <#index description#>
-	/// - Returns: <#description#>
+	///   - touchLocation: fraction of width where touch is happening
+	///   - index: index into data array
+	/// - Returns: a scale larger than 1.0 if in bounds; 1.0 (unscaled) if not in bounds
     func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
         if touchLocation > CGFloat(index)/CGFloat(chartData.data.count) &&
            touchLocation < CGFloat(index+1)/CGFloat(chartData.data.count) {
@@ -73,9 +73,9 @@ public struct BarChartRow: View {
         return CGSize(width: 1, height: 1)
     }
 
-	/// <#Description#>
-	/// - Parameter width: <#width description#>
-	/// - Returns: <#description#>
+	/// Get data value where touch happened
+	/// - Parameter width: width of chart
+	/// - Returns: value as `Double` if chart has data
     func getCurrentValue(width: CGFloat) -> Double? {
         guard self.chartData.data.count > 0 else { return nil}
             let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))
