@@ -1,6 +1,8 @@
 import SwiftUI
 
 extension Color {
+	/// Create a `Color` from a hexadecimal representation
+	/// - Parameter hexString: 3, 6, or 8-character string, with optional (ignored) punctuation such as "#"
     init(hexString: String) {
         let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int = UInt64()

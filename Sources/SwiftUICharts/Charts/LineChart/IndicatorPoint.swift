@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-/// A dot representing a single data point as user moves finger over line in LineChart.
+/// A dot representing a single data point as user moves finger over line in `LineChart`
 struct IndicatorPoint: View {
     public var body: some View {
         ZStack {

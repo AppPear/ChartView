@@ -1,11 +1,11 @@
 import SwiftUI
 
-/// <#Description#>
+/// Descripton of colors/styles for any kind of chart
 public class ChartStyle: ObservableObject {
 
-	/// <#Description#>
+	/// colors for background are of chart
 	public let backgroundColor: ColorGradient
-	/// <#Description#>
+	/// colors for foreground fill of chart
     public let foregroundColor: [ColorGradient]
 
 	/// <#Description#>

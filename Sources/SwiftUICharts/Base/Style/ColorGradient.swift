@@ -24,7 +24,7 @@ public struct ColorGradient: Equatable {
     }
 
 /// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+	/// - Returns: a `Gradient` between the specified start and end colors
     public var gradient: Gradient {
         return Gradient(colors: [startColor, endColor])
     }

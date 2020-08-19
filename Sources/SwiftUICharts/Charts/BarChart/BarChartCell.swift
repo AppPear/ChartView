@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A single vertical bar in a bar chart
+/// A single vertical bar in a `BarChart`
 public struct BarChartCell: View {
     var value: Double
     var index: Int = 0

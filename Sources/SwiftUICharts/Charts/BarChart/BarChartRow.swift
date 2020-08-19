@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A single row of data, a view in a BarChart.
+/// A single row of data, a view in a `BarChart`
 public struct BarChartRow: View {
     @EnvironmentObject var chartValue: ChartValue
     @ObservedObject var chartData: ChartData

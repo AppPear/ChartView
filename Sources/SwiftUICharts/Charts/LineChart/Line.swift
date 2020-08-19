@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A single line of data, a view in a LineChart.
+/// A single line of data, a view in a `LineChart`
 public struct Line: View {
     @EnvironmentObject var chartValue: ChartValue
     @State private var frame: CGRect = .zero
@@ -15,13 +15,13 @@ public struct Line: View {
     var curvedLines: Bool = true
 
 /// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+	/// - Returns: X and Y delta between each data point based on data and view's frame
 	var step: CGPoint {
         return CGPoint.getStep(frame: frame, data: chartData.data)
     }
 
 /// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+	/// - Returns: A path for stroking representing the data
     var path: Path {
         let points = chartData.data
 
@@ -35,7 +35,7 @@ public struct Line: View {
     }
     
 /// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+	/// - Returns: A path for filling representing the data
     var closedPath: Path {
         let points = chartData.data
 
@@ -151,7 +151,8 @@ struct Line_Previews: PreviewProvider {
     }
 }
 
-/// <#Description#>
+/// Predefined style, black over white, for preview
 private let blackLineStyle = ChartStyle(backgroundColor: ColorGradient(.white), foregroundColor: ColorGradient(.black))
-/// <#Description#>
+
+/// Predefined stylem red over white, for preview
 private let redLineStyle = ChartStyle(backgroundColor: .whiteBlack, foregroundColor: ColorGradient(.red))

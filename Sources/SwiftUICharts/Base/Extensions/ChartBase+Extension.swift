@@ -2,9 +2,9 @@ import SwiftUI
 
 extension View where Self: ChartBase {
 	
-	/// <#Description#>
-	/// - Parameter data: <#data description#>
-	/// - Returns: <#description#>
+	/// Set data for a chart
+	/// - Parameter data: array of `Double`
+	/// - Returns: modified `View` with data attached
     public func data(_ data: [Double]) -> some View {
         chartData.data = data
         return self

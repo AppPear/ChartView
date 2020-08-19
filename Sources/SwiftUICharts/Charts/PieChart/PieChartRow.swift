@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// A single "row" (slice) of data, a view in a PieChart.
+/// A single "row" (slice) of data, a view in a `PieChart`
 public struct PieChartRow: View {
     @ObservedObject var chartData: ChartData
 
@@ -73,12 +73,12 @@ struct PieChartRow_Previews: PreviewProvider {
     }
 }
 
-/// <#Description#>
+/// Predefined color style, for preview
 private let defaultMultiColorChartStyle = ChartStyle(
     backgroundColor: Color.white,
     foregroundColor: [ColorGradient]())
 
-/// <#Description#>
+/// Predefined color style, for preview
 private let multiColorChartStyle = ChartStyle(
 backgroundColor: Color.purple,
 foregroundColor: [ColorGradient.greenRed, ColorGradient.whiteBlack])

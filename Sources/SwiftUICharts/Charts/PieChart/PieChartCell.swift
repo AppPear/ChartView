@@ -15,7 +15,7 @@ struct PieSlice: Identifiable {
     var value: Double
 }
 
-/// A single row of data, a view in a PieChart.
+/// A single row of data, a view in a `PieChart`
 public struct PieChartCell: View {
     @State private var show: Bool = false
     var rect: CGRect

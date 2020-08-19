@@ -3,7 +3,7 @@ import Foundation
 extension Array where Element == ColorGradient {
 	
 	/// <#Description#>
-	/// - Parameter index: <#index description#>
+	/// - Parameter index: offset in data table
 	/// - Returns: <#description#>
     func rotate(for index: Int) -> ColorGradient {
         if self.isEmpty {

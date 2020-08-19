@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// <#Description#>
+/// What kind of label - this affects color, size, position of the label
 public enum ChartLabelType {
     case title
     case subTitle
@@ -9,15 +9,15 @@ public enum ChartLabelType {
     case legend
 }
 
-/// <#Description#>
+/// A chart may contain any number of labels in pre-set positions based on their `ChartLabelType`
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
     @State private var textToDisplay:String = ""
 
     private var title: String
 
-/// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+	/// Label font size
+	/// - Returns: the font size of the label
     private var labelSize: CGFloat {
         switch labelType {
         case .title:
@@ -33,8 +33,8 @@ public struct ChartLabel: View {
         }
     }
 
-/// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+/// Padding around label
+	/// - Returns: the edge padding to use based on position of the label
     private var labelPadding: EdgeInsets {
         switch labelType {
         case .title:
@@ -50,11 +50,11 @@ public struct ChartLabel: View {
         }
     }
 
-	/// <#Description#>
+	/// Which type (color, size, position) for label
     private let labelType: ChartLabelType
 
 /// <#Description#>
-	/// - Returns: the coordinate for a rectangle center
+	/// - Returns: Color of label based on its `ChartLabelType`
     private var labelColor: Color {
         switch labelType {
         case .title:

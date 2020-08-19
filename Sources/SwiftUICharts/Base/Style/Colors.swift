@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// <#Description#>
+/// Some predefined colors, used for demos, defaults if color is missing, and data indicator point
 public enum ChartColors {
     // Orange
     public static let orangeBright = Color(hexString: "#FF782C")
