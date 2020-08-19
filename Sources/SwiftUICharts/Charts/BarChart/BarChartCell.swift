@@ -15,14 +15,6 @@ public struct BarChartCell: View {
 
     @State private var firstDisplay: Bool = true
 
-	/// Initialize
-	/// - Parameters:
-	///   - value: <#value description#>
-	///   - index: <#index description#>
-	///   - width: <#width description#>
-	///   - numberOfDataPoints: <#numberOfDataPoints description#>
-	///   - gradientColor: <#gradientColor description#>
-	///   - touchLocation: <#touchLocation description#>
     public init( value: Double,
                  index: Int = 0,
                  width: Float,

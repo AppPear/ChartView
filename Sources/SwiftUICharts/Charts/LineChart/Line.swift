@@ -86,16 +86,16 @@ public struct Line: View {
 
 extension Line {
 
-	/// <#Description#>
-	/// - Parameter touchLocation: <#touchLocation description#>
-	/// - Returns: <#description#>
+	/// Calculate point closest to where the user touched
+	/// - Parameter touchLocation: location in view where touched
+	/// - Returns: `CGPoint` of data point on chart
     private func getClosestPointOnPath(touchLocation: CGPoint) -> CGPoint {
         let closest = self.path.point(to: touchLocation.x)
         return closest
     }
 
-	/// <#Description#>
-	/// - Parameter point: <#point description#>
+	/// Figure out where closest touch point was
+	/// - Parameter point: location of data point on graph, near touch location
     private func getClosestDataPoint(point: CGPoint) {
         let index = Int(round((point.x)/step.x))
         if (index >= 0 && index < self.chartData.data.count){
@@ -103,7 +103,9 @@ extension Line {
         }
     }
 
-	/// <#Description#>
+	/// Get the view representing the filled in background below the chart, filled with the foreground color's gradient
+	///
+	/// TODO: explain rotations
 	/// - Returns: SwiftUI `View`
     private func getBackgroundPathView() -> some View {
         self.closedPath
@@ -120,8 +122,10 @@ extension Line {
             .animation(.easeIn(duration: 1.6))
     }
 
-	/// Draw the line stroked in the `foregroundColor`
+	/// Get the view representing the line stroked in the `foregroundColor`
+	/// 
 	/// TODO: Explain how `showFull` works
+	/// TODO: explain rotations
 	/// - Returns: SwiftUI `View`
     private func getLinePathView() -> some View {
         self.path
