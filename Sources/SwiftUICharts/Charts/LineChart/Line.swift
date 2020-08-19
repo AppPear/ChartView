@@ -20,8 +20,8 @@ public struct Line: View {
         return CGPoint.getStep(frame: frame, data: chartData.data)
     }
 
-/// Path of line graph
-	/// - Returns: A path for stroking representing the data
+	/// Path of line graph
+	/// - Returns: A path for stroking representing the data, either curved or jagged.
     var path: Path {
         let points = chartData.data
 
@@ -34,8 +34,8 @@ public struct Line: View {
         return Path.linePathWithPoints(points: points, step: step)
     }
     
-/// Path of linegraph, but also closed at the bottom side
-	/// - Returns: A path for filling representing the data
+	/// Path of linegraph, but also closed at the bottom side
+	/// - Returns: A path for filling representing the data, either curved or jagged
     var closedPath: Path {
         let points = chartData.data
 

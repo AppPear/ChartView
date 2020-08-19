@@ -33,7 +33,7 @@ public struct ChartLabel: View {
         }
     }
 
-/// Padding around label
+	/// Padding around label
 	/// - Returns: the edge padding to use based on position of the label
     private var labelPadding: EdgeInsets {
         switch labelType {
@@ -53,7 +53,7 @@ public struct ChartLabel: View {
 	/// Which type (color, size, position) for label
     private let labelType: ChartLabelType
 
-/// Foreground color for this label
+	/// Foreground color for this label
 	/// - Returns: Color of label based on its `ChartLabelType`
     private var labelColor: Color {
         switch labelType {

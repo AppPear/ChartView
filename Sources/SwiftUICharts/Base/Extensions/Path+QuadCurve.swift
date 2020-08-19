@@ -4,7 +4,7 @@ extension Path {
 
 	/// Returns a tiny segment of path based on percentage along the path
 	///
-	/// TODO: Explain why > 1 gets 0 and why < 0 gets 1
+	/// TODO: Explain why more than 1 gets 0 and why less than 0 gets 1
 	/// - Parameter percent: fraction along data set, between 0.0 and 1.0 (underflow and overflow are handled)
 	/// - Returns: tiny path right around the requested fraction
     func trimmedPath(for percent: CGFloat) -> Path {
@@ -29,7 +29,7 @@ extension Path {
         return CGPoint(x: path.boundingRect.midX, y: path.boundingRect.midY)
     }
 
-/// <#Description#>
+	/// <#Description#>
 	/// - Parameter maxX: <#maxX description#>
 	/// - Returns: <#description#>
     func point(to maxX: CGFloat) -> CGPoint {
@@ -39,7 +39,7 @@ extension Path {
         return point(for: percent)
     }
     
-/// <#Description#>
+	/// <#Description#>
 	/// - Returns: <#description#>
    var length: CGFloat {
         var ret: CGFloat = 0.0
