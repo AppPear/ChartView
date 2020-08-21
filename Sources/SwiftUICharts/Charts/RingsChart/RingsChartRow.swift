@@ -29,7 +29,7 @@ public struct RingsChartRow: View {
 		GeometryReader { geometry in
 			ZStack {
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
-					RingChart()
+					Ring()
 //					value: self.normalizedValue(index: index),
 //								 index: index,
 //								 width: Float(geometry.frame(in: .local).width - Constant.spacing),
