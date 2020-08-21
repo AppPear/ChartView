@@ -108,10 +108,10 @@ struct Ring: View {
 	var body: some View {
 		GeometryReader { geometry in
 			ZStack {
-				// Background for the ring
+				// Background for the ring. Use the final color with reduced opacity
 				RingShape()
 					.stroke(style: StrokeStyle(lineWidth: self.ringWidth))
-					.fill(self.backgroundGradient)
+					.fill(lastGradientColor.opacity(0.142857))
 				// Foreground
 				RingShape(percent: self.percent, startAngle: self.startAngle)
 					.stroke(style: StrokeStyle(lineWidth: self.ringWidth, lineCap: .round))

@@ -8,46 +8,32 @@
 import SwiftUI
 
 public struct RingsChartRow: View {
+
+	var width : CGFloat
+	var spacing : CGFloat
+
 	@EnvironmentObject var chartValue: ChartValue
 	@ObservedObject var chartData: ChartData
 	@State var touchLocation: CGFloat = -1.0
 
-	enum Constant {
-		static let spacing: CGFloat = 16.0
-	}
-
 	var style: ChartStyle
-
-	var maxValue: Double {
-		guard let max = chartData.data.max() else {
-			return 1
-		}
-		return max != 0 ? max : 1
-	}
 
 	public var body: some View {
 		GeometryReader { geometry in
 			ZStack {
+//				Circle()
+//					.fill(self.style.backgroundColor.endColor)	// use gradient?
+
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
-					Ring(ringWidth: 20, percent: self.chartData.data[index], backgroundColor: self.style.backgroundColor, foregroundColor:self.style.foregroundColor.rotate(for: index))
-//					value: self.normalizedValue(index: index),
-//								 index: index,
-//								 width: Float(geometry.frame(in: .local).width - Constant.spacing),
-//								 numberOfDataPoints: self.chartData.data.count,
-//								 gradientColor: self.style.foregroundColor.rotate(for: index),
+					Ring(ringWidth: width, percent: self.chartData.data[index], backgroundColor: self.style.backgroundColor, foregroundColor:self.style.foregroundColor.rotate(for: index))
 //								 touchLocation: self.touchLocation)
-						.padding(20.0 * CGFloat(index))
+						.padding((width + spacing) * CGFloat(index))
 						.scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .center)
 						.animation(Animation.easeIn(duration: 0.2))
 				}
 				//                   .drawingGroup()
 			}
-//			.padding([.top, .leading, .trailing], 10)
 		}
-	}
-
-	func normalizedValue(index: Int) -> Double {
-		return Double(chartData.data[index])/Double(maxValue)
 	}
 
 	func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
@@ -74,10 +60,8 @@ struct RingsChartRow_Previews: PreviewProvider {
 											[ColorGradient(.purple, .blue),
 											 ColorGradient(.orange, .red),
 											 ColorGradient(.green, .yellow),
-											 ColorGradient(.red, .purple),
-											 ColorGradient(.yellow, .orange),
 											])
 
-		return RingsChartRow(chartData: ChartData([25,50,75,100,125,150]), style: multiStyle)
+		return RingsChartRow(width:20.0, spacing:10.0, chartData: ChartData([25,50,75,100,125]), style: multiStyle)
 	}
 }
