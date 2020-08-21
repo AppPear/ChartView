@@ -19,7 +19,11 @@ extension Double {
 }
 
 struct RingShape: Shape {
-	// Helper function to convert percent values to angles in degrees
+	/// Helper function to convert percent values to angles in degrees
+	/// - Parameters:
+	///   - percent: percent, greater than 100 is OK
+	///   - startAngle: angle to add after converting
+	/// - Returns: angle in degrees
 	static func percentToAngle(percent: Double, startAngle: Double) -> Double {
 		(percent / 100 * 360) + startAngle
 	}
@@ -43,7 +47,10 @@ struct RingShape: Shape {
 		self.drawnClockwise = drawnClockwise
 	}
 
-	// This draws a simple arc from the start angle to the end angle
+	/// This draws a simple arc from the start angle to the end angle
+	///
+	/// - Parameter rect: The frame of reference for describing this shape.
+	/// - Returns: A path that describes this shape.
 	func path(in rect: CGRect) -> Path {
 		let width = rect.width
 		let height = rect.height
@@ -64,7 +71,6 @@ struct Ring: View {
 
 	private let ringWidth: CGFloat
 	private let percent: Double
-	private let backgroundColor: ColorGradient
 	private let foregroundColor: ColorGradient
 	private let startAngle: Double = -90
 	private var gradientStartAngle: Double {
@@ -80,14 +86,6 @@ struct Ring: View {
 	private var lastGradientColor: Color {
 		self.foregroundColor.endColor
 	}
-	private var backgroundGradient: AngularGradient {
-		AngularGradient(
-			gradient: self.backgroundColor.gradient,
-			center: .center,
-			startAngle: Angle(degrees: 0),
-			endAngle: Angle(degrees: 360)
-		)
-	}
 
 	private var ringGradient: AngularGradient {
 		AngularGradient(
@@ -98,10 +96,9 @@ struct Ring: View {
 		)
 	}
 
-	init(ringWidth: CGFloat, percent: Double, backgroundColor: ColorGradient, foregroundColor: ColorGradient) {
+	init(ringWidth: CGFloat, percent: Double, foregroundColor: ColorGradient) {
 		self.ringWidth = ringWidth
 		self.percent = percent
-		self.backgroundColor = backgroundColor
 		self.foregroundColor = foregroundColor
 	}
 
@@ -167,14 +164,12 @@ struct Ring_Previews: PreviewProvider {
 		VStack {
 			Ring(
 				ringWidth: 50, percent: 5 ,
-				backgroundColor: ColorGradient(Color.green.opacity(0.2)),
 				foregroundColor: ColorGradient(.green, .blue)
 			)
 			.frame(width: 200, height: 200)
 
 			Ring(
 				ringWidth: 20, percent: 110 ,
-				backgroundColor: ColorGradient(Color.black.opacity(0.2)),
 				foregroundColor: ColorGradient(.red, .blue)
 			)
 			.frame(width: 200, height: 200)

@@ -20,14 +20,23 @@ public struct RingsChartRow: View {
 
 	public var body: some View {
 		GeometryReader { geometry in
+
 			ZStack {
-//				Circle()
-//					.fill(self.style.backgroundColor.endColor)	// use gradient?
+
+				// FIXME: Why is background circle offset strangely when frame isn't specified? See Preview below.
+				Circle()
+					.fill(RadialGradient(gradient: self.style.backgroundColor.gradient, center: .center, startRadius: min(geometry.size.width, geometry.size.height)/2.0, endRadius: 1.0))
 
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
-					Ring(ringWidth: width, percent: self.chartData.data[index], backgroundColor: self.style.backgroundColor, foregroundColor:self.style.foregroundColor.rotate(for: index))
+					Ring(ringWidth: width, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index))
 //								 touchLocation: self.touchLocation)
-						.padding((width + spacing) * CGFloat(index))
+
+						.padding(min(
+							(width + spacing) * CGFloat(index),	// expected padding
+									 min(geometry.size.width, geometry.size.height)/2.0 - width
+										// make sure it doesn't get to crazy value
+									 ))
+
 						.scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .center)
 						.animation(Animation.easeIn(duration: 0.2))
 				}
@@ -55,7 +64,7 @@ public struct RingsChartRow: View {
 struct RingsChartRow_Previews: PreviewProvider {
 	static var previews: some View {
 
-		let multiStyle = ChartStyle(backgroundColor: .gray,
+		let multiStyle = ChartStyle(backgroundColor: ColorGradient(Color.black.opacity(0.05), Color.white),
 										   foregroundColor:
 											[ColorGradient(.purple, .blue),
 											 ColorGradient(.orange, .red),
@@ -63,5 +72,8 @@ struct RingsChartRow_Previews: PreviewProvider {
 											])
 
 		return RingsChartRow(width:20.0, spacing:10.0, chartData: ChartData([25,50,75,100,125]), style: multiStyle)
+
+		// and why does this not get centered when frame IS specified?
+		.frame(width:300, height:400)
 	}
 }
