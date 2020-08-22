@@ -14,7 +14,7 @@ public struct RingsChartRow: View {
 
 	@EnvironmentObject var chartValue: ChartValue
 	@ObservedObject var chartData: ChartData
-	@State var touchLocation: CGFloat = -1.0
+	@State var touchRadius: CGFloat = -1.0
 
 	var style: ChartStyle
 
@@ -29,7 +29,7 @@ public struct RingsChartRow: View {
 
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
 					Ring(ringWidth: width, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
-								 touchLocation: self.touchLocation)
+								 touchRadius: self.touchRadius)
 
 						.padding(min(
 							(width + spacing) * CGFloat(index),	// expected padding
@@ -37,7 +37,7 @@ public struct RingsChartRow: View {
 										// make sure it doesn't get to crazy value
 									 ))
 
-						.scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .center)
+						.scaleEffect(self.getScaleSize(size:geometry.size, touchRadius: self.touchRadius, index: index), anchor: .center)
 						.animation(Animation.easeIn(duration: 1.0))
 				}
 				//                   .drawingGroup()
@@ -47,35 +47,62 @@ public struct RingsChartRow: View {
 						.onChanged({ value in
 							let frame = geometry.frame(in: .local)
 							let radius = min(frame.width, frame.height) / 2.0
+							let deltaX = value.location.x - frame.midX
+							let deltaY = value.location.y - frame.midY
+							self.touchRadius = sqrt(deltaX*deltaX + deltaY*deltaY) // Pythagorean equation
 
-							print("radius = \(radius) loc = \(value.location.x), \(value.location.y)")
-
-							self.touchLocation = value.location.x/width
-							if let currentValue = self.getCurrentValue(width: width) {
+							if let currentValue = self.getCurrentValue(maxRadius: radius) {
 								self.chartValue.currentValue = currentValue
 								self.chartValue.interactionInProgress = true
 							}
 						})
 						.onEnded({ value in
 							self.chartValue.interactionInProgress = false
-							self.touchLocation = -1
+							self.touchRadius = -1
 						})
 			)
 
 		}
 	}
 
-	func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
-		if touchLocation > CGFloat(index)/CGFloat(chartData.data.count) &&
-			touchLocation < CGFloat(index+1)/CGFloat(chartData.data.count) {
+	/// Scale up the touched ring
+	/// - Parameters:
+	///   - size: size of the view
+	///   - touchRadius: distance from center where touched
+	///   - index: which ring is being drawn
+	/// - Returns: size to scale up or just scale of 1 if not scaled up
+	func getScaleSize(size: CGSize, touchRadius: CGFloat, index: Int) -> CGSize {
+		let radius = min(size.width, size.height) / 2.0
+		if self.touchedCircleIndex(maxRadius: radius) != nil {
 			return CGSize(width: 1.4, height: 1.4)
 		}
 		return CGSize(width: 1, height: 1)
 	}
 
-	func getCurrentValue(width: CGFloat) -> Double? {
-		guard self.chartData.data.count > 0 else { return nil}
-		let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))
+	/// Find which circle has been touched
+	/// - Parameter maxRadius: radius of overall view circle
+	/// - Returns: which circle index was touched, if found. 0 = outer, 1 = next one in, etc.
+	func touchedCircleIndex(maxRadius: CGFloat) -> Int? {
+		guard self.chartData.data.count > 0 else { return nil }	// no data
+
+		// Pretend actual circle goes ½ the inter-ring spacing out, so that a touch
+		// is registered on either side of each ring
+		let radialDistanceFromEdge = (maxRadius + spacing/2) - self.touchRadius;
+		guard radialDistanceFromEdge >= 0 else { return nil }	// touched outside of ring
+
+		let touchIndex = Int(floor(radialDistanceFromEdge / (width + spacing)))
+
+		if touchIndex >= self.chartData.data.count { return nil }	// too far from outside, no ring
+
+		return touchIndex
+	}
+
+	/// Description
+	/// - Parameter maxRadius: radius of overall view circle
+	/// - Returns: percentage value of the touched circle, based on `touchRadius` if found
+	func getCurrentValue(maxRadius: CGFloat) -> Double? {
+
+		guard let index = self.touchedCircleIndex(maxRadius: maxRadius) else { return nil }
 		return self.chartData.data[index]
 	}
 }
