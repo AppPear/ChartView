@@ -28,14 +28,23 @@ public struct RingsChartRow: View {
 					.fill(RadialGradient(gradient: self.style.backgroundColor.gradient, center: .center, startRadius: min(geometry.size.width, geometry.size.height)/2.0, endRadius: 1.0))
 
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
-					Ring(ringWidth:self.getScaledRingWidth(size:geometry.size, touchRadius: self.touchRadius, index: index), percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
+
+					let scaleUp = isRingScaled(size:geometry.size, touchRadius: self.touchRadius, index: index)
+					let scaledWidth = scaleUp ? self.width * 2.0 : self.width
+
+					let normalPadding = (width + spacing) * CGFloat(index)
+					let scaledDiff = (scaledWidth - width) / 2.0
+					let padding = min(normalPadding - scaledDiff,
+									  min(geometry.size.width, geometry.size.height)/2.0 - width
+									  // make sure it doesn't get to crazy value
+					)
+
+					Ring(ringWidth:scaledWidth, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
 						 touchLocation: self.touchRadius)
 
-						.padding(min(
-							(width + spacing) * CGFloat(index),	// expected padding
-							min(geometry.size.width, geometry.size.height)/2.0 - width
-							// make sure it doesn't get to crazy value
-						))
+
+						.zIndex(scaleUp ? 1 : 0)
+						.padding(padding)
 
 						.animation(Animation.easeIn(duration: 1.0))
 				}
@@ -64,18 +73,15 @@ public struct RingsChartRow: View {
 		}
 	}
 
-	/// Scale up the touched ring
+	/// should we scale up the touched ring?
 	/// - Parameters:
 	///   - size: size of the view
 	///   - touchRadius: distance from center where touched
 	///   - index: which ring is being drawn
 	/// - Returns: size to scale up or just scale of 1 if not scaled up
-	func getScaledRingWidth(size: CGSize, touchRadius: CGFloat, index: Int) -> CGFloat {
+	func isRingScaled(size: CGSize, touchRadius: CGFloat, index: Int) -> Bool {
 		let radius = min(size.width, size.height) / 2.0
-		if index == self.touchedCircleIndex(maxRadius: radius) {
-			return self.width * 2.0
-		}
-		return self.width
+		return index == self.touchedCircleIndex(maxRadius: radius)
 	}
 
 	/// Find which circle has been touched
@@ -123,4 +129,5 @@ struct RingsChartRow_Previews: PreviewProvider {
 			.frame(width:300, height:400)
 	}
 }
+
 
