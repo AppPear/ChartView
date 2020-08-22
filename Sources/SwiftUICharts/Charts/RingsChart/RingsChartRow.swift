@@ -23,7 +23,7 @@ public struct RingsChartRow: View {
 
 			ZStack {
 
-				// FIXME: Why is background circle offset strangely when frame isn't specified? See Preview below.
+				// FIXME: Why is background circle offset strangely when frame isn't specified? See Preview below. Related to the .animation somehow ????
 				Circle()
 					.fill(RadialGradient(gradient: self.style.backgroundColor.gradient, center: .center, startRadius: min(geometry.size.width, geometry.size.height)/2.0, endRadius: 1.0))
 
@@ -38,7 +38,7 @@ public struct RingsChartRow: View {
 									 ))
 
 						.scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .center)
-						.animation(Animation.easeIn(duration: 0.2))
+						.animation(Animation.easeIn(duration: 1.0))
 				}
 				//                   .drawingGroup()
 			}
