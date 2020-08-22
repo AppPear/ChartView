@@ -28,8 +28,8 @@ public struct RingsChartRow: View {
 					.fill(RadialGradient(gradient: self.style.backgroundColor.gradient, center: .center, startRadius: min(geometry.size.width, geometry.size.height)/2.0, endRadius: 1.0))
 
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
-					Ring(ringWidth: width, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index))
-//								 touchLocation: self.touchLocation)
+					Ring(ringWidth: width, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
+								 touchLocation: self.touchLocation)
 
 						.padding(min(
 							(width + spacing) * CGFloat(index),	// expected padding
@@ -42,13 +42,33 @@ public struct RingsChartRow: View {
 				}
 				//                   .drawingGroup()
 			}
+
+			.gesture(DragGesture()
+						.onChanged({ value in
+							let frame = geometry.frame(in: .local)
+							let radius = min(frame.width, frame.height) / 2.0
+
+							print("radius = \(radius) loc = \(value.location.x), \(value.location.y)")
+
+							self.touchLocation = value.location.x/width
+							if let currentValue = self.getCurrentValue(width: width) {
+								self.chartValue.currentValue = currentValue
+								self.chartValue.interactionInProgress = true
+							}
+						})
+						.onEnded({ value in
+							self.chartValue.interactionInProgress = false
+							self.touchLocation = -1
+						})
+			)
+
 		}
 	}
 
 	func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
 		if touchLocation > CGFloat(index)/CGFloat(chartData.data.count) &&
 			touchLocation < CGFloat(index+1)/CGFloat(chartData.data.count) {
-			return CGSize(width: 1.4, height: 1.1)
+			return CGSize(width: 1.4, height: 1.4)
 		}
 		return CGSize(width: 1, height: 1)
 	}

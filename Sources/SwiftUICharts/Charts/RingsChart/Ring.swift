@@ -73,6 +73,11 @@ struct Ring: View {
 	private let percent: Double
 	private let foregroundColor: ColorGradient
 	private let startAngle: Double = -90
+
+	private let touchLocation: CGFloat
+
+
+
 	private var gradientStartAngle: Double {
 		self.percent >= 100 ? relativePercentageAngle - 360 : startAngle
 	}
@@ -96,10 +101,11 @@ struct Ring: View {
 		)
 	}
 
-	init(ringWidth: CGFloat, percent: Double, foregroundColor: ColorGradient) {
+	init(ringWidth: CGFloat, percent: Double, foregroundColor: ColorGradient, touchLocation:CGFloat) {
 		self.ringWidth = ringWidth
 		self.percent = percent
 		self.foregroundColor = foregroundColor
+		self.touchLocation = touchLocation
 	}
 
 	var body: some View {
@@ -164,13 +170,13 @@ struct Ring_Previews: PreviewProvider {
 		VStack {
 			Ring(
 				ringWidth: 50, percent: 5 ,
-				foregroundColor: ColorGradient(.green, .blue)
+				foregroundColor: ColorGradient(.green, .blue), touchLocation: -1.0
 			)
 			.frame(width: 200, height: 200)
 
 			Ring(
 				ringWidth: 20, percent: 110 ,
-				foregroundColor: ColorGradient(.red, .blue)
+				foregroundColor: ColorGradient(.red, .blue), touchLocation: -1.0
 			)
 			.frame(width: 200, height: 200)
 
