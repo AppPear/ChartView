@@ -29,13 +29,13 @@ public struct RingsChartRow: View {
 
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
 					Ring(ringWidth: width, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
-								 touchRadius: self.touchRadius)
+						 touchLocation: self.touchRadius)
 
 						.padding(min(
 							(width + spacing) * CGFloat(index),	// expected padding
-									 min(geometry.size.width, geometry.size.height)/2.0 - width
-										// make sure it doesn't get to crazy value
-									 ))
+							min(geometry.size.width, geometry.size.height)/2.0 - width
+							// make sure it doesn't get to crazy value
+						))
 
 						.scaleEffect(self.getScaleSize(size:geometry.size, touchRadius: self.touchRadius, index: index), anchor: .center)
 						.animation(Animation.easeIn(duration: 1.0))
@@ -112,15 +112,16 @@ struct RingsChartRow_Previews: PreviewProvider {
 	static var previews: some View {
 
 		let multiStyle = ChartStyle(backgroundColor: ColorGradient(Color.black.opacity(0.05), Color.white),
-										   foregroundColor:
-											[ColorGradient(.purple, .blue),
-											 ColorGradient(.orange, .red),
-											 ColorGradient(.green, .yellow),
-											])
+									foregroundColor:
+										[ColorGradient(.purple, .blue),
+										 ColorGradient(.orange, .red),
+										 ColorGradient(.green, .yellow),
+										])
 
 		return RingsChartRow(width:20.0, spacing:10.0, chartData: ChartData([25,50,75,100,125]), style: multiStyle)
 
-		// and why does this not get centered when frame IS specified?
-		.frame(width:300, height:400)
+			// and why does this not get centered when frame IS specified?
+			.frame(width:300, height:400)
 	}
 }
+
