@@ -28,7 +28,7 @@ public struct RingsChartRow: View {
 					.fill(RadialGradient(gradient: self.style.backgroundColor.gradient, center: .center, startRadius: min(geometry.size.width, geometry.size.height)/2.0, endRadius: 1.0))
 
 				ForEach(0..<self.chartData.data.count, id: \.self) { index in
-					Ring(ringWidth: width, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
+					Ring(ringWidth:self.getScaledRingWidth(size:geometry.size, touchRadius: self.touchRadius, index: index), percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
 						 touchLocation: self.touchRadius)
 
 						.padding(min(
@@ -37,7 +37,6 @@ public struct RingsChartRow: View {
 							// make sure it doesn't get to crazy value
 						))
 
-						.scaleEffect(self.getScaleSize(size:geometry.size, touchRadius: self.touchRadius, index: index), anchor: .center)
 						.animation(Animation.easeIn(duration: 1.0))
 				}
 				//                   .drawingGroup()
@@ -71,12 +70,12 @@ public struct RingsChartRow: View {
 	///   - touchRadius: distance from center where touched
 	///   - index: which ring is being drawn
 	/// - Returns: size to scale up or just scale of 1 if not scaled up
-	func getScaleSize(size: CGSize, touchRadius: CGFloat, index: Int) -> CGSize {
+	func getScaledRingWidth(size: CGSize, touchRadius: CGFloat, index: Int) -> CGFloat {
 		let radius = min(size.width, size.height) / 2.0
-		if self.touchedCircleIndex(maxRadius: radius) != nil {
-			return CGSize(width: 1.4, height: 1.4)
+		if index == self.touchedCircleIndex(maxRadius: radius) {
+			return self.width * 2.0
 		}
-		return CGSize(width: 1, height: 1)
+		return self.width
 	}
 
 	/// Find which circle has been touched
@@ -120,7 +119,7 @@ struct RingsChartRow_Previews: PreviewProvider {
 
 		return RingsChartRow(width:20.0, spacing:10.0, chartData: ChartData([25,50,75,100,125]), style: multiStyle)
 
-			// and why does this not get centered when frame IS specified?
+			// and why does this not get centered when frame isn't specified?
 			.frame(width:300, height:400)
 	}
 }
