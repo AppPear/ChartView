@@ -43,10 +43,10 @@ public struct RingsChartRow: View {
 						 touchLocation: self.touchRadius)
 
 
-						.zIndex(scaleUp ? 1 : 0)
+						.zIndex(scaleUp ? 1 : 0)	// make sure zoomed one is on top
 						.padding(padding)
 
-						.animation(Animation.easeIn(duration: 1.0))
+						.animation(Animation.easeIn(duration: 0.5))
 				}
 				//                   .drawingGroup()
 			}
