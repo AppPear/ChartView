@@ -75,7 +75,7 @@ public struct ChartLabel: View {
         }
     }
 
-    public init (_ title: String, format: ChartLabelFormat,
+    public init (_ title: String, format: ChartLabelFormat = .none,
                  type: ChartLabelType = .title) {
         self.title = title
         self.format = format
