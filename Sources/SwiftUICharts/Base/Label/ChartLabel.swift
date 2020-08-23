@@ -78,8 +78,8 @@ public struct ChartLabel: View {
     public init (_ title: String,
                  type: ChartLabelType = .title, format: ChartLabelFormat = .none) {
         self.title = title
-        self.format = format
         labelType = type
+        self.format = format
     }
 
     public var body: some View {
@@ -93,17 +93,11 @@ public struct ChartLabel: View {
                     self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.setTextToDisplay()
+                    self.textToDisplay = self.chartValue.interactionInProgress ? format.format(value: self.chartValue.currentValue) : self.title
                 }
             if !self.chartValue.interactionInProgress {
                 Spacer()
             }
         }
     }
-    
-    func setTextToDisplay() {
-        self.textToDisplay = self.chartValue.interactionInProgress ? format.format(value: self.chartValue.currentValue) : self.title
-    }
 }
-
-
