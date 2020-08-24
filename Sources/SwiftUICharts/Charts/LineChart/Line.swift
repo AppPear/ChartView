@@ -16,14 +16,14 @@ public struct Line: View {
 
 	/// Step for plotting through data
 	/// - Returns: X and Y delta between each data point based on data and view's frame
-	var step: CGPoint {
-        return CGPoint.getStep(frame: frame, data: chartData.data)
+    var step: CGPoint {
+        return CGPoint.getStep(frame: frame, data: chartData.points)
     }
 
 	/// Path of line graph
 	/// - Returns: A path for stroking representing the data, either curved or jagged.
     var path: Path {
-        let points = chartData.data
+        let points = chartData.points
 
         if curvedLines {
             return Path.quadCurvedPathWithPoints(points: points,
@@ -37,7 +37,7 @@ public struct Line: View {
 	/// Path of linegraph, but also closed at the bottom side
 	/// - Returns: A path for filling representing the data, either curved or jagged
     var closedPath: Path {
-        let points = chartData.data
+        let points = chartData.points
 
         if curvedLines {
             return Path.quadClosedCurvedPathWithPoints(points: points,
@@ -47,20 +47,19 @@ public struct Line: View {
 
         return Path.closedLinePathWithPoints(points: points, step: step)
     }
+
+    // see https://stackoverflow.com/a/62370919
+    // This lets geometry be recalculated when device rotates. However it doesn't cover issue of app changing
+    // from full screen to split view. Not possible in SwiftUI? Feedback submitted to apple FB8451194.
+    let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
+        .makeConnectable()
+        .autoconnect()
     
 	/// The content and behavior of the `Line`.
-	///
 	/// Draw the background if showing the full line (?) and the `showBackground` option is set. Above that draw the line, and then the data indicator if the graph is currently being touched.
 	/// On appear, set the frame so that the data graph metrics can be calculated. On a drag (touch) gesture, highlight the closest touched data point.
 	/// TODO: explain rotation
     public var body: some View {
-
-		let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
-			.makeConnectable()
-			.autoconnect()	// see https://stackoverflow.com/a/62370919
-		// This lets geometry be recalculated when device rotates. However it doesn't cover issue of app changing
-		// from full screen to split view. Not possible in SwiftUI? Feedback submitted to apple FB8451194.
-
         GeometryReader { geometry in
             ZStack {
                 if self.showFull && self.showBackground {
@@ -120,7 +119,7 @@ extension Line {
     private func getClosestDataPoint(point: CGPoint) {
         let index = Int(round((point.x)/step.x))
         if (index >= 0 && index < self.chartData.data.count){
-            self.chartValue.currentValue = self.chartData.data[index]
+            self.chartValue.currentValue = self.chartData.points[index]
         }
     }
 

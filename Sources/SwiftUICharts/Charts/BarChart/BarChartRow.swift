@@ -13,7 +13,7 @@ public struct BarChartRow: View {
     var style: ChartStyle
     
     var maxValue: Double {
-        guard let max = chartData.data.max() else {
+        guard let max = chartData.points.max() else {
             return 1
         }
         return max != 0 ? max : 1
@@ -62,7 +62,7 @@ public struct BarChartRow: View {
 	/// - Parameter index: index into array of data
 	/// - Returns: data value at given index, divided by data maximum
     func normalizedValue(index: Int) -> Double {
-        return Double(chartData.data[index])/Double(maxValue)
+        return Double(chartData.points[index])/Double(maxValue)
     }
 
 	/// Size to scale the touch indicator
@@ -84,6 +84,6 @@ public struct BarChartRow: View {
     func getCurrentValue(width: CGFloat) -> Double? {
         guard self.chartData.data.count > 0 else { return nil}
             let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))
-            return self.chartData.data[index]
+            return self.chartData.points[index]
         }
 }

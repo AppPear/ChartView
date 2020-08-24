@@ -12,12 +12,8 @@ public enum ChartLabelType {
 /// A chart may contain any number of labels in pre-set positions based on their `ChartLabelType`
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
-<<<<<<< HEAD
-    @State private var textToDisplay:String = ""
-=======
     @State var textToDisplay:String = ""
     var format: String = "%.01f"
->>>>>>> Add custom string format for ChartLabel when interactionInProgress = true (#151)
 
     private var title: String
 

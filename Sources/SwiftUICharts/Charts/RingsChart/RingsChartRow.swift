@@ -39,7 +39,7 @@ public struct RingsChartRow: View {
 									  // make sure it doesn't get to crazy value
 					)
 
-					Ring(ringWidth:scaledWidth, percent: self.chartData.data[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
+					Ring(ringWidth:scaledWidth, percent: self.chartData.points[index], foregroundColor:self.style.foregroundColor.rotate(for: index),
 						 touchLocation: self.touchRadius)
 
 
@@ -108,7 +108,7 @@ public struct RingsChartRow: View {
 	func getCurrentValue(maxRadius: CGFloat) -> Double? {
 
 		guard let index = self.touchedCircleIndex(maxRadius: maxRadius) else { return nil }
-		return self.chartData.data[index]
+		return self.chartData.points[index]
 	}
 }
 

@@ -10,9 +10,9 @@ public struct PieChartRow: View {
     var slices: [PieSlice] {
         var tempSlices: [PieSlice] = []
         var lastEndDeg: Double = 0
-        let maxValue: Double = chartData.data.reduce(0, +)
+        let maxValue: Double = chartData.points.reduce(0, +)
         
-        for slice in chartData.data {
+        for slice in chartData.points {
             let normalized: Double = Double(slice) / (maxValue == 0 ? 1 : maxValue)
             let startDeg = lastEndDeg
             let endDeg = lastEndDeg + (normalized * 360)
