@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// A single vertical bar in a `BarChart`
 public struct BarChartCell: View {
     var value: Double
     var index: Int = 0
@@ -12,7 +13,7 @@ public struct BarChartCell: View {
         return Double(width)/(Double(numberOfDataPoints) * 1.5)
     }
 
-    @State var firstDisplay: Bool = true
+    @State private var firstDisplay: Bool = true
 
     public init( value: Double,
                  index: Int = 0,
@@ -28,6 +29,9 @@ public struct BarChartCell: View {
         self.touchLocation = touchLocation
     }
 
+	/// The content and behavior of the `BarChartCell`.
+	///
+	/// Animated when first displayed, using the `firstDisplay` variable, with an increasing delay through the data set.
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 4)

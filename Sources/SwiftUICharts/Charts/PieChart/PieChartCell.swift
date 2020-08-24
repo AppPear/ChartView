@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// One slice of a `PieChartRow`
 struct PieSlice: Identifiable {
     var id = UUID()
     var startDeg: Double
@@ -14,6 +15,7 @@ struct PieSlice: Identifiable {
     var value: Double
 }
 
+/// A single row of data, a view in a `PieChart`
 public struct PieChartCell: View {
     @State private var show: Bool = false
     var rect: CGRect
@@ -21,7 +23,9 @@ public struct PieChartCell: View {
         return min(rect.width, rect.height)/2
     }
     var startDeg: Double
-    var endDeg: Double
+	var endDeg: Double
+
+	/// Path representing this slice
     var path: Path {
         var path = Path()
         path.addArc(
@@ -42,6 +46,9 @@ public struct PieChartCell: View {
     // Section color
     var accentColor: ColorGradient
     
+	/// The content and behavior of the `PieChartCell`.
+	///
+	/// Fills and strokes with 2-pixel line (unless start/end degrees not yet set). Animates by scaling up to 100% when first appears.
     public var body: some View {
         Group {
             path

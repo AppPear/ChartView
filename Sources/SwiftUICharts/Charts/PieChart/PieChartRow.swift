@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A single "row" (slice) of data, a view in a `PieChart`
 public struct PieChartRow: View {
     @ObservedObject var chartData: ChartData
 
@@ -27,7 +28,10 @@ public struct PieChartRow: View {
         
         return tempSlices
     }
-    
+
+	/// The content and behavior of the `PieChartRow`.
+	///
+	///
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -72,10 +76,12 @@ struct PieChartRow_Previews: PreviewProvider {
     }
 }
 
+/// Predefined color style, for preview
 private let defaultMultiColorChartStyle = ChartStyle(
     backgroundColor: Color.white,
     foregroundColor: [ColorGradient]())
 
+/// Predefined color style, for preview
 private let multiColorChartStyle = ChartStyle(
 backgroundColor: Color.purple,
 foregroundColor: [ColorGradient.greenRed, ColorGradient.whiteBlack])

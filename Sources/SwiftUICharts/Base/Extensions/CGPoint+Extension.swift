@@ -1,6 +1,12 @@
 import SwiftUI
 
 extension CGPoint {
+	
+	/// Calculate X and Y delta for each data point, based on data min/max and enclosing frame.
+	/// - Parameters:
+	///   - frame: Rectangle of enclosing frame
+	///   - data: array of `Double`
+	/// - Returns: X and Y delta as a `CGPoint`
     static func getStep(frame: CGRect, data: [Double]) -> CGPoint {
         let padding: CGFloat = 30.0
 
