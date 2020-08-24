@@ -19,4 +19,5 @@ public struct RingsChart: View, ChartBase {
 		RingsChartRow(width:10.0, spacing:5.0, chartData: data, style: style)
 	}
 
+    public init() {}
 }
