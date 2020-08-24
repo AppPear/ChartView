@@ -8,12 +8,26 @@ public enum ChartLabelType {
     case legend
 }
 
+public enum ChartLabelFormat {
+    case custom(completion: (Double) -> String)
+    case none
+    
+    func format(value: Double) -> String {
+        switch self {
+        case .custom(let completion):
+            return completion(value)
+        case .none:
+            return String(format: "%.01f", value)
+        }
+    }
+}
+
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
     @State var textToDisplay:String = ""
-
+    
     private var title: String
-
+    private var format: ChartLabelFormat
     private var labelSize: CGFloat {
         switch labelType {
         case .title:
@@ -62,9 +76,10 @@ public struct ChartLabel: View {
     }
 
     public init (_ title: String,
-                 type: ChartLabelType = .title) {
+                 type: ChartLabelType = .title, format: ChartLabelFormat = .none) {
         self.title = title
         labelType = type
+        self.format = format
     }
 
     public var body: some View {
@@ -78,7 +93,7 @@ public struct ChartLabel: View {
                     self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: "%.01f", self.chartValue.currentValue) : self.title
+                    self.textToDisplay = self.chartValue.interactionInProgress ? self.format.format(value: self.chartValue.currentValue) : self.title
                 }
             if !self.chartValue.interactionInProgress {
                 Spacer()
