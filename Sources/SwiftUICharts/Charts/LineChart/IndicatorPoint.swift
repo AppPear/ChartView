@@ -1,11 +1,3 @@
-//
-//  IndicatorPoint.swift
-//  LineChart
-//
-//  Created by András Samu on 2019. 09. 03..
-//  Copyright © 2019. András Samu. All rights reserved.
-//
-
 import SwiftUI
 
 /// A dot representing a single data point as user moves finger over line in `LineChart`
