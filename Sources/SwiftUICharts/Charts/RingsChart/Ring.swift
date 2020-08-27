@@ -114,7 +114,7 @@ struct Ring: View {
 				// Background for the ring. Use the final color with reduced opacity
 				RingShape()
 					.stroke(style: StrokeStyle(lineWidth: self.ringWidth))
-					.fill(lastGradientColor.opacity(0.142857))
+                    .fill(self.lastGradientColor.opacity(0.142857))
 				// Foreground
 				RingShape(percent: self.percent, startAngle: self.startAngle)
 					.stroke(style: StrokeStyle(lineWidth: self.ringWidth, lineCap: .round))

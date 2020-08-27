@@ -97,7 +97,7 @@ public struct ChartLabel: View {
                     self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: format, self.chartValue.currentValue) : self.title
+                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: self.format, self.chartValue.currentValue) : self.title
                 }
             if !self.chartValue.interactionInProgress {
                 Spacer()

@@ -45,7 +45,7 @@ public struct PieChartRow: View {
                         backgroundColor: self.style.backgroundColor.startColor,
                         accentColor: self.style.foregroundColor.rotate(for: index)
                     )
-                    .scaleEffect(currentTouchedIndex == index ? 1.1 : 1)
+                    .scaleEffect(self.currentTouchedIndex == index ? 1.1 : 1)
                     .animation(Animation.spring())
                 }
             }
@@ -55,13 +55,13 @@ public struct PieChartRow: View {
                             let isTouchInPie = isPointInCircle(point: value.location, circleRect: rect)
                             if isTouchInPie {
                                 let touchDegree = degree(for: value.location, inCircleRect: rect)
-                                currentTouchedIndex = slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
+                                self.currentTouchedIndex = self.slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
                             } else {
-                                currentTouchedIndex = -1
+                                self.currentTouchedIndex = -1
                             }
                         })
                         .onEnded({ value in
-                            currentTouchedIndex = -1
+                            self.currentTouchedIndex = -1
                         })
             )
         }
