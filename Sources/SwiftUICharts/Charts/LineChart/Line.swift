@@ -77,7 +77,7 @@ public struct Line: View {
                 self.frame = geometry.frame(in: .local)
 
             }
-			.onReceive(orientationChanged) { _ in
+            .onReceive(self.orientationChanged) { _ in
 				// When we receive notification here, the geometry is still the old value
 				// so delay evaluation to get the new frame!
 				DispatchQueue.main.async {
