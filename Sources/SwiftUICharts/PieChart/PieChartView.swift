@@ -9,16 +9,17 @@
 import SwiftUI
 
 public struct PieChartView : View {
-    public var data: [Double]
+    public var data: [PieChartData]
     public var title: String
     public var legend: String?
     public var style: ChartStyle
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
+    public var showPercentage:Bool
     
     @State private var showValue = false
-    @State private var currentValue: Double = 0 {
+    @State private var currentValue: PieChartData = PieChartData(value: 0) {
         didSet{
             if(oldValue != self.currentValue && self.showValue) {
                 HapticFeedback.playSelection()
@@ -26,7 +27,7 @@ public struct PieChartView : View {
         }
     }
     
-    public init(data: [Double], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, valueSpecifier: String? = "%.1f"){
+    public init(data: [PieChartData], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, valueSpecifier: String? = "%.1f", showPercentage: Bool? = false){
         self.data = data
         self.title = title
         self.legend = legend
@@ -37,6 +38,7 @@ public struct PieChartView : View {
         }
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
+        self.showPercentage = showPercentage
     }
     
     public var body: some View {
@@ -52,7 +54,7 @@ public struct PieChartView : View {
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }else{
-                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
+                        Text("\(self.currentValue.label) \(self.currentValue, specifier: self.valueSpecifier)\(self.showPercentage ? "%" : "")")
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }
