@@ -21,7 +21,7 @@ public struct PieChartView : View {
     @State private var showValue = false
     @State private var currentValue: PieChartData = PieChartData(value: 0) {
         didSet{
-            if(oldValue != self.currentValue && self.showValue) {
+            if(oldValue.label != self.currentValue.label && self.showValue) {
                 HapticFeedback.playSelection()
             }
         }
@@ -38,7 +38,7 @@ public struct PieChartView : View {
         }
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
-        self.showPercentage = showPercentage
+        self.showPercentage = showPercentage!
     }
     
     public var body: some View {
@@ -54,7 +54,7 @@ public struct PieChartView : View {
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }else{
-                        Text("\(self.currentValue.label) \(self.currentValue, specifier: self.valueSpecifier)\(self.showPercentage ? "%" : "")")
+                        Text("\(self.currentValue.label) \(self.currentValue.value, specifier: self.valueSpecifier)\(self.showPercentage ? "%" : "")")
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }
@@ -80,7 +80,7 @@ public struct PieChartView : View {
 #if DEBUG
 struct PieChartView_Previews : PreviewProvider {
     static var previews: some View {
-        PieChartView(data:[56,78,53,65,54], title: "Title", legend: "Legend")
+        PieChartView(data:[PieChartData(label: "Q1", value: 56), PieChartData(label: "Q2", value: 78), PieChartData(label: "Q3", value: 53), PieChartData(label: "Q4", value: 65), PieChartData(label: "Q5", value: 54)], title: "Title", legend: "Legend")
     }
 }
 #endif
