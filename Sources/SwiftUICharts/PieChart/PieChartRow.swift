@@ -8,8 +8,14 @@
 
 import SwiftUI
 
+struct PieChartData {
+    var label: String = ""
+    var value: Double
+}
+
 public struct PieChartRow : View {
-    var data: [Double]
+    var data: [PieChartData]
+    var labeledData: [(String, Double)]?
     var backgroundColor: Color
     var accentColor: Color
     var slices: [PieSlice] {
@@ -17,23 +23,23 @@ public struct PieChartRow : View {
         var lastEndDeg:Double = 0
         let maxValue = data.reduce(0, +)
         for slice in data {
-            let normalized:Double = Double(slice)/Double(maxValue)
+            let normalized:Double = Double(slice.value)/Double(maxValue)
             let startDeg = lastEndDeg
             let endDeg = lastEndDeg + (normalized * 360)
             lastEndDeg = endDeg
-            tempSlices.append(PieSlice(startDeg: startDeg, endDeg: endDeg, value: slice, normalizedValue: normalized))
+            tempSlices.append(PieSlice(startDeg: startDeg, endDeg: endDeg, value: slice.value, normalizedValue: normalized, label: slice.label))
         }
         return tempSlices
     }
     
     @Binding var showValue: Bool
-    @Binding var currentValue: Double
+    @Binding var currentValue: PieChartData
     
     @State private var currentTouchedIndex = -1 {
         didSet {
             if oldValue != currentTouchedIndex {
                 showValue = currentTouchedIndex != -1
-                currentValue = showValue ? slices[currentTouchedIndex].value : 0
+                currentValue = showValue ? PieChartData(label: slices[currentTouchedIndex].label, value: slices[currentTouchedIndex].value) : PieChartData(value: 0)
             }
         }
     }
