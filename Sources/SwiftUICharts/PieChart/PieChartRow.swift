@@ -29,7 +29,7 @@ public struct PieChartRow : View {
             let startDeg = lastEndDeg
             let endDeg = lastEndDeg + (normalized * 360)
             lastEndDeg = endDeg
-            tempSlices.append(PieSlice(startDeg: startDeg, endDeg: endDeg, value: slice.value, normalizedValue: normalized, label: slice.label))
+            tempSlices.append(PieSlice(startDeg: startDeg, endDeg: endDeg, value: slice.value, label: slice.label, normalizedValue: normalized))
         }
         return tempSlices
     }
