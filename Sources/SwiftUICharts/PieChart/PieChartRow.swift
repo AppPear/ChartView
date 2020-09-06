@@ -8,11 +8,6 @@
 
 import SwiftUI
 
-public struct PieChartData {
-    var label: String = ""
-    var value: Double
-}
-
 public struct PieChartRow : View {
     var data: [PieChartData]
     var labeledData: [(String, Double)]?
