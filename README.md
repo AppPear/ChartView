@@ -198,7 +198,13 @@ BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.s
 You can add a pie chart with the following code: 
 
 ```swift
- PieChartView(data: [8,23,54,32], title: "Title", legend: "Legendary") // legend is optional
+PieChartView(data: [PieChartData(value: 8), PieChartData(value: 23), PieChartData(value: 54), PieChartData(value: 32)], title: "Title", legend: "Legendary") // legend is optional
+```
+
+You can add labels to the values of the pie chart with the following code: 
+
+```swift
+PieChartView(data: [PieChartData(label: "Q1", value: 8), PieChartData(label: "Q2", value: 23), PieChartData(label: "Q3", value: 54), PieChartData(label: "Q4", value: 32)], title: "Title", legend: "Legendary") // legend is optional
 ```
 
 **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
