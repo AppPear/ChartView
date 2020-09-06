@@ -21,7 +21,9 @@ public struct PieChartRow : View {
     var slices: [PieSlice] {
         var tempSlices:[PieSlice] = []
         var lastEndDeg:Double = 0
-        let maxValue = data.reduce(0, +)
+        let maxValue = data.map({
+            $0.value
+        }).reduce(0, +)
         for slice in data {
             let normalized:Double = Double(slice.value)/Double(maxValue)
             let startDeg = lastEndDeg
