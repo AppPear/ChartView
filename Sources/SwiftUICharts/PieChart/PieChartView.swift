@@ -16,7 +16,8 @@ public struct PieChartView : View {
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
-    public var showPercentage:Bool
+    public var prefix:String
+    public var postfix: String
     
     @State private var showValue = false
     @State private var currentValue: PieChartData = PieChartData(value: 0) {
@@ -27,7 +28,7 @@ public struct PieChartView : View {
         }
     }
     
-    public init(data: [PieChartData], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, valueSpecifier: String? = "%.1f", showPercentage: Bool? = false){
+    public init(data: [PieChartData], title: String, legend: String? = nil, style: ChartStyle = Styles.pieChartStyleOne, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, valueSpecifier: String? = "%.1f", prefix: String? = "", postfix: String? = ""){
         self.data = data
         self.title = title
         self.legend = legend
@@ -39,6 +40,8 @@ public struct PieChartView : View {
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.showPercentage = showPercentage!
+        self.prefix = prefix!
+        self.postfix = postfix!
     }
     
     public var body: some View {
@@ -54,7 +57,7 @@ public struct PieChartView : View {
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }else{
-                        Text("\(self.currentValue.label) \(self.currentValue.value, specifier: self.valueSpecifier)\(self.showPercentage ? "%" : "")")
+                        Text("\(self.currentValue.label) \(self.prefix)\(self.currentValue.value, specifier: self.valueSpecifier)\(self.postfix)")
                             .font(.headline)
                             .foregroundColor(self.style.textColor)
                     }
