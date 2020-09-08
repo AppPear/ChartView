@@ -39,7 +39,6 @@ public struct PieChartView : View {
         }
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
-        self.showPercentage = showPercentage!
         self.prefix = prefix!
         self.postfix = postfix!
     }
