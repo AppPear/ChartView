@@ -44,10 +44,12 @@ public struct PieChartRow : View {
     public var body: some View {
         GeometryReader { geometry in
             ZStack{
-                ForEach(0..<self.slices.count){ i in
-                    PieChartCell(rect: geometry.frame(in: .local), startDeg: self.slices[i].startDeg, endDeg: self.slices[i].endDeg, index: i, backgroundColor: self.backgroundColor,accentColor: self.accentColor)
-                        .scaleEffect(self.currentTouchedIndex == i ? 1.1 : 1)
-                        .animation(Animation.spring())
+                if self.slices.count > 0 {
+                    ForEach(0..<self.slices.count){ i in
+                        PieChartCell(rect: geometry.frame(in: .local), startDeg: self.slices[i].startDeg, endDeg: self.slices[i].endDeg, index: i, backgroundColor: self.backgroundColor,accentColor: self.accentColor)
+                            .scaleEffect(self.currentTouchedIndex == i ? 1.1 : 1)
+                            .animation(Animation.spring())
+                    }
                 }
             }
             .gesture(DragGesture()
