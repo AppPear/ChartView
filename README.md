@@ -20,7 +20,7 @@ It supports:
 ### Slack
 Join our Slack channel for day to day conversation and more insights:
 
-[Slack invite link](https://join.slack.com/t/swiftuichartview/shared_invite/zt-el5pnmba-FvyraEsI~EwxqWHNfHZWZg)
+[Slack invite link](https://join.slack.com/t/swiftuichartview/shared_invite/zt-g6mxioq8-j3iUTF1YKX7D23ML3qcc4g)
 
 ### Installation:
 
