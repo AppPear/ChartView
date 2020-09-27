@@ -14,7 +14,7 @@ public struct LineView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    public var valueSpecifier:String
+    public var numberFormat:String
     
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State private var showLegend = false
@@ -29,14 +29,17 @@ public struct LineView: View {
                 title: String? = nil,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
-                valueSpecifier: String? = "%.1f") {
+                numberFormat: String? = "%.1f",
+                hideHorizontalLines: Bool = false) {
         
+        self._hideHorizontalLines = State(initialValue: hideHorizontalLines)
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
         self.style = style
-        self.valueSpecifier = valueSpecifier!
+        self.numberFormat = numberFormat!
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
+        
     }
     
     public var body: some View {
@@ -83,7 +86,7 @@ public struct LineView: View {
                     }
                     .frame(width: geometry.frame(in: .local).size.width, height: 240)
                     .offset(x: 0, y: 40 )
-                    MagnifierRect(currentNumber: self.$currentDataNumber, valueSpecifier: self.valueSpecifier)
+                    MagnifierRect(currentNumber: self.$currentDataNumber, valueSpecifier: self.numberFormat)
                         .opacity(self.opacity)
                         .offset(x: self.dragLocation.x - geometry.frame(in: .local).size.width/2, y: 36)
                 }
