@@ -42,8 +42,9 @@ public struct LineChart: View {
     }
     
     
+    
     public var body: some View {
-        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle, valueSpecifier: self.floatingPntNumberFormat)
+        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat)
     }
 }
 

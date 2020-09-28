@@ -16,6 +16,7 @@ public struct LineChartView: View {
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
     
+    private var rawData: [Double]
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
@@ -27,7 +28,6 @@ public struct LineChartView: View {
             if (oldValue != self.currentValue && showIndicatorDot) {
                 HapticFeedback.playSelection()
             }
-            
         }
     }
     var frame = CGSize(width: 180, height: 120)
@@ -42,6 +42,7 @@ public struct LineChartView: View {
                 dropShadow: Bool? = false,
                 valueSpecifier: String? = "%.1f") {
         
+        self.rawData = data
         self.data = ChartData(points: data)
         self.title = title
         self.legend = legend
@@ -54,14 +55,32 @@ public struct LineChartView: View {
         self.rateValue = rateValue
     }
     
+    private var internalRate: Int? {
+        if self.currentValue == 2 {
+            if self.rawData.count > 1 {
+                return Int(((self.rawData.last!/self.rawData.first!) - 1)*100)
+            } else {
+                return nil
+            }
+        } else {
+            if self.rawData.count > 1 {
+                return Int(((self.currentValue/self.rawData.first!) - 1)*100)
+            } else {
+                return nil
+            }
+        }
+        
+    }
+    
     public var body: some View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 20)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                .frame(width: frame.width, height: 450, alignment: .center)
+                .frame(width: frame.width, height: 230, alignment: .center)
                 .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
-                if(!self.showIndicatorDot){
+//                if(!self.showIndicatorDot){
+                if true {
                     VStack(alignment: .leading, spacing: 8){
                         if (self.title != nil) {
                             Text(self.title!)
@@ -75,31 +94,30 @@ public struct LineChartView: View {
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
                         }
                         HStack {
-                            
-                            if (self.rateValue ?? 0 != 0)
-                            {
-                                if (self.rateValue ?? 0 >= 0){
+                            if (self.internalRate ?? 0 != 0) {
+                                if (self.internalRate ?? 0 >= 0) {
                                     Image(systemName: "arrow.up")
-                                }else{
+                                } else {
                                     Image(systemName: "arrow.down")
                                 }
-                                Text("\(self.rateValue!)%")
+                                Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)")
                             }
                         }
                     }
                     .transition(.opacity)
                     .animation(.easeIn(duration: 0.1))
                     .padding([.leading, .top])
-                } else {
-                    HStack{
-                        Spacer()
-                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
-                            .font(.system(size: 41, weight: .bold, design: .default))
-                            .offset(x: 0, y: 30)
-                        Spacer()
-                    }
-                    .transition(.scale)
                 }
+//                else {
+//                    HStack{
+//                        Spacer()
+//                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
+//                            .font(.system(size: 41, weight: .bold, design: .default))
+//                            .offset(x: 0, y: 30)
+//                        Spacer()
+//                    }
+//                    .transition(.scale)
+//                }
                 Spacer()
                 GeometryReader{ geometry in
                     Line(data: self.data,
@@ -115,16 +133,19 @@ public struct LineChartView: View {
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width, height: self.formSize.height)
         }
-        .gesture(DragGesture()
+        .gesture(DragGesture(minimumDistance: 0)
         .onChanged({ value in
             self.touchLocation = value.location
             self.showIndicatorDot = true
             self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
+            print("dragging \(value)")
+            print("\(self.internalRate)")
         })
             .onEnded({ value in
                 self.showIndicatorDot = false
             })
         )
+        
     }
     
     @discardableResult func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
