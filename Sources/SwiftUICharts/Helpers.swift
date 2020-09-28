@@ -148,38 +148,42 @@ public struct ChartForm {
 
 public class ChartStyle {
     public var backgroundColor: Color
+    public var backgroundGradient: GradientColor
     public var accentColor: Color
-    public var gradientColor: GradientColor
+    public var lineGradient: GradientColor
     public var textColor: Color
     public var legendTextColor: Color
     public var dropShadowColor: Color
     public weak var darkModeStyle: ChartStyle?
     
-    public init(backgroundColor: Color, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color, dropShadowColor: Color){
+    public init(backgroundColor: Color = .white, accentColor: Color, secondGradientColor: Color, textColor: Color, legendTextColor: Color, dropShadowColor: Color, backgroundGradient: GradientColor = GradientColor(start: Colors.GradientNeonBlue, end: .white)){
         self.backgroundColor = backgroundColor
         self.accentColor = accentColor
-        self.gradientColor = GradientColor(start: accentColor, end: secondGradientColor)
+        self.lineGradient = GradientColor(start: accentColor, end: secondGradientColor)
         self.textColor = textColor
         self.legendTextColor = legendTextColor
         self.dropShadowColor = dropShadowColor
+        self.backgroundGradient = backgroundGradient
     }
     
-    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor, textColor: Color, legendTextColor: Color, dropShadowColor: Color){
+    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor, textColor: Color, legendTextColor: Color, dropShadowColor: Color, backgroundGradient: GradientColor = GradientColor(start: Colors.GradientNeonBlue, end: .white)){
         self.backgroundColor = backgroundColor
         self.accentColor = accentColor
-        self.gradientColor = gradientColor
+        self.lineGradient = gradientColor
         self.textColor = textColor
         self.legendTextColor = legendTextColor
         self.dropShadowColor = dropShadowColor
+        self.backgroundGradient = backgroundGradient
     }
     
     public init(formSize: CGSize){
         self.backgroundColor = Color.white
         self.accentColor = Colors.OrangeStart
-        self.gradientColor = GradientColors.orange
+        self.lineGradient = GradientColors.orange
         self.legendTextColor = Color.gray
         self.textColor = Color.black
         self.dropShadowColor = Color.gray
+        self.backgroundGradient = GradientColor(start: Colors.GradientNeonBlue, end: .white)
     }
 }
 

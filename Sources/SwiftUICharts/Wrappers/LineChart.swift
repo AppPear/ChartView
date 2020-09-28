@@ -39,20 +39,15 @@ public struct LineChart: View {
         default:
             self.chartStyle = Styles.lineChartStyleOne
         }
+        
+        
     }
-    
-    
     
     public var body: some View {
         LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat)
     }
 }
 
-//struct ContentTest: View {
-//    var body: some View {
-//        LineChart(data: [], title: "test", subTitle: "Blah", displayHorizontalLines: false, style: .custom(ChartStyle(backgroundColor: Color.blue, accentColor: Color.blue, gradientColor: GradientColor(start: Color.green, end: Color.blue), textColor: Color.blue, legendTextColor: Color.blue, dropShadowColor: Color.blue)))
-//    }
-//}
 
 public enum LineChartStyle {
     case lineChartStyleOne

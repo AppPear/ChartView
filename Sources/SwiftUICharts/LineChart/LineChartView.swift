@@ -130,7 +130,9 @@ public struct LineChartView: View {
                          touchLocation: self.$touchLocation,
                          showIndicator: self.$showIndicatorDot,
                          minDataValue: .constant(nil),
-                         maxDataValue: .constant(nil)
+                         maxDataValue: .constant(nil),
+                         lineGradient: self.style.lineGradient,
+                         backgroundGradient: self.style.backgroundGradient
                     )
                 }
                 .frame(width: frame.width+20, height: 2*frame.height + 50)

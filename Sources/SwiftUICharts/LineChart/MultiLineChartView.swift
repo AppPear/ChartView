@@ -118,7 +118,7 @@ public struct MultiLineChartView: View {
                                  minDataValue: .constant(self.globalMin),
                                  maxDataValue: .constant(self.globalMax),
                                  showBackground: false,
-                                 gradient: self.data[i].getGradient(),
+                                 lineGradient: self.data[i].getGradient(),
                                  index: i)
                         }
                     }
