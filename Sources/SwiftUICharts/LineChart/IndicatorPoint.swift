@@ -9,10 +9,12 @@
 import SwiftUI
 
 struct IndicatorPoint: View {
+    var indicatorKnob: Color = Colors.IndicatorKnob
+    
     var body: some View {
         ZStack{
             Circle()
-                .fill(Colors.IndicatorKnob)
+                .fill(self.indicatorKnob)
             Circle()
                 .stroke(Color.white, style: StrokeStyle(lineWidth: 4))
         }

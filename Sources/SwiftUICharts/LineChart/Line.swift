@@ -19,6 +19,7 @@ public struct Line: View {
     @State var showBackground: Bool = true
     var lineGradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
     var backgroundGradient: GradientColor = GradientColor(start: Colors.GradientUpperBlue, end: .white)
+    var indicatorKnob: Color = Colors.IndicatorKnob
     var index:Int = 0
     let padding:CGFloat = 30
     var curvedLines: Bool = true
@@ -83,7 +84,7 @@ public struct Line: View {
             }
             .drawingGroup()
             if(self.showIndicator) {
-                IndicatorPoint()
+                IndicatorPoint(indicatorKnob: indicatorKnob)
                     .position(self.getClosestPointOnPath(touchLocation: self.touchLocation))
                     .rotationEffect(.degrees(180), anchor: .center)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))

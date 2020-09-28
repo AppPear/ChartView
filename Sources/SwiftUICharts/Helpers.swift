@@ -166,7 +166,7 @@ public class ChartStyle {
         self.backgroundGradient = backgroundGradient
     }
     
-    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor, textColor: Color, legendTextColor: Color, dropShadowColor: Color, backgroundGradient: GradientColor = GradientColor(start: Colors.GradientNeonBlue, end: .white)){
+    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue), textColor: Color, legendTextColor: Color, dropShadowColor: Color, backgroundGradient: GradientColor = GradientColor(start: Colors.GradientNeonBlue, end: .white)){
         self.backgroundColor = backgroundColor
         self.accentColor = accentColor
         self.lineGradient = gradientColor

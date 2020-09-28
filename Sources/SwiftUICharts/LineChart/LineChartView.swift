@@ -15,6 +15,7 @@ public struct LineChartView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
+    var indicatorKnob: Color
     
     private var rawData: [Double]
     public var formSize:CGSize
@@ -40,7 +41,8 @@ public struct LineChartView: View {
                 form: CGSize? = ChartForm.extraLarge,
                 rateValue: Int? = 14,
                 dropShadow: Bool? = false,
-                valueSpecifier: String? = "%.1f") {
+                valueSpecifier: String? = "%.1f",
+                cursorColor: Color = Colors.IndicatorKnob) {
         
         self.rawData = data
         self.data = ChartData(points: data)
@@ -53,6 +55,7 @@ public struct LineChartView: View {
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
+        self.indicatorKnob = cursorColor
     }
     
     private var internalRate: Int? {
@@ -132,7 +135,8 @@ public struct LineChartView: View {
                          minDataValue: .constant(nil),
                          maxDataValue: .constant(nil),
                          lineGradient: self.style.lineGradient,
-                         backgroundGradient: self.style.backgroundGradient
+                         backgroundGradient: self.style.backgroundGradient,
+                         indicatorKnob: self.indicatorKnob
                     )
                 }
                 .frame(width: frame.width+20, height: 2*frame.height + 50)
