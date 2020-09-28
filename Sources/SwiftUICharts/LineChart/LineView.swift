@@ -24,6 +24,7 @@ public struct LineView: View {
     @State private var opacity:Double = 0
     @State private var currentDataNumber: Double = 0
     @State private var hideHorizontalLines: Bool = false
+    private var defaultHorizontalLines: Bool = false
     
     public init(data: [Double],
                 title: String? = nil,
@@ -31,7 +32,7 @@ public struct LineView: View {
                 style: ChartStyle = Styles.lineChartStyleOne,
                 numberFormat: String? = "%.1f",
                 hideHorizontalLines: Bool = false) {
-        
+        self.defaultHorizontalLines = hideHorizontalLines
         self._hideHorizontalLines = State(initialValue: hideHorizontalLines)
         self.data = ChartData(points: data)
         self.title = title
@@ -95,13 +96,14 @@ public struct LineView: View {
                 .onChanged({ value in
                     self.dragLocation = value.location
                     self.indicatorLocation = CGPoint(x: max(value.location.x-30,0), y: 32)
-                    self.opacity = 1
+                    self.opacity = 1.0
                     self.closestPoint = self.getClosestDataPoint(toPoint: value.location, width: geometry.frame(in: .local).size.width-30, height: 240)
                     self.hideHorizontalLines = true
                 })
                     .onEnded({ value in
                         self.opacity = 0
                         self.hideHorizontalLines = false
+                        print(self.defaultHorizontalLines)
                     })
                 )
             }

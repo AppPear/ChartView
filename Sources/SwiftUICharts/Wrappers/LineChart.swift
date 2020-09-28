@@ -19,7 +19,7 @@ public struct LineChart: View {
     public init (data: [Double],
                  title: String? = nil,
                  subTitle: String? = nil,
-                 displayHorizontalLines: Bool = false,
+                 displayHorizontalLines: Bool = true,
                  style: LineChartStyle? = .lineChartStyleOne,
                  floatingPntNumberFormat: String = "%.1f") {
         // Assign data
@@ -43,7 +43,7 @@ public struct LineChart: View {
     
     
     public var body: some View {
-        LineView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle, numberFormat: self.floatingPntNumberFormat, hideHorizontalLines: true)
+        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle, valueSpecifier: self.floatingPntNumberFormat)
     }
 }
 

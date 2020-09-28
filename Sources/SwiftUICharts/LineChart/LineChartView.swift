@@ -11,7 +11,7 @@ import SwiftUI
 public struct LineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @ObservedObject var data:ChartData
-    public var title: String
+    public var title: String?
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
@@ -34,12 +34,12 @@ public struct LineChartView: View {
     private var rateValue: Int?
     
     public init(data: [Double],
-                title: String,
+                title: String? = nil,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
-                form: CGSize? = ChartForm.medium,
+                form: CGSize? = ChartForm.extraLarge,
                 rateValue: Int? = 14,
-                dropShadow: Bool? = true,
+                dropShadow: Bool? = false,
                 valueSpecifier: String? = "%.1f") {
         
         self.data = ChartData(points: data)
@@ -58,15 +58,17 @@ public struct LineChartView: View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 20)
                 .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                .frame(width: frame.width, height: 240, alignment: .center)
+                .frame(width: frame.width, height: 450, alignment: .center)
                 .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
                 if(!self.showIndicatorDot){
                     VStack(alignment: .leading, spacing: 8){
-                        Text(self.title)
-                            .font(.title)
-                            .bold()
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
+                        if (self.title != nil) {
+                            Text(self.title!)
+                                .font(.title)
+                                .bold()
+                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
+                        }
                         if (self.legend != nil){
                             Text(self.legend!)
                                 .font(.callout)
@@ -88,7 +90,7 @@ public struct LineChartView: View {
                     .transition(.opacity)
                     .animation(.easeIn(duration: 0.1))
                     .padding([.leading, .top])
-                }else{
+                } else {
                     HStack{
                         Spacer()
                         Text("\(self.currentValue, specifier: self.valueSpecifier)")
