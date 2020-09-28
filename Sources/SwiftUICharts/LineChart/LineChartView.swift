@@ -99,7 +99,13 @@ public struct LineChartView: View {
                                 } else {
                                     Image(systemName: "arrow.down")
                                 }
-                                Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)")
+                                if (self.showIndicatorDot) {
+                                    Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(.callout)
+                                } else if (self.rawData.last != nil) {
+                                    Text("\(String(format: "%.2f", self.rawData.last!)) (\(self.internalRate!)%)").font(.callout)
+                                } else {
+                                    Text("(\(self.internalRate!)%)").font(.callout)
+                                }
                             }
                         }
                     }
@@ -127,14 +133,13 @@ public struct LineChartView: View {
                          maxDataValue: .constant(nil)
                     )
                 }
-                .frame(width: frame.width, height: 2*frame.height + 50)
+                .frame(width: frame.width+20, height: 2*frame.height + 50)
                 .clipShape(RoundedRectangle(cornerRadius: 0))
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width).background(Color.white)
         }
         .gesture(DragGesture(minimumDistance: 0)
         .onChanged({ value in
-            print("did drag")
             self.touchLocation = value.location
             self.showIndicatorDot = true
             self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
