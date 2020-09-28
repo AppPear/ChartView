@@ -14,6 +14,7 @@ public struct LineChart: View {
     public var displayHorizontalLines: Bool
     public var floatingPntNumberFormat: String
     public var cursorColor: Color
+    public var curvedLines: Bool
     
     private var chartStyle: ChartStyle = Styles.lineChartStyleOne
     
@@ -22,6 +23,7 @@ public struct LineChart: View {
                  subTitle: String? = nil,
                  displayHorizontalLines: Bool = true,
                  style: LineChartStyle? = .lineChartStyleOne,
+                 curvedLines: Bool = true,
                  floatingPntNumberFormat: String = "%.1f",
                  cursorColor: Color = Colors.IndicatorKnob) {
         // Assign data
@@ -31,6 +33,7 @@ public struct LineChart: View {
         self.displayHorizontalLines = displayHorizontalLines
         self.floatingPntNumberFormat = floatingPntNumberFormat
         self.cursorColor = cursorColor
+        self.curvedLines = curvedLines
         
         switch style {
         case .lineChartStyleOne:
@@ -45,7 +48,7 @@ public struct LineChart: View {
     }
     
     public var body: some View {
-        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor)
+        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines)
     }
 }
 

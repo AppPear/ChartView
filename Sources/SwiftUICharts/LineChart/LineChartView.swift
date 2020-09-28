@@ -21,6 +21,7 @@ public struct LineChartView: View {
     public var formSize:CGSize
     public var dropShadow: Bool
     public var valueSpecifier:String
+    public var curvedLines: Bool
     
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -42,7 +43,8 @@ public struct LineChartView: View {
                 rateValue: Int? = 14,
                 dropShadow: Bool? = false,
                 valueSpecifier: String? = "%.1f",
-                cursorColor: Color = Colors.IndicatorKnob) {
+                cursorColor: Color = Colors.IndicatorKnob,
+                curvedLines: Bool = true) {
         
         self.rawData = data
         self.data = ChartData(points: data)
@@ -56,6 +58,7 @@ public struct LineChartView: View {
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
         self.indicatorKnob = cursorColor
+        self.curvedLines = curvedLines
     }
     
     private var internalRate: Int? {
@@ -136,7 +139,8 @@ public struct LineChartView: View {
                          maxDataValue: .constant(nil),
                          lineGradient: self.style.lineGradient,
                          backgroundGradient: self.style.backgroundGradient,
-                         indicatorKnob: self.indicatorKnob
+                         indicatorKnob: self.indicatorKnob,
+                         curvedLines: self.curvedLines
                     )
                 }
                 .frame(width: frame.width+20, height: 2*frame.height + 50)
