@@ -56,7 +56,7 @@ public struct LineChartView: View {
     }
     
     private var internalRate: Int? {
-        if self.currentValue == 2 {
+        if !self.showIndicatorDot {
             if self.rawData.count > 1 {
                 return Int(((self.rawData.last!/self.rawData.first!) - 1)*100)
             } else {
@@ -69,15 +69,14 @@ public struct LineChartView: View {
                 return nil
             }
         }
-        
     }
     
     public var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 20)
-                .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-                .frame(width: frame.width, height: 230, alignment: .center)
-                .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
+//            RoundedRectangle(cornerRadius: 0)
+//                .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
+//                .frame(width: frame.width, alignment: .center)
+//                .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
 //                if(!self.showIndicatorDot){
                 if true {
@@ -128,18 +127,17 @@ public struct LineChartView: View {
                          maxDataValue: .constant(nil)
                     )
                 }
-                .frame(width: frame.width, height: frame.height + 30)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .frame(width: frame.width, height: 2*frame.height + 50)
+                .clipShape(RoundedRectangle(cornerRadius: 0))
                 .offset(x: 0, y: 0)
-            }.frame(width: self.formSize.width, height: self.formSize.height)
+            }.frame(width: self.formSize.width).background(Color.white)
         }
         .gesture(DragGesture(minimumDistance: 0)
         .onChanged({ value in
+            print("did drag")
             self.touchLocation = value.location
             self.showIndicatorDot = true
             self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
-            print("dragging \(value)")
-            print("\(self.internalRate)")
         })
             .onEnded({ value in
                 self.showIndicatorDot = false
