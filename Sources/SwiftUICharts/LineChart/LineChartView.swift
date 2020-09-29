@@ -22,6 +22,7 @@ public struct LineChartView: View {
     public var dropShadow: Bool
     public var valueSpecifier:String
     public var curvedLines: Bool
+    public var displayChartStats: Bool
     
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -44,7 +45,8 @@ public struct LineChartView: View {
                 dropShadow: Bool? = false,
                 valueSpecifier: String? = "%.1f",
                 cursorColor: Color = Colors.IndicatorKnob,
-                curvedLines: Bool = true) {
+                curvedLines: Bool = true,
+                displayChartStats: Bool = true) {
         
         self.rawData = data
         self.data = ChartData(points: data)
@@ -59,6 +61,7 @@ public struct LineChartView: View {
         self.rateValue = rateValue
         self.indicatorKnob = cursorColor
         self.curvedLines = curvedLines
+        self.displayChartStats = displayChartStats
     }
     
     private var internalRate: Int? {
@@ -79,57 +82,40 @@ public struct LineChartView: View {
     
     public var body: some View {
         ZStack(alignment: .center){
-//            RoundedRectangle(cornerRadius: 0)
-//                .fill(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
-//                .frame(width: frame.width, alignment: .center)
-//                .shadow(color: self.style.dropShadowColor, radius: self.dropShadow ? 8 : 0)
             VStack(alignment: .leading){
-//                if(!self.showIndicatorDot){
-                if true {
-                    VStack(alignment: .leading, spacing: 8){
-                        if (self.title != nil) {
-                            Text(self.title!)
-                                .font(.title)
-                                .bold()
-                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
-                        }
-                        if (self.legend != nil){
-                            Text(self.legend!)
-                                .font(.callout)
-                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
-                        }
-                        HStack {
-                            if (self.internalRate ?? 0 != 0) {
-                                if (self.internalRate ?? 0 >= 0) {
-                                    Image(systemName: "arrow.up")
-                                } else {
-                                    Image(systemName: "arrow.down")
-                                }
-                                if (self.showIndicatorDot) {
-                                    Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(.callout)
-                                } else if (self.rawData.last != nil) {
-                                    Text("\(String(format: "%.2f", self.rawData.last!)) (\(self.internalRate!)%)").font(.callout)
-                                } else {
-                                    Text("(\(self.internalRate!)%)").font(.callout)
-                                }
+                VStack(alignment: .leading, spacing: 8){
+                    if (self.title != nil) {
+                        Text(self.title!)
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
+                    }
+                    if (self.legend != nil){
+                        Text(self.legend!)
+                            .font(.callout)
+                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
+                    }
+                    HStack {
+                        if ((self.internalRate ?? 0 != 0) && (self.displayChartStats)) {
+                            if (self.internalRate ?? 0 >= 0) {
+                                Image(systemName: "arrow.up")
+                            } else {
+                                Image(systemName: "arrow.down")
+                            }
+                            if (self.showIndicatorDot) {
+                                Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(.callout)
+                            } else if (self.rawData.last != nil) {
+                                Text("\(String(format: "%.2f", self.rawData.last!)) (\(self.internalRate!)%)").font(.callout)
+                            } else {
+                                Text("(\(self.internalRate!)%)").font(.callout)
                             }
                         }
                     }
-                    .transition(.opacity)
-                    .animation(.easeIn(duration: 0.1))
-                    .padding([.leading, .top])
                 }
-//                else {
-//                    HStack{
-//                        Spacer()
-//                        Text("\(self.currentValue, specifier: self.valueSpecifier)")
-//                            .font(.system(size: 41, weight: .bold, design: .default))
-//                            .offset(x: 0, y: 30)
-//                        Spacer()
-//                    }
-//                    .transition(.scale)
-//                }
-                Spacer()
+                .transition(.opacity)
+                .animation(.easeIn(duration: 0.1))
+                .padding([.leading, .top])
+
                 GeometryReader{ geometry in
                     Line(data: self.data,
                          frame: .constant(geometry.frame(in: .local)),

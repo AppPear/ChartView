@@ -57,6 +57,15 @@ public struct GradientColors {
 }
 
 public struct Styles {
+    public static let lineChartStyleTwo = ChartStyle(
+        backgroundColor: Color.white,
+        accentColor: Colors.GradientNeonBlue,
+        gradientColor: GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue),
+        textColor: Color.black,
+        legendTextColor: Colors.LegendText,
+        dropShadowColor: Color.gray,
+        backgroundGradient: GradientColor(start: Colors.GradientUpperBlue, end: .white))
+    
     public static let lineChartStyleOne = ChartStyle(
         backgroundColor: Color.white,
         accentColor: Colors.OrangeStart,

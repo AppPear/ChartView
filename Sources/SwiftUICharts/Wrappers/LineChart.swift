@@ -15,6 +15,7 @@ public struct LineChart: View {
     public var floatingPntNumberFormat: String
     public var cursorColor: Color
     public var curvedLines: Bool
+    public var displayChartStats: Bool
     
     private var chartStyle: ChartStyle = Styles.lineChartStyleOne
     
@@ -25,7 +26,8 @@ public struct LineChart: View {
                  style: LineChartStyle? = .lineChartStyleOne,
                  curvedLines: Bool = true,
                  floatingPntNumberFormat: String = "%.1f",
-                 cursorColor: Color = Colors.IndicatorKnob) {
+                 cursorColor: Color = Colors.IndicatorKnob,
+                 displayChartStats: Bool = true) {
         // Assign data
         self.data = data
         self.title = title
@@ -34,6 +36,7 @@ public struct LineChart: View {
         self.floatingPntNumberFormat = floatingPntNumberFormat
         self.cursorColor = cursorColor
         self.curvedLines = curvedLines
+        self.displayChartStats = displayChartStats
         
         switch style {
         case .lineChartStyleOne:
@@ -42,18 +45,21 @@ public struct LineChart: View {
             self.chartStyle = Styles.lineViewDarkMode
         case .custom(let customStyle):
             self.chartStyle = customStyle
+        case .primary:
+            self.chartStyle = Styles.lineChartStyleTwo
         default:
             self.chartStyle = Styles.lineChartStyleOne
         }
     }
     
     public var body: some View {
-        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines)
+        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines, displayChartStats: self.displayChartStats)
     }
 }
 
 
 public enum LineChartStyle {
+    case primary
     case lineChartStyleOne
     case lineViewDarkMode
     case custom(ChartStyle)
