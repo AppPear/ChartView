@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct LineChartView: View {
+struct LineChartView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @ObservedObject var data:ChartData
     public var title: String?
@@ -43,7 +43,7 @@ public struct LineChartView: View {
     var frame = CGSize(width: 180, height: 120)
     private var rateValue: Int?
     
-    public init(data: [Double],
+    init(data: [Double],
                 title: String? = nil,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
@@ -99,14 +99,13 @@ public struct LineChartView: View {
         }
     }
     
-    public var body: some View {
+    var body: some View {
         ZStack(alignment: .center){
             VStack(alignment: .leading){
                 VStack(alignment: .leading, spacing: 0){
                     if (self.title != nil) {
                         Text(self.title!)
                             .font(self.titleFont)
-                            .bold()
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }
                     if (self.legend != nil){
@@ -116,11 +115,6 @@ public struct LineChartView: View {
                     }
                     HStack {
                         if ((self.internalRate ?? 0 != 0) && (self.displayChartStats)) {
-//                            if (self.internalRate ?? 0 >= 0) {
-//                                Image(systemName: "arrow.up.bold")
-//                            } else {
-//                                Image(systemName: "arrow.down.bold")
-//                            }
                             if (self.showIndicatorDot) {
                                 Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
                             } else if (self.rawData.last != nil) {
@@ -151,7 +145,7 @@ public struct LineChartView: View {
                 .frame(width: frame.width, height: 2*frame.height + 50)
                 .clipShape(RoundedRectangle(cornerRadius: 0))
                 .offset(x: 0, y: 0)
-            }.frame(width: self.formSize.width).background(Color.white)
+            }.frame(width: self.formSize.width).background(self.style.backgroundColor)
         }
         .gesture(DragGesture(minimumDistance: 0)
         .onChanged({ value in

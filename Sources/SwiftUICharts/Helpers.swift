@@ -31,6 +31,7 @@ public struct Colors {
     public static let NeonOrange: Color = Color(hexString: "#ffa46f")
     public static let NeonRed: Color = Color(hexString: "#ff6f6f")
     public static let NeonGreen: Color = Color(hexString: "#6fffc3")
+    public static let NeonBlack: Color = Color(hexString: "#404040")
 }
 
 public struct GradientColor {
@@ -68,7 +69,7 @@ public struct Styles {
         legendTextColor: Colors.LegendText,
         dropShadowColor: Color.gray,
         backgroundGradient: GradientColor(start: Colors.GradientUpperBlue, end: .white))
-    
+
     public static let lineChartStyleThree = ChartStyle(
         backgroundColor: Color.white,
         accentColor: Colors.NeonOrange,
@@ -196,7 +197,7 @@ public class ChartStyle {
         self.backgroundGradient = backgroundGradient
     }
     
-    public init(backgroundColor: Color, accentColor: Color, gradientColor: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue), textColor: Color, legendTextColor: Color, dropShadowColor: Color, backgroundGradient: GradientColor = GradientColor(start: Colors.GradientNeonBlue, end: .white)){
+    public init(backgroundColor: Color, accentColor: Color = Color.white, gradientColor: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue), textColor: Color, legendTextColor: Color, dropShadowColor: Color = Color.white, backgroundGradient: GradientColor = GradientColor(start: Colors.GradientNeonBlue, end: .white)){
         self.backgroundColor = backgroundColor
         self.accentColor = accentColor
         self.lineGradient = gradientColor
@@ -276,7 +277,7 @@ public class TestData{
     
 }
 
-extension Color {
+public extension Color {
     init(hexString: String) {
         let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int = UInt64()

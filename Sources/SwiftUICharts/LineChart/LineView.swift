@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct LineView: View {
+struct LineView: View {
     @ObservedObject var data: ChartData
     public var title: String?
     public var legend: String?
@@ -43,7 +43,7 @@ public struct LineView: View {
         
     }
     
-    public var body: some View {
+    var body: some View {
         GeometryReader{ geometry in
             VStack(alignment: .leading, spacing: 8) {
                 Group{

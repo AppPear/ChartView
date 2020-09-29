@@ -11,7 +11,6 @@ public struct LineChart: View {
     public var data: [Double]
     public var title: String?
     public var subTitle: String?
-    public var displayHorizontalLines: Bool
     public var floatingPntNumberFormat: String
     public var cursorColor: Color
     public var curvedLines: Bool
@@ -28,13 +27,12 @@ public struct LineChart: View {
     public init (data: [Double],
                  title: String? = nil,
                  subTitle: String? = nil,
-                 displayHorizontalLines: Bool = true,
                  style: LineChartStyle? = .primary,
                  curvedLines: Bool = true,
                  cursorColor: Color = Colors.IndicatorKnob,
-                 displayChartStats: Bool = true,
+                 displayChartStats: Bool = false,
                  width: CGFloat = 360,
-                 height: CGFloat = 360,
+                 height: CGFloat = 420,
                  titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
                  subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
                  priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced),
@@ -44,7 +42,6 @@ public struct LineChart: View {
         self.data = data
         self.title = title
         self.subTitle = subTitle
-        self.displayHorizontalLines = displayHorizontalLines
         self.floatingPntNumberFormat = floatingPntNumberFormat
         self.cursorColor = cursorColor
         self.curvedLines = curvedLines
