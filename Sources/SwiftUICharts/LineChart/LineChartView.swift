@@ -27,6 +27,10 @@ public struct LineChartView: View {
     public var width: CGFloat
     public var height: CGFloat
     
+    public var titleFont: Font
+    public var subtitleFont: Font
+    public var priceFont: Font
+    
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
     @State private var currentValue: Double = 2 {
@@ -51,7 +55,11 @@ public struct LineChartView: View {
                 curvedLines: Bool = true,
                 displayChartStats: Bool = true,
                 width: CGFloat = 360,
-                height: CGFloat = 360) {
+                height: CGFloat = 360,
+                titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
+                subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
+                priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced)
+                ) {
         
         self.rawData = data
         self.data = ChartData(points: data)
@@ -69,6 +77,10 @@ public struct LineChartView: View {
         self.indicatorKnob = cursorColor
         self.curvedLines = curvedLines
         self.displayChartStats = displayChartStats
+        self.subtitleFont = subtitleFont
+        self.titleFont = titleFont
+        self.priceFont = priceFont
+        
     }
     
     private var internalRate: Int? {
@@ -90,34 +102,34 @@ public struct LineChartView: View {
     public var body: some View {
         ZStack(alignment: .center){
             VStack(alignment: .leading){
-                VStack(alignment: .leading, spacing: 8){
+                VStack(alignment: .leading, spacing: 0){
                     if (self.title != nil) {
                         Text(self.title!)
-                            .font(.title)
+                            .font(self.titleFont)
                             .bold()
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                     }
                     if (self.legend != nil){
                         Text(self.legend!)
-                            .font(.callout)
+                            .font(self.subtitleFont)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
                     }
                     HStack {
                         if ((self.internalRate ?? 0 != 0) && (self.displayChartStats)) {
-                            if (self.internalRate ?? 0 >= 0) {
-                                Image(systemName: "arrow.up")
-                            } else {
-                                Image(systemName: "arrow.down")
-                            }
+//                            if (self.internalRate ?? 0 >= 0) {
+//                                Image(systemName: "arrow.up.bold")
+//                            } else {
+//                                Image(systemName: "arrow.down.bold")
+//                            }
                             if (self.showIndicatorDot) {
-                                Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(.callout)
+                                Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
                             } else if (self.rawData.last != nil) {
-                                Text("\(String(format: "%.2f", self.rawData.last!)) (\(self.internalRate!)%)").font(.callout)
+                                Text("\(String(format: "%.2f", self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
                             } else {
-                                Text("(\(self.internalRate!)%)").font(.callout)
+                                Text("(\(self.internalRate!)%)").font(self.priceFont)
                             }
                         }
-                    }
+                    }.padding(.top)
                 }
                 .transition(.opacity)
                 .animation(.easeIn(duration: 0.1))

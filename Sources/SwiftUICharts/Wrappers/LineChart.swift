@@ -19,6 +19,10 @@ public struct LineChart: View {
     public var width: CGFloat
     public var height: CGFloat
     
+    public var titleFont: Font
+    public var subtitleFont: Font
+    public var priceFont: Font
+    
     private var chartStyle: ChartStyle = Styles.lineChartStyleOne
     
     public init (data: [Double],
@@ -27,11 +31,15 @@ public struct LineChart: View {
                  displayHorizontalLines: Bool = true,
                  style: LineChartStyle? = .lineChartStyleOne,
                  curvedLines: Bool = true,
-                 floatingPntNumberFormat: String = "%.1f",
                  cursorColor: Color = Colors.IndicatorKnob,
                  displayChartStats: Bool = true,
                  width: CGFloat = 360,
-                 height: CGFloat = 360) {
+                 height: CGFloat = 360,
+                 titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
+                 subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
+                 priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced),
+                 floatingPntNumberFormat: String = "%.1f") {
+        
         // Assign data
         self.data = data
         self.title = title
@@ -43,6 +51,9 @@ public struct LineChart: View {
         self.displayChartStats = displayChartStats
         self.width = width
         self.height = height
+        self.subtitleFont = subtitleFont
+        self.titleFont = titleFont
+        self.priceFont = priceFont
         
         switch style {
         case .lineChartStyleOne:
@@ -59,7 +70,7 @@ public struct LineChart: View {
     }
     
     public var body: some View {
-        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines, displayChartStats: self.displayChartStats, width: self.width, height: self.height)
+        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines, displayChartStats: self.displayChartStats, width: self.width, height: self.height, titleFont: self.titleFont, subtitleFont: self.subtitleFont, priceFont: self.priceFont)
     }
 }
 
