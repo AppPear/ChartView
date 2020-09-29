@@ -28,6 +28,9 @@ public struct Colors {
     public static let GradientLowerBlue:Color = Color(hexString: "#F1F9FF")
     public static let DarkPurple:Color = Color(hexString: "#1B205E")
     public static let BorderBlue:Color = Color(hexString: "#4EBCFF")
+    public static let NeonOrange: Color = Color(hexString: "#ffa46f")
+    public static let NeonRed: Color = Color(hexString: "#ff6f6f")
+    public static let NeonGreen: Color = Color(hexString: "#6fffc3")
 }
 
 public struct GradientColor {
@@ -65,6 +68,24 @@ public struct Styles {
         legendTextColor: Colors.LegendText,
         dropShadowColor: Color.gray,
         backgroundGradient: GradientColor(start: Colors.GradientUpperBlue, end: .white))
+    
+    public static let lineChartStyleThree = ChartStyle(
+        backgroundColor: Color.white,
+        accentColor: Colors.NeonOrange,
+        gradientColor: GradientColor(start: Colors.NeonOrange, end: Colors.NeonRed),
+        textColor: Color.black,
+        legendTextColor: Colors.LegendText,
+        dropShadowColor: Color.gray,
+        backgroundGradient: GradientColor(start: Colors.NeonOrange, end: .white))
+    
+    public static let lineChartStyleFour = ChartStyle(
+        backgroundColor: Color.white,
+        accentColor: Colors.NeonOrange,
+        gradientColor: GradientColor(start: Colors.NeonGreen, end: Colors.GradientNeonBlue),
+        textColor: Color.black,
+        legendTextColor: Colors.LegendText,
+        dropShadowColor: Color.gray,
+        backgroundGradient: GradientColor(start: .white, end: .white))
     
     public static let lineChartStyleOne = ChartStyle(
         backgroundColor: Color.white,

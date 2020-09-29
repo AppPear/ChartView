@@ -29,7 +29,7 @@ public struct LineChart: View {
                  title: String? = nil,
                  subTitle: String? = nil,
                  displayHorizontalLines: Bool = true,
-                 style: LineChartStyle? = .lineChartStyleOne,
+                 style: LineChartStyle? = .primary,
                  curvedLines: Bool = true,
                  cursorColor: Color = Colors.IndicatorKnob,
                  displayChartStats: Bool = true,
@@ -56,14 +56,14 @@ public struct LineChart: View {
         self.priceFont = priceFont
         
         switch style {
-        case .lineChartStyleOne:
-            self.chartStyle = Styles.lineChartStyleOne
-        case .lineViewDarkMode:
-            self.chartStyle = Styles.lineViewDarkMode
         case .custom(let customStyle):
             self.chartStyle = customStyle
         case .primary:
             self.chartStyle = Styles.lineChartStyleTwo
+        case .secondary:
+            self.chartStyle = Styles.lineChartStyleThree
+        case .tertiary:
+            self.chartStyle = Styles.lineChartStyleFour
         default:
             self.chartStyle = Styles.lineChartStyleOne
         }
@@ -77,8 +77,8 @@ public struct LineChart: View {
 
 public enum LineChartStyle {
     case primary
-    case lineChartStyleOne
-    case lineViewDarkMode
+    case secondary
+    case tertiary
     case custom(ChartStyle)
 }
 
