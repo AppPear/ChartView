@@ -24,6 +24,9 @@ public struct LineChartView: View {
     public var curvedLines: Bool
     public var displayChartStats: Bool
     
+    public var width: CGFloat
+    public var height: CGFloat
+    
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
     @State private var currentValue: Double = 2 {
@@ -46,7 +49,9 @@ public struct LineChartView: View {
                 valueSpecifier: String? = "%.1f",
                 cursorColor: Color = Colors.IndicatorKnob,
                 curvedLines: Bool = true,
-                displayChartStats: Bool = true) {
+                displayChartStats: Bool = true,
+                width: CGFloat = 360,
+                height: CGFloat = 360) {
         
         self.rawData = data
         self.data = ChartData(points: data)
@@ -54,8 +59,10 @@ public struct LineChartView: View {
         self.legend = legend
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
-        self.formSize = form!
-        frame = CGSize(width: self.formSize.width, height: self.formSize.height/2)
+        self.formSize = CGSize(width: width, height: height)
+        self.width = width
+        self.height = height
+        frame = CGSize(width: width, height: height/2)
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
@@ -129,7 +136,7 @@ public struct LineChartView: View {
                          curvedLines: self.curvedLines
                     )
                 }
-                .frame(width: frame.width+20, height: 2*frame.height + 50)
+                .frame(width: frame.width, height: 2*frame.height + 50)
                 .clipShape(RoundedRectangle(cornerRadius: 0))
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width).background(Color.white)
