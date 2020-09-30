@@ -84,6 +84,10 @@ struct LineChartView: View {
     }
     
     private var internalRate: Int? {
+        if (self.rawData.count > 0) && (self.rawData.first! == 0) {
+            return nil
+        }
+        
         if !self.showIndicatorDot {
             if self.rawData.count > 1 {
                 return Int(((self.rawData.last!/self.rawData.first!) - 1)*100)
@@ -116,11 +120,21 @@ struct LineChartView: View {
                     HStack {
                         if ((self.displayChartStats)) {
                             if (self.showIndicatorDot) {
-                                Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
+                                if (self.internalRate != nil) {
+                                    Text("\(String(format: self.valueSpecifier, self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
+                                } else {
+                                    Text("\(String(format: self.valueSpecifier, self.currentValue))").font(self.priceFont)
+                                }
                             } else if (self.rawData.last != nil) {
-                                Text("\(String(format: "%.2f", self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
-                            } else {
+                                if (self.internalRate != nil) {
+                                    Text("\(String(format: self.valueSpecifier, self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
+                                } else {
+                                    Text("\(String(format: self.valueSpecifier, self.rawData.last!))").font(self.priceFont)
+                                }
+                            } else if (self.internalRate != nil) {
                                 Text("(\(self.internalRate!)%)").font(self.priceFont)
+                            } else {
+                                Text("nil")
                             }
                         }
                     }.padding(.top)
