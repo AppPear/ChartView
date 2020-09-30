@@ -114,7 +114,7 @@ struct LineChartView: View {
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
                     }
                     HStack {
-                        if ((self.internalRate ?? 0 != 0) && (self.displayChartStats)) {
+                        if ((self.displayChartStats)) {
                             if (self.showIndicatorDot) {
                                 Text("\(String(format: "%.2f", self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
                             } else if (self.rawData.last != nil) {
