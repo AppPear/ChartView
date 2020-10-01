@@ -21,8 +21,11 @@ public struct LineChart: View {
     public var titleFont: Font
     public var subtitleFont: Font
     public var priceFont: Font
+    public var fullScreen: Bool
+    
     
     private var chartStyle: ChartStyle = Styles.lineChartStyleOne
+    
     
     public init (data: [Double],
                  title: String? = nil,
@@ -36,7 +39,8 @@ public struct LineChart: View {
                  titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
                  subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
                  priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced),
-                 floatingPntNumberFormat: String = "%.1f") {
+                 floatingPntNumberFormat: String = "%.1f",
+                 fullScreen: Bool = false) {
         
         // Assign data
         self.data = data
@@ -51,6 +55,7 @@ public struct LineChart: View {
         self.subtitleFont = subtitleFont
         self.titleFont = titleFont
         self.priceFont = priceFont
+        self.fullScreen = fullScreen
         
         switch style {
         case .custom(let customStyle):
@@ -66,8 +71,17 @@ public struct LineChart: View {
         }
     }
     
+    
     public var body: some View {
-        LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines, displayChartStats: self.displayChartStats, width: self.width, height: self.height, titleFont: self.titleFont, subtitleFont: self.subtitleFont, priceFont: self.priceFont)
+        if fullScreen {
+            LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines, displayChartStats: self.displayChartStats, width: self.width, height: self.height, titleFont: self.titleFont, subtitleFont: self.subtitleFont, priceFont: self.priceFont)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .background(self.chartStyle.backgroundColor)
+                .edgesIgnoringSafeArea(.all)
+        } else {
+            LineChartView(data: self.data, title: self.title, legend: self.subTitle, style: self.chartStyle,  valueSpecifier: self.floatingPntNumberFormat, cursorColor: self.cursorColor, curvedLines: self.curvedLines, displayChartStats: self.displayChartStats, width: self.width, height: self.height, titleFont: self.titleFont, subtitleFont: self.subtitleFont, priceFont: self.priceFont)
+        }
+        
     }
 }
 
