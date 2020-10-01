@@ -38,7 +38,7 @@ public struct LineChart: View {
                  height: CGFloat = 420,
                  titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
                  subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
-                 priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced),
+                 dataFont: Font = .system(size: 16, weight: .bold, design: .monospaced),
                  floatingPntNumberFormat: String = "%.1f",
                  fullScreen: Bool = false) {
         
@@ -54,7 +54,7 @@ public struct LineChart: View {
         self.height = height
         self.subtitleFont = subtitleFont
         self.titleFont = titleFont
-        self.priceFont = priceFont
+        self.priceFont = dataFont
         self.fullScreen = fullScreen
         
         switch style {
