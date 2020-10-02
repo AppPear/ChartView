@@ -164,11 +164,11 @@ public struct Styles {
 
 public struct ChartForm {
     #if os(watchOS)
-    public static let small = CGSize(width:120, height:90)
-    public static let medium = CGSize(width:120, height:160)
-    public static let large = CGSize(width:180, height:90)
-    public static let extraLarge = CGSize(width:180, height:90)
-    public static let detail = CGSize(width:180, height:160)
+    public static let small = CGSize(maxWidth:120, maxHeight:90)
+    public static let medium = CGSize(maxWidth:120, maxHeight:160)
+    public static let large = CGSize(maxWidth:180, maxHeight:90)
+    public static let extraLarge = CGSize(maxWidth:180, maxHeight:90)
+    public static let detail = CGSize(maxWidth:180, maxHeight:160)
     #else
     public static let small = CGSize(width:180, height:120)
     public static let medium = CGSize(width:180, height:240)

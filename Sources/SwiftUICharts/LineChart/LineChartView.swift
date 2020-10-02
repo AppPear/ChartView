@@ -24,8 +24,10 @@ struct LineChartView: View {
     public var curvedLines: Bool
     public var displayChartStats: Bool
     
-    public var width: CGFloat
-    public var height: CGFloat
+    public var minWidth: CGFloat
+    public var minHeight: CGFloat
+    public var maxWidth: CGFloat
+    public var maxHeight: CGFloat
     
     public var titleFont: Font
     public var subtitleFont: Font
@@ -56,8 +58,10 @@ struct LineChartView: View {
                 cursorColor: Color = Colors.IndicatorKnob,
                 curvedLines: Bool = true,
                 displayChartStats: Bool = true,
-                width: CGFloat? = nil,
-                height: CGFloat? = nil,
+                minWidth: CGFloat = 0,
+                minHeight: CGFloat = 0,
+                maxWidth: CGFloat = .infinity,
+                maxHeight: CGFloat = .infinity,
                 titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
                 subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
                 priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced)
@@ -74,10 +78,10 @@ struct LineChartView: View {
 //        self.height = height
 //        frame = CGSize(width: width, height: height)
         // MARK: DEBUG
-        self.formSize = CGSize(width: 100, height: 100)
-        self.width = 100
-        self.height = 100
-        frame = CGSize(width: 100, height: 100)
+        self.formSize = CGSize(width: maxWidth, height: maxHeight)
+        self.maxWidth = maxWidth
+        self.maxHeight = maxHeight
+        frame = CGSize(width: maxWidth, height: maxHeight)
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
@@ -87,6 +91,8 @@ struct LineChartView: View {
         self.subtitleFont = subtitleFont
         self.titleFont = titleFont
         self.priceFont = priceFont
+        self.minHeight = minHeight
+        self.minWidth = minWidth
         
     }
     
@@ -151,6 +157,7 @@ struct LineChartView: View {
                     .animation(.easeIn(duration: 0.1))
                     .padding([.leading, .top])
                     
+                    
 
                     GeometryReader{ geometry in
                         Line(data: self.data,
@@ -165,20 +172,25 @@ struct LineChartView: View {
                              curvedLines: self.curvedLines
                         )
                     }
+                    .frame(minWidth: self.minWidth, maxWidth: self.maxWidth, minHeight: self.minHeight, maxHeight: self.maxHeight)
                     .padding(.bottom)
+                    
                     // MARK: Frames
     //                .clipShape(RoundedRectangle(cornerRadius: 0))
-    //                .offset(x: 0, y: 0)
+                    
                 }
                 // MARK: Frames
-                .frame(width: g.size.width, height: g.size.height)
+                .frame(width: (self.maxWidth == .infinity ? g.size.width : self.maxWidth),
+                       height: (self.maxHeight == .infinity ? g.size.height : self.maxHeight))
                 .background(self.style.backgroundColor)
             }.gesture(DragGesture(minimumDistance: 0)
                 .onChanged({ value in
                     self.touchLocation = value.location
                     self.showIndicatorDot = true
                     // MARK: Frames
-                    self.getClosestDataPoint(toPoint: value.location, width:g.size.width, height: g.size.height)
+                    self.getClosestDataPoint(toPoint: value.location,
+                                             width:(self.maxWidth == .infinity ? g.size.width : self.maxWidth),
+                                             height:(self.maxHeight == .infinity ? g.size.height : self.maxHeight))
                 })
                 .onEnded({ value in
                     self.showIndicatorDot = false
