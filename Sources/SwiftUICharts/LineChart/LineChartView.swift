@@ -31,6 +31,8 @@ struct LineChartView: View {
     public var subtitleFont: Font
     public var priceFont: Font
     
+    private var contentHeight: CGFloat = 0
+    
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
     @State private var currentValue: Double = 2 {
@@ -54,8 +56,8 @@ struct LineChartView: View {
                 cursorColor: Color = Colors.IndicatorKnob,
                 curvedLines: Bool = true,
                 displayChartStats: Bool = true,
-                width: CGFloat = 360,
-                height: CGFloat = 360,
+                width: CGFloat? = nil,
+                height: CGFloat? = nil,
                 titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
                 subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
                 priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced)
@@ -67,10 +69,15 @@ struct LineChartView: View {
         self.legend = legend
         self.style = style
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
-        self.formSize = CGSize(width: width, height: height)
-        self.width = width
-        self.height = height
-        frame = CGSize(width: width, height: height/2)
+//        self.formSize = CGSize(width: width, height: height)
+//        self.width = width
+//        self.height = height
+//        frame = CGSize(width: width, height: height)
+        // MARK: DEBUG
+        self.formSize = CGSize(width: 100, height: 100)
+        self.width = 100
+        self.height = 100
+        frame = CGSize(width: 100, height: 100)
         self.dropShadow = dropShadow!
         self.valueSpecifier = valueSpecifier!
         self.rateValue = rateValue
@@ -104,74 +111,80 @@ struct LineChartView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .center){
-            VStack(alignment: .leading){
-                VStack(alignment: .leading, spacing: 0){
-                    if (self.title != nil) {
-                        Text(self.title!)
-                            .font(self.titleFont)
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
-                    }
-                    if (self.legend != nil){
-                        Text(self.legend!)
-                            .font(self.subtitleFont)
-                            .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
-                    }
-                    HStack {
-                        if ((self.displayChartStats)) {
-                            if (self.showIndicatorDot) {
-                                if (self.internalRate != nil) {
-                                    Text("\(String(format: self.valueSpecifier, self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
-                                } else {
-                                    Text("\(String(format: self.valueSpecifier, self.currentValue))").font(self.priceFont)
-                                }
-                            } else if (self.rawData.last != nil) {
-                                if (self.internalRate != nil) {
-                                    Text("\(String(format: self.valueSpecifier, self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
-                                } else {
-                                    Text("\(String(format: self.valueSpecifier, self.rawData.last!))").font(self.priceFont)
-                                }
-                            } else if (self.internalRate != nil) {
-                                Text("(\(self.internalRate!)%)").font(self.priceFont)
-                            } else {
-                                Text("nil")
-                            }
+        GeometryReader { g in
+            ZStack(alignment: .center) {
+                VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 0){
+                        if (self.title != nil) {
+                            Text(self.title!)
+                                .font(self.titleFont)
+                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                         }
-                    }.padding(.top)
-                }
-                .transition(.opacity)
-                .animation(.easeIn(duration: 0.1))
-                .padding([.leading, .top])
+                        if (self.legend != nil){
+                            Text(self.legend!)
+                                .font(self.subtitleFont)
+                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
+                        }
+                        HStack {
+                            if ((self.displayChartStats)) {
+                                if (self.showIndicatorDot) {
+                                    if (self.internalRate != nil) {
+                                        Text("\(String(format: self.valueSpecifier, self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
+                                    } else {
+                                        Text("\(String(format: self.valueSpecifier, self.currentValue))").font(self.priceFont)
+                                    }
+                                } else if (self.rawData.last != nil) {
+                                    if (self.internalRate != nil) {
+                                        Text("\(String(format: self.valueSpecifier, self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
+                                    } else {
+                                        Text("\(String(format: self.valueSpecifier, self.rawData.last!))").font(self.priceFont)
+                                    }
+                                } else if (self.internalRate != nil) {
+                                    Text("(\(self.internalRate!)%)").font(self.priceFont)
+                                } else {
+                                    Text("nil")
+                                }
+                            }
+                        }.padding(.top)
+                    }
+                    .transition(.opacity)
+                    .animation(.easeIn(duration: 0.1))
+                    .padding([.leading, .top])
+                    
 
-                GeometryReader{ geometry in
-                    Line(data: self.data,
-                         frame: .constant(geometry.frame(in: .local)),
-                         touchLocation: self.$touchLocation,
-                         showIndicator: self.$showIndicatorDot,
-                         minDataValue: .constant(nil),
-                         maxDataValue: .constant(nil),
-                         lineGradient: self.style.lineGradient,
-                         backgroundGradient: self.style.backgroundGradient,
-                         indicatorKnob: self.indicatorKnob,
-                         curvedLines: self.curvedLines
-                    )
+                    GeometryReader{ geometry in
+                        Line(data: self.data,
+                             frame: .constant(geometry.frame(in: .local)),
+                             touchLocation: self.$touchLocation,
+                             showIndicator: self.$showIndicatorDot,
+                             minDataValue: .constant(nil),
+                             maxDataValue: .constant(nil),
+                             lineGradient: self.style.lineGradient,
+                             backgroundGradient: self.style.backgroundGradient,
+                             indicatorKnob: self.indicatorKnob,
+                             curvedLines: self.curvedLines
+                        )
+                    }
+                    .padding(.bottom)
+                    // MARK: Frames
+    //                .clipShape(RoundedRectangle(cornerRadius: 0))
+    //                .offset(x: 0, y: 0)
                 }
-                .frame(width: frame.width, height: 2*frame.height + 50)
-                .clipShape(RoundedRectangle(cornerRadius: 0))
-                .offset(x: 0, y: 0)
-            }.frame(width: self.formSize.width).background(self.style.backgroundColor)
+                // MARK: Frames
+                .frame(width: g.size.width, height: g.size.height)
+                .background(self.style.backgroundColor)
+            }.gesture(DragGesture(minimumDistance: 0)
+                .onChanged({ value in
+                    self.touchLocation = value.location
+                    self.showIndicatorDot = true
+                    // MARK: Frames
+                    self.getClosestDataPoint(toPoint: value.location, width:g.size.width, height: g.size.height)
+                })
+                .onEnded({ value in
+                    self.showIndicatorDot = false
+                })
+            )
         }
-        .gesture(DragGesture(minimumDistance: 0)
-        .onChanged({ value in
-            self.touchLocation = value.location
-            self.showIndicatorDot = true
-            self.getClosestDataPoint(toPoint: value.location, width:self.frame.width, height: self.frame.height)
-        })
-            .onEnded({ value in
-                self.showIndicatorDot = false
-            })
-        )
-        
     }
     
     @discardableResult func getClosestDataPoint(toPoint: CGPoint, width:CGFloat, height: CGFloat) -> CGPoint {
