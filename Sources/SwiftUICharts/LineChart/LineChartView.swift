@@ -34,6 +34,8 @@ struct LineChartView: View {
     public var priceFont: Font
     
     private var contentHeight: CGFloat = 0
+    private var topPadding: CGFloat = 0
+    private var edgesIgnored: Edge.Set
     
     @State private var touchLocation:CGPoint = .zero
     @State private var showIndicatorDot: Bool = false
@@ -64,7 +66,8 @@ struct LineChartView: View {
                 maxHeight: CGFloat = .infinity,
                 titleFont: Font = .system(size: 30, weight: .regular, design: .rounded),
                 subtitleFont: Font = .system(size: 14, weight: .light, design: .rounded),
-                priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced)
+                priceFont: Font = .system(size: 16, weight: .bold, design: .monospaced),
+                fullScreen: Bool = false
                 ) {
         
         self.rawData = data
@@ -94,6 +97,12 @@ struct LineChartView: View {
         self.minHeight = minHeight
         self.minWidth = minWidth
         
+        if fullScreen {
+            self.edgesIgnored = .all
+            self.topPadding = 7
+        } else {
+            self.edgesIgnored = .bottom
+        }
     }
     
     private var internalRate: Int? {
@@ -120,42 +129,46 @@ struct LineChartView: View {
         GeometryReader { g in
             ZStack(alignment: .center) {
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading, spacing: 0){
-                        if (self.title != nil) {
-                            Text(self.title!)
-                                .font(self.titleFont)
-                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
-                        }
-                        if (self.legend != nil){
-                            Text(self.legend!)
-                                .font(self.subtitleFont)
-                                .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
-                        }
-                        HStack {
-                            if ((self.displayChartStats)) {
-                                if (self.showIndicatorDot) {
-                                    if (self.internalRate != nil) {
-                                        Text("\(String(format: self.valueSpecifier, self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
-                                    } else {
-                                        Text("\(String(format: self.valueSpecifier, self.currentValue))").font(self.priceFont)
-                                    }
-                                } else if (self.rawData.last != nil) {
-                                    if (self.internalRate != nil) {
-                                        Text("\(String(format: self.valueSpecifier, self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
-                                    } else {
-                                        Text("\(String(format: self.valueSpecifier, self.rawData.last!))").font(self.priceFont)
-                                    }
-                                } else if (self.internalRate != nil) {
-                                    Text("(\(self.internalRate!)%)").font(self.priceFont)
-                                } else {
-                                    Text("nil")
-                                }
+                    if ((self.title != nil) || (self.legend != nil) || (self.displayChartStats)) {
+                        VStack(alignment: .leading, spacing: 0){
+                            if (self.title != nil) {
+                                Text(self.title!)
+                                    .font(self.titleFont)
+                                    .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
                             }
-                        }.padding(.top)
+                            if (self.legend != nil){
+                                Text(self.legend!)
+                                    .font(self.subtitleFont)
+                                    .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
+                            }
+                            HStack {
+                                if ((self.displayChartStats)) {
+                                    if (self.showIndicatorDot) {
+                                        if (self.internalRate != nil) {
+                                            Text("\(String(format: self.valueSpecifier, self.currentValue)) (\(self.internalRate!)%)").font(self.priceFont)
+                                        } else {
+                                            Text("\(String(format: self.valueSpecifier, self.currentValue))").font(self.priceFont)
+                                        }
+                                    } else if (self.rawData.last != nil) {
+                                        if (self.internalRate != nil) {
+                                            Text("\(String(format: self.valueSpecifier, self.rawData.last!)) (\(self.internalRate!)%)").font(self.priceFont)
+                                        } else {
+                                            Text("\(String(format: self.valueSpecifier, self.rawData.last!))").font(self.priceFont)
+                                        }
+                                    } else if (self.internalRate != nil) {
+                                        Text("(\(self.internalRate!)%)").font(self.priceFont)
+                                    } else {
+                                        Text("nil")
+                                    }
+                                }
+                            }.padding(.top)
+                        }
+                        .transition(.opacity)
+                        .animation(.easeIn(duration: 0.1))
+                        .padding([.leading, .top])
+                        .padding(.top, self.topPadding)
                     }
-                    .transition(.opacity)
-                    .animation(.easeIn(duration: 0.1))
-                    .padding([.leading, .top])
+                    
                     
                     
 
@@ -180,9 +193,11 @@ struct LineChartView: View {
                     
                 }
                 // MARK: Frames
+                .background(self.style.backgroundColor)
+                .edgesIgnoringSafeArea(self.edgesIgnored)
                 .frame(width: (self.maxWidth == .infinity ? g.size.width : self.maxWidth),
                        height: (self.maxHeight == .infinity ? g.size.height : self.maxHeight))
-                .background(self.style.backgroundColor)
+                
             }.gesture(DragGesture(minimumDistance: 0)
                 .onChanged({ value in
                     self.touchLocation = value.location
