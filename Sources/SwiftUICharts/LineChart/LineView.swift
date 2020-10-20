@@ -10,6 +10,7 @@ import SwiftUI
 
 public struct LineView: View {
     @ObservedObject var data: ChartData
+    public var xAxisData: [CustomStringConvertible]?
     public var title: String?
     public var legend: String?
     public var style: ChartStyle
@@ -24,14 +25,17 @@ public struct LineView: View {
     @State private var opacity:Double = 0
     @State private var currentDataNumber: Double = 0
     @State private var hideHorizontalLines: Bool = false
+    @State private var currentXValue: CustomStringConvertible?
     
     public init(data: [Double],
+                xAxisData: [CustomStringConvertible]? = nil,
                 title: String? = nil,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
                 valueSpecifier: String? = "%.1f") {
         
         self.data = ChartData(points: data)
+        self.xAxisData = xAxisData
         self.title = title
         self.legend = legend
         self.style = style
@@ -83,7 +87,7 @@ public struct LineView: View {
                     }
                     .frame(width: geometry.frame(in: .local).size.width, height: 240)
                     .offset(x: 0, y: 40 )
-                    MagnifierRect(currentNumber: self.$currentDataNumber, valueSpecifier: self.valueSpecifier)
+                    MagnifierRect(currentNumber: self.$currentDataNumber, currentXValue: self.$currentXValue, valueSpecifier: self.valueSpecifier)
                         .opacity(self.opacity)
                         .offset(x: self.dragLocation.x - geometry.frame(in: .local).size.width/2, y: 36)
                 }
@@ -113,6 +117,11 @@ public struct LineView: View {
         let index:Int = Int(floor((toPoint.x-15)/stepWidth))
         if (index >= 0 && index < points.count){
             self.currentDataNumber = points[index]
+            if let xAxisData = xAxisData,
+               (index >= 0 && index < xAxisData.count)
+            {
+                self.currentXValue = xAxisData[index]
+            }
             return CGPoint(x: CGFloat(index)*stepWidth, y: CGFloat(points[index])*stepHeight)
         }
         return .zero
