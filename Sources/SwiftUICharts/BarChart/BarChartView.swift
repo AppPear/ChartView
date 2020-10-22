@@ -107,9 +107,9 @@ public struct BarChartView : View {
                     }
                 })
                 .onEnded({ value in
-                    self.showValue = false
-                    self.showLabelValue = false
                     if !keepTouchLocation {
+                        self.showValue = false
+                        self.showLabelValue = false
                         self.touchLocation = -1
                     }
                 })
