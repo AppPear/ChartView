@@ -111,6 +111,12 @@ public struct BarChartView : View {
                         self.showValue = false
                         self.showLabelValue = false
                         self.touchLocation = -1
+                    } else {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.showValue = false
+                            self.showLabelValue = false
+                            self.touchLocation = -1
+                        }
                     }
                 })
         )
