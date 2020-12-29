@@ -188,10 +188,9 @@ You can access built-in styles:
 BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.small)
 ```
 
-### You can choose whether draggable label is back to origin or not by specifying `keepTouchLocation` (default is false).
-|keepTouchLocation is false|keepTouchLocation is true|
-|---|---|
-|![RPReplay_Final1603364812](https://user-images.githubusercontent.com/44002126/96867561-d6c10500-14a7-11eb-92ea-22cd57a4055f.gif)|![RPReplay_Final1603367132](https://user-images.githubusercontent.com/44002126/96867884-3c14f600-14a8-11eb-96c4-c918609e3fe8.gif)|
+### You can choose whether bar is animated or not after completing your gesture.
+
+If you want to animate back movement after completing your gesture, you set `animatedToBack` as `true`. 
 
 ### WatchOS support for Bar charts: 
 
