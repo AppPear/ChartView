@@ -188,6 +188,10 @@ You can access built-in styles:
 BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.small)
 ```
 
+### You can choose whether bar is animated or not after completing your gesture.
+
+If you want to animate back movement after completing your gesture, you set `animatedToBack` as `true`. 
+
 ### WatchOS support for Bar charts: 
 
 ![Pie Charts](./Resources/watchos1.png "Pie Charts")
