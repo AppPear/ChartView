@@ -53,7 +53,7 @@ public struct LineView: View {
                             .font(.callout)
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                     }
-                }.offset(x: 0, y: 20)
+                }.offset(x: 0, y: 0)
                 ZStack{
                     GeometryReader{ reader in
                         Rectangle()
@@ -65,7 +65,7 @@ public struct LineView: View {
                                 .animation(Animation.easeOut(duration: 1).delay(1))
                         }
                         Line(data: self.data,
-                             frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                             frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height + 30)),
                              touchLocation: self.$indicatorLocation,
                              showIndicator: self.$hideHorizontalLines,
                              minDataValue: .constant(nil),
@@ -73,7 +73,7 @@ public struct LineView: View {
                              showBackground: false,
                              gradient: self.style.gradientColor
                         )
-                        .offset(x: 30, y: -20)
+                        .offset(x: 42.5, y: 0)
                         .onAppear(){
                             self.showLegend = true
                         }
@@ -91,7 +91,7 @@ public struct LineView: View {
                 .gesture(DragGesture()
                 .onChanged({ value in
                     self.dragLocation = value.location
-                    self.indicatorLocation = CGPoint(x: max(value.location.x-30,0), y: 32)
+                    self.indicatorLocation = CGPoint(x: max(value.location.x-40,0), y: 32)
                     self.opacity = 1
                     self.closestPoint = self.getClosestDataPoint(toPoint: value.location, width: geometry.frame(in: .local).size.width-30, height: 240)
                     self.hideHorizontalLines = true
@@ -125,6 +125,8 @@ struct LineView_Previews: PreviewProvider {
             LineView(data: [8,23,54,32,12,37,7,23,43], title: "Full chart", style: Styles.lineChartStyleOne)
             
             LineView(data: [282.502, 284.495, 283.51, 285.019, 285.197, 286.118, 288.737, 288.455, 289.391, 287.691, 285.878, 286.46, 286.252, 284.652, 284.129, 284.188], title: "Full chart", style: Styles.lineChartStyleOne)
+            
+            LineView(data: [60, 55, 50, 50], title: "Full chart", style: Styles.lineChartStyleOne)
             
         }
     }
