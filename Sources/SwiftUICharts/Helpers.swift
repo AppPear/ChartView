@@ -213,6 +213,20 @@ public class ChartData: ObservableObject, Identifiable {
     }
 }
 
+public struct PieChartData {
+    var label: String = ""
+    var value: Double
+    
+    public init(value: Double) {
+        self.value = value
+    }
+    
+    public init(label: String, value: Double) {
+        self.label = label
+        self.value = value
+    }
+}
+
 public class MultiLineChartData: ChartData {
     var gradient: GradientColor
     
