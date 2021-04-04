@@ -12,8 +12,20 @@ public class ChartData: ObservableObject {
         data.map { $0.0 }
     }
 
-	/// Initialize with data array
-	/// - Parameter data: Array of `Double`
+    var normalisedPoints: [Double] {
+        points.map { $0 / (points.max() ?? 1.0) }
+    }
+
+    var normalisedRange: Double {
+        (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0)
+    }
+
+    var isInNegativeDomain: Bool {
+        (points.min() ?? 0.0) < 0
+    }
+
+    /// Initialize with data array
+    /// - Parameter data: Array of `Double`
     public init(_ data: [Double]) {
         self.data = data.map { ("", $0) }
     }

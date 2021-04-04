@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Nicolas Savoini on 2020-05-25.
-//
-
 @testable import SwiftUICharts
 import XCTest
 
