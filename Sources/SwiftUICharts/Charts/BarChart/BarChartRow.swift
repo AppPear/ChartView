@@ -6,10 +6,6 @@ public struct BarChartRow: View {
     @ObservedObject var chartData: ChartData
     @State private var touchLocation: CGFloat = -1.0
 
-    enum Constant {
-        static let spacing: CGFloat = 16.0
-    }
-
     var style: ChartStyle
     
     var maxValue: Double {
@@ -27,20 +23,18 @@ public struct BarChartRow: View {
     public var body: some View {
         GeometryReader { geometry in
             HStack(alignment: .bottom,
-                   spacing: (geometry.frame(in: .local).width - Constant.spacing) / CGFloat(self.chartData.data.count * 3)) {
-                    ForEach(0..<self.chartData.data.count, id: \.self) { index in
-                        BarChartCell(value: self.normalizedValue(index: index),
+                   spacing: geometry.frame(in: .local).width / CGFloat(chartData.data.count * 3)) {
+                    ForEach(0..<chartData.data.count, id: \.self) { index in
+                        BarChartCell(value: chartData.normalisedPoints[index],
                                      index: index,
-                                     width: Float(geometry.frame(in: .local).width - Constant.spacing),
-                                     numberOfDataPoints: self.chartData.data.count,
                                      gradientColor: self.style.foregroundColor.rotate(for: index),
                                      touchLocation: self.touchLocation)
                             .scaleEffect(self.getScaleSize(touchLocation: self.touchLocation, index: index), anchor: .bottom)
                             .animation(Animation.easeIn(duration: 0.2))
                     }
-//                   .drawingGroup()
+//                    .drawingGroup()
             }
-            .padding([.top, .leading, .trailing], 10)
+            .frame(maxHeight: chartData.isInNegativeDomain ? geometry.size.height / 2 : geometry.size.height)
             .gesture(DragGesture()
                 .onChanged({ value in
                     let width = geometry.frame(in: .local).width
@@ -56,13 +50,6 @@ public struct BarChartRow: View {
                 })
             )
         }
-    }
-
-	/// Value relative to maximum value
-	/// - Parameter index: index into array of data
-	/// - Returns: data value at given index, divided by data maximum
-    func normalizedValue(index: Int) -> Double {
-        return Double(chartData.points[index])/Double(maxValue)
     }
 
 	/// Size to scale the touch indicator
@@ -86,4 +73,12 @@ public struct BarChartRow: View {
             let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))
             return self.chartData.points[index]
         }
+}
+
+struct BarChartRow_Previews: PreviewProvider {
+    static let chartData = ChartData([6, 2, 5, 8, 6])
+    static let chartStyle = ChartStyle(backgroundColor: .white, foregroundColor: .orangeBright)
+    static var previews: some View {
+        BarChartRow(chartData: chartData, style: chartStyle)
+    }
 }
