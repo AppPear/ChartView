@@ -3,7 +3,7 @@ import SwiftUI
 /// A type of chart that displays a line connecting the data points
 public struct LineChart: View, ChartBase {
     public var chartData = ChartData()
-
+    public var curvedLines: Bool
     @EnvironmentObject var data: ChartData
     @EnvironmentObject var style: ChartStyle
 
@@ -11,8 +11,10 @@ public struct LineChart: View, ChartBase {
 	///
 	///
     public var body: some View {
-        Line(chartData: data, style: style)
+        Line(chartData: data, style: style, curvedLines: curvedLines)
     }
     
-    public init() {}
+    public init(curvedLines: Bool = true) {
+        self.curvedLines = curvedLines
+    }
 }
