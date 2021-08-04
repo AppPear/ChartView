@@ -38,4 +38,10 @@ extension CGPoint {
 
         return CGPoint(x: stepWidth, y: stepHeight)
     }
+    
+    func denormalize(with geometry: GeometryProxy) -> CGPoint {
+        let width = geometry.frame(in: .local).width
+        let height = geometry.frame(in: .local).height
+        return CGPoint(x: self.x * width, y: self.y * height)
+    }
 }

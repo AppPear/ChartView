@@ -26,9 +26,9 @@ public struct CardView<Content: View>: View, ChartBase {
             if showShadow {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.white)
-                    .shadow(color: Color.gray, radius: 8)
+                    .shadow(color: Color(white: 0.9, opacity: 1), radius: 8)
             }
-            VStack {
+            VStack (alignment: .leading) {
                 self.content()
             }
             .clipShape(RoundedRectangle(cornerRadius: showShadow ? 20 : 0))
