@@ -13,6 +13,10 @@ public struct Line: View {
     @State private var didCellAppear: Bool = false
 
     var curvedLines: Bool = true
+    var path: Path {
+        Path.quadCurvedPathWithPoints(points: chartData.normalisedPoints,
+                                      step: CGPoint(x: 1.0, y: 1.0))
+    }
     
 	/// The content and behavior of the `Line`.
 	/// Draw the background if showing the full line (?) and the `showBackground` option is set. Above that draw the line, and then the data indicator if the graph is currently being touched.
@@ -31,12 +35,13 @@ public struct Line: View {
                               style: style,
                               trimTo: didCellAppear ? 1.0 : 0.0)
                     .animation(.easeIn)
-//                if self.showIndicator {
-//                    IndicatorPoint()
-//                        .position(self.getClosestPointOnPath(touchLocation: self.touchLocation))
-//                        .rotationEffect(.degrees(180), anchor: .center)
-//                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-//                }
+                if self.showIndicator {
+                    IndicatorPoint()
+                        .position(self.getClosestPointOnPath(geometry: geometry,
+                                                             touchLocation: self.touchLocation))
+                        .rotationEffect(.degrees(180), anchor: .center)
+                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                }
             }
             .onAppear {
                 didCellAppear = true
@@ -49,7 +54,7 @@ public struct Line: View {
                 .onChanged({ value in
                     self.touchLocation = value.location
                     self.showIndicator = true
-//                    self.getClosestDataPoint(point: self.getClosestPointOnPath(touchLocation: value.location))
+                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
                     self.chartValue.interactionInProgress = true
                 })
                 .onEnded({ value in
@@ -64,24 +69,30 @@ public struct Line: View {
 
 // MARK: - Private functions
 
-//extension Line {
-//	/// Calculate point closest to where the user touched
-//	/// - Parameter touchLocation: location in view where touched
-//	/// - Returns: `CGPoint` of data point on chart
-//    private func getClosestPointOnPath(touchLocation: CGPoint) -> CGPoint {
-//        let closest = self.path.point(to: touchLocation.x)
-//        return closest
-//    }
-//
+extension Line {
+	/// Calculate point closest to where the user touched
+	/// - Parameter touchLocation: location in view where touched
+	/// - Returns: `CGPoint` of data point on chart
+    private func getClosestPointOnPath(geometry: GeometryProxy, touchLocation: CGPoint) -> CGPoint {
+        let geometryWidth = geometry.frame(in: .local).width
+        let normalisedTouchLocationX = (touchLocation.x / geometryWidth) * CGFloat(chartData.normalisedPoints.count - 1)
+        let closest = self.path.point(to: normalisedTouchLocationX)
+        var denormClosest = closest.denormalize(with: geometry)
+        denormClosest.x = denormClosest.x / CGFloat(chartData.normalisedPoints.count - 1)
+        denormClosest.y = denormClosest.y / CGFloat(chartData.normalisedRange)
+        return denormClosest
+    }
+
 //	/// Figure out where closest touch point was
 //	/// - Parameter point: location of data point on graph, near touch location
-//    private func getClosestDataPoint(point: CGPoint) {
-//        let index = Int(round((point.x)/step.x))
-//        if (index >= 0 && index < self.chartData.data.count){
-//            self.chartValue.currentValue = self.chartData.points[index]
-//        }
-//    }
-//}
+    private func getClosestDataPoint(geometry: GeometryProxy, touchLocation: CGPoint) {
+        let geometryWidth = geometry.frame(in: .local).width
+        let index = Int(round((touchLocation.x / geometryWidth) * CGFloat(chartData.points.count - 1)))
+        if (index >= 0 && index < self.chartData.data.count){
+            self.chartValue.currentValue = self.chartData.points[index]
+        }
+    }
+}
 
 struct Line_Previews: PreviewProvider {
     /// Predefined style, black over white, for preview

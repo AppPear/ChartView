@@ -46,7 +46,7 @@ struct DashedLine: View {
     var body: some View {
         GeometryReader { geometry in
             line(frame: geometry.frame(in: .local))
-                .stroke(Color(white: 0.3), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [5, 10]))
+                .stroke(Color(white: 0.85), style: StrokeStyle(lineWidth: 1, lineCap: .round, dash: [5, 10]))
         }
     }
 }
