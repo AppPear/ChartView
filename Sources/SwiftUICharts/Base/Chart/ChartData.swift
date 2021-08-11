@@ -13,7 +13,8 @@ public class ChartData: ObservableObject {
     }
 
     var normalisedPoints: [Double] {
-        points.map { $0 / (points.max() ?? 1.0) }
+        let absolutePoints = points.map { abs($0) }
+        return points.map { $0 / (absolutePoints.max() ?? 1.0) }
     }
 
     var normalisedRange: Double {

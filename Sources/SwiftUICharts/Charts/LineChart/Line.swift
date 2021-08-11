@@ -54,7 +54,7 @@ public struct Line: View {
                 .onChanged({ value in
                     self.touchLocation = value.location
                     self.showIndicator = true
-//                    self.getClosestDataPoint(point: self.getClosestPointOnPath(touchLocation: value.location))
+                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
                     self.chartValue.interactionInProgress = true
                 })
                 .onEnded({ value in
@@ -77,20 +77,21 @@ extension Line {
         let geometryWidth = geometry.frame(in: .local).width
         let normalisedTouchLocationX = (touchLocation.x / geometryWidth) * CGFloat(chartData.normalisedPoints.count - 1)
         let closest = self.path.point(to: normalisedTouchLocationX)
-        var normClosest = closest.denormalize(with: geometry)
-        normClosest.x = normClosest.x / CGFloat(chartData.normalisedPoints.count - 1)
-        normClosest.y = normClosest.y * 1.15
-        return normClosest
+        var denormClosest = closest.denormalize(with: geometry)
+        denormClosest.x = denormClosest.x / CGFloat(chartData.normalisedPoints.count - 1)
+        denormClosest.y = denormClosest.y / CGFloat(chartData.normalisedRange)
+        return denormClosest
     }
 
 //	/// Figure out where closest touch point was
 //	/// - Parameter point: location of data point on graph, near touch location
-//    private func getClosestDataPoint(point: CGPoint) {
-//        let index = Int(round((point.x)/step.x))
-//        if (index >= 0 && index < self.chartData.data.count){
-//            self.chartValue.currentValue = self.chartData.points[index]
-//        }
-//    }
+    private func getClosestDataPoint(geometry: GeometryProxy, touchLocation: CGPoint) {
+        let geometryWidth = geometry.frame(in: .local).width
+        let index = Int(round((touchLocation.x / geometryWidth) * CGFloat(chartData.points.count - 1)))
+        if (index >= 0 && index < self.chartData.data.count){
+            self.chartValue.currentValue = self.chartData.points[index]
+        }
+    }
 }
 
 struct Line_Previews: PreviewProvider {
