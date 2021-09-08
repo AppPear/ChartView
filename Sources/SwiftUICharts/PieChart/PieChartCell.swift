@@ -13,6 +13,7 @@ struct PieSlice: Identifiable {
     var startDeg: Double
     var endDeg: Double
     var value: Double
+    var label: String
     var normalizedValue: Double
 }
 
