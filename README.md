@@ -164,9 +164,10 @@ Customizable:
 * second gradient color
 * text color
 * legend text color
+* drop shadow color
 
 ```swift
- let chartStyle = ChartStyle(backgroundColor: Color.black, accentColor: Colors.OrangeStart, secondGradientColor: Colors.OrangeEnd, chartFormSize: ChartForm.medium, textColor: Color.white, legendTextColor: Color.white )
+ let chartStyle = ChartStyle(backgroundColor: Color.black, accentColor: Colors.OrangeStart, secondGradientColor: Colors.OrangeEnd, textColor: Color.white, legendTextColor: Color.white, dropShadowColor: Color.black)
  ...
  BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", style: chartStyle)
 ```
