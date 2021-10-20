@@ -17,6 +17,8 @@ public struct Line: View {
         Path.quadCurvedPathWithPoints(points: chartData.normalisedPoints,
                                       step: CGPoint(x: 1.0, y: 1.0))
     }
+
+    public init() {}
     
 	/// The content and behavior of the `Line`.
 	/// Draw the background if showing the full line (?) and the `showBackground` option is set. Above that draw the line, and then the data indicator if the graph is currently being touched.
