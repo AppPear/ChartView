@@ -126,7 +126,7 @@ struct Ring: View {
 						.frame(width: self.ringWidth, height: self.ringWidth, alignment: .center)
 						.offset(x: self.getEndCircleLocation(frame: geometry.size).0,
 								y: self.getEndCircleLocation(frame: geometry.size).1)
-						.shadow(color: Ring.ShadowColor,
+                        .shadow(color: percent == 100 ? .clear :  Ring.ShadowColor,
 								radius: Ring.ShadowRadius,
 								x: self.getEndCircleShadowOffset().0,
 								y: self.getEndCircleShadowOffset().1)
@@ -175,8 +175,8 @@ struct Ring_Previews: PreviewProvider {
 			.frame(width: 200, height: 200)
 
 			Ring(
-				ringWidth: 20, percent: 110 ,
-				foregroundColor: ColorGradient(.red, .blue), touchLocation: -1.0
+				ringWidth: 20, percent: 100 ,
+				foregroundColor: ColorGradient( .blue), touchLocation: -1.0
 			)
 			.frame(width: 200, height: 200)
 
