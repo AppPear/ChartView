@@ -8,7 +8,14 @@
 import SwiftUI
 
 public struct RingsChartRow: View {
-
+    
+    public init(width: CGFloat, spacing: CGFloat, chartData: ChartData, style: ChartStyle) {
+        self.width = width
+        self.spacing = spacing
+        self.chartData = chartData
+        self.style = style
+    }
+    
 	var width : CGFloat
 	var spacing : CGFloat
 
