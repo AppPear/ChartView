@@ -79,7 +79,7 @@ struct Ring: View {
 
 
 	private var gradientStartAngle: Double {
-		self.percent >= 100 ? relativePercentageAngle - 360 : startAngle
+		self.percent == 100 ? relativePercentageAngle - 360 : startAngle
 	}
 	private var absolutePercentageAngle: Double {
 		RingShape.percentToAngle(percent: self.percent, startAngle: 0)
@@ -175,7 +175,7 @@ struct Ring_Previews: PreviewProvider {
 			.frame(width: 200, height: 200)
 
 			Ring(
-				ringWidth: 20, percent: 100 ,
+				ringWidth: 20, percent: 120 ,
 				foregroundColor: ColorGradient( .blue), touchLocation: -1.0
 			)
 			.frame(width: 200, height: 200)
