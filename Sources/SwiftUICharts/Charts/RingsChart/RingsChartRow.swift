@@ -58,24 +58,24 @@ public struct RingsChartRow: View {
 				//                   .drawingGroup()
 			}
 
-			.gesture(DragGesture()
-						.onChanged({ value in
-							let frame = geometry.frame(in: .local)
-							let radius = min(frame.width, frame.height) / 2.0
-							let deltaX = value.location.x - frame.midX
-							let deltaY = value.location.y - frame.midY
-							self.touchRadius = sqrt(deltaX*deltaX + deltaY*deltaY) // Pythagorean equation
-
-							if let currentValue = self.getCurrentValue(maxRadius: radius) {
-								self.chartValue.currentValue = currentValue
-								self.chartValue.interactionInProgress = true
-							}
-						})
-						.onEnded({ value in
-							self.chartValue.interactionInProgress = false
-							self.touchRadius = -1
-						})
-			)
+//			.gesture(DragGesture()
+//						.onChanged({ value in
+//							let frame = geometry.frame(in: .local)
+//							let radius = min(frame.width, frame.height) / 2.0
+//							let deltaX = value.location.x - frame.midX
+//							let deltaY = value.location.y - frame.midY
+//							self.touchRadius = sqrt(deltaX*deltaX + deltaY*deltaY) // Pythagorean equation
+//
+//							if let currentValue = self.getCurrentValue(maxRadius: radius) {
+//								self.chartValue.currentValue = currentValue
+//								self.chartValue.interactionInProgress = true
+//							}
+//						})
+//						.onEnded({ value in
+//							self.chartValue.interactionInProgress = false
+//							self.touchRadius = -1
+//						})
+//			)
 
 		}
 	}

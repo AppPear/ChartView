@@ -169,7 +169,7 @@ struct Ring_Previews: PreviewProvider {
 	static var previews: some View {
 		VStack {
 			Ring(
-				ringWidth: 50, percent: 5 ,
+				ringWidth: 50, percent: 100 ,
 				foregroundColor: ColorGradient(.green, .blue), touchLocation: -1.0
 			)
 			.frame(width: 200, height: 200)
