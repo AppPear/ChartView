@@ -134,6 +134,7 @@ struct RingsChartRow_Previews: PreviewProvider {
 
 			// and why does this not get centered when frame isn't specified?
 			.frame(width:300, height:400)
+            .environmentObject(ChartValue())
 	}
 }
 
