@@ -9,24 +9,50 @@
 import SwiftUI
 
 public struct Line: View {
-    @ObservedObject var data: ChartData
-    @Binding var frame: CGRect
-    @Binding var touchLocation: CGPoint
-    @Binding var showIndicator: Bool
-    @Binding var minDataValue: Double?
-    @Binding var maxDataValue: Double?
+    @ObservedObject public var data: ChartData
+    @Binding public var frame: CGRect
+    @Binding public var touchLocation: CGPoint
+    @Binding public var showIndicator: Bool
+    @Binding public var minDataValue: Double?
+    @Binding public var maxDataValue: Double?
     @State private var showFull: Bool = false
-    @State var showBackground: Bool = true
-    var gradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
-    var index:Int = 0
+    @State public var showBackground: Bool = true
+    public var gradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue)
+    public var index:Int = 0
     let padding:CGFloat = 30
-    var curvedLines: Bool = true
+    public var curvedLines: Bool = true
+    
+    init(
+        data: ChartData,
+        frame: Binding<CGRect>,
+        touchLocation: Binding<CGPoint>,
+        showIndicator: Binding<Bool>,
+        minDataValue: Binding<Double?>,
+        maxDataValue: Binding<Double?>,
+        showBackground: Bool = true,
+        gradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue),
+        index: Int = 0,
+        curvedLines: Bool = true
+    ) {
+        self.data = data
+        self._frame = frame
+        self._touchLocation = touchLocation
+        self._showIndicator = showIndicator
+        self._minDataValue = minDataValue
+        self._maxDataValue = maxDataValue
+        self.showBackground = showBackground
+        self.gradient = gradient
+        self.index = index
+        self.curvedLines = curvedLines
+    }
+    
     var stepWidth: CGFloat {
         if data.points.count < 2 {
             return 0
         }
         return frame.size.width / CGFloat(data.points.count-1)
     }
+    
     var stepHeight: CGFloat {
         var min: Double?
         var max: Double?
@@ -49,10 +75,12 @@ public struct Line: View {
         }
         return 0
     }
+    
     var path: Path {
         let points = self.data.onlyPoints()
         return curvedLines ? Path.quadCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight), globalOffset: minDataValue) : Path.linePathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
     }
+    
     var closedPath: Path {
         let points = self.data.onlyPoints()
         return curvedLines ? Path.quadClosedCurvedPathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight), globalOffset: minDataValue) : Path.closedLinePathWithPoints(points: points, step: CGPoint(x: stepWidth, y: stepHeight))
@@ -62,7 +90,7 @@ public struct Line: View {
         ZStack {
             if(self.showFull && self.showBackground){
                 self.closedPath
-                    .fill(LinearGradient(gradient: Gradient(colors: [Colors.GradientUpperBlue, .white]), startPoint: .bottom, endPoint: .top))
+                    .fill(LinearGradient(gradient: Gradient(colors: [gradient.start, gradient.end]), startPoint: .bottom, endPoint: .top))
                     .rotationEffect(.degrees(180), anchor: .center)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                     .transition(.opacity)

@@ -262,20 +262,20 @@ extension Color {
     }
 }
 
-class HapticFeedback {
+public class HapticFeedback {
     #if os(watchOS)
     //watchOS implementation
-    static func playSelection() -> Void {
+    public static func playSelection() -> Void {
         WKInterfaceDevice.current().play(.click)
     }
     #elseif os(iOS)
     //iOS implementation
     let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
-    static func playSelection() -> Void {
+    public static func playSelection() -> Void {
         UISelectionFeedbackGenerator().selectionChanged()
     }
     #else
-    static func playSelection() -> Void {
+    public static func playSelection() -> Void {
         //No-op
     }
     #endif
