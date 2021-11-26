@@ -262,7 +262,7 @@ extension Color {
     }
 }
 
-class HapticFeedback {
+public class HapticFeedback {
     #if os(watchOS)
     //watchOS implementation
     static func playSelection() -> Void {
