@@ -22,6 +22,30 @@ public struct Line: View {
     let padding:CGFloat = 30
     public var curvedLines: Bool = true
     
+    init(
+        data: ChartData,
+        frame: Binding<CGRect>,
+        touchLocation: Binding<CGPoint>,
+        showIndicator: Binding<Bool>,
+        minDataValue: Binding<Double?>,
+        maxDataValue: Binding<Double?>,
+        showBackground: Bool = true,
+        gradient: GradientColor = GradientColor(start: Colors.GradientPurple, end: Colors.GradientNeonBlue),
+        index: Int = 0,
+        curvedLines: Bool = true
+    ) {
+        self.data = data
+        self._frame = frame
+        self._touchLocation = touchLocation
+        self._showIndicator = showIndicator
+        self._minDataValue = minDataValue
+        self._maxDataValue = maxDataValue
+        self.showBackground = showBackground
+        self.gradient = gradient
+        self.index = index
+        self.curvedLines = curvedLines
+    }
+    
     var stepWidth: CGFloat {
         if data.points.count < 2 {
             return 0
