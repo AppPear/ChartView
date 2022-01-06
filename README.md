@@ -190,3 +190,12 @@ You can add a pie chart with the following code:
 
 **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
 
+## Advanced charts
+
+You can add advanced variats of the above 4 versions of the chats.  These varients take a ChartStyle just like their simple data counter parts.  
+
+However, these varients use a new data viewmodifier.  They take in a ChartData object that has a property called Data which is an array of objects that conform to ChartDataPoint. And a keypath property keyPathForGraphValue which is used to get the keypath for the data of type double.
+
+ChartDataPoint has a chart value property that is used to label the graph when the built in label is used.
+
+The new data viewModifier also takes a ChartValue object that holds two properties (which should be Published values) that allow the user to detect which of their ChartDataPoints was last selected and if the user is currently interacting with the chart.  This allows the user to create complex headers.
