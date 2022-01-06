@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// View containing data and some kind of chart content
-public struct CardView<Content: View>: View, ChartBase {
-    public var chartData = ChartData()
+public struct CardView<Content: View, Root: ChartDataPoint, ChartValueType: ChartValue>: View, ChartBase where ChartValueType.Root == Root {
+    
+    public var chartData = ChartData<Root>()
     let content: () -> Content
 
     private var showShadow: Bool

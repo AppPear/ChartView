@@ -1,11 +1,11 @@
 import SwiftUI
 
-public struct ChartGrid<Content: View>: View, ChartBase {
-    public var chartData = ChartData()
+public struct ChartGrid<Content: View, Root: ChartDataPoint, ChartValueType: ChartValue>: View, ChartBase where ChartValueType.Root == Root {
+    public var chartData = ChartData<Root>()
     let content: () -> Content
     let numberOfHorizontalLines = 4
 
-    @EnvironmentObject var data: ChartData
+    @EnvironmentObject var data: ChartData<Root>
     @EnvironmentObject var style: ChartStyle
 
     public init(@ViewBuilder content: @escaping () -> Content) {

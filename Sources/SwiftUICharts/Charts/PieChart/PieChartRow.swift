@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// A single "row" (slice) of data, a view in a `PieChart`
-public struct PieChartRow: View {
-    @ObservedObject var chartData: ChartData
-    @EnvironmentObject var chartValue: ChartValue
+public struct PieChartRow<Root: ChartDataPoint, ChartValueType: ChartValue>: View where ChartValueType.Root == Root  {
+    @ObservedObject var chartData: ChartData<Root>
+    @EnvironmentObject var chartValue: ChartValueType
 
     var style: ChartStyle
 
@@ -28,7 +28,7 @@ public struct PieChartRow: View {
             if oldValue != currentTouchedIndex {
                 chartValue.interactionInProgress = currentTouchedIndex != -1
                 guard currentTouchedIndex != -1 else { return }
-                chartValue.currentValue = slices[currentTouchedIndex].value
+                chartValue.currentValue = chartData.data[currentTouchedIndex]
             }
         }
     }

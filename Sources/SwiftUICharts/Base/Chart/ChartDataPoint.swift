@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol ChartDataPoint {
+public protocol ChartDataPoint: Equatable {
     var chartPoint: Double { get }
     var chartValue: String { get }
 }

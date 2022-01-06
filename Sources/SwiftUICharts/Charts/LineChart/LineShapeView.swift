@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct LineShapeView: View, Animatable {
-    var chartData: ChartData
+struct LineShapeView<Root: ChartDataPoint>: View, Animatable {
+    var chartData: ChartData<Root>
     var geometry: GeometryProxy
     var style: ChartStyle
     var trimTo: Double = 0

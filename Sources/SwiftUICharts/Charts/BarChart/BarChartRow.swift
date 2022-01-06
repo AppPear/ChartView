@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// A single row of data, a view in a `BarChart`
-public struct BarChartRow: View {
-    @EnvironmentObject var chartValue: ChartValue
-    @ObservedObject var chartData: ChartData
+public struct BarChartRow<Root: ChartDataPoint, ChartValueType: ChartValue>: View where ChartValueType.Root == Root {
+    @EnvironmentObject var chartValue: ChartValueType
+    @ObservedObject var chartData: ChartData<Root>
     @State private var touchLocation: CGFloat = -1.0
 
     var style: ChartStyle
@@ -68,10 +68,10 @@ public struct BarChartRow: View {
 	/// Get data value where touch happened
 	/// - Parameter width: width of chart
 	/// - Returns: value as `Double` if chart has data
-    func getCurrentValue(width: CGFloat) -> Double? {
+    func getCurrentValue(width: CGFloat) -> Root? {
         guard self.chartData.data.count > 0 else { return nil}
             let index = max(0,min(self.chartData.data.count-1,Int(floor((self.touchLocation*width)/(width/CGFloat(self.chartData.data.count))))))
-            return self.chartData.points[index]
+            return self.chartData.data[index]
         }
 }
 
@@ -79,6 +79,6 @@ struct BarChartRow_Previews: PreviewProvider {
     static let chartData = ChartData([6, 2, 5, 8, 6])
     static let chartStyle = ChartStyle(backgroundColor: .white, foregroundColor: .orangeBright)
     static var previews: some View {
-        BarChartRow(chartData: chartData, style: chartStyle)
+        BarChartRow<SimpleChartDataPoint, SimpleChartValue>(chartData: chartData, style: chartStyle)
     }
 }

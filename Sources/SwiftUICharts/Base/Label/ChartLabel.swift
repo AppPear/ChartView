@@ -10,8 +10,8 @@ public enum ChartLabelType {
 }
 
 /// A chart may contain any number of labels in pre-set positions based on their `ChartLabelType`
-public struct ChartLabel: View {
-    @EnvironmentObject var chartValue: ChartValue
+public struct ChartLabel<Root: ChartDataPoint, ChartValueType: ChartValue>: View {
+    @EnvironmentObject var chartValue: ChartValueType
     @State var textToDisplay:String = ""
     var format: String = "%.01f"
 
@@ -97,7 +97,7 @@ public struct ChartLabel: View {
                     self.textToDisplay = self.title
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: format, self.chartValue.currentValue) : self.title
+                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: format, self.chartValue.currentValue.chartPoint) : self.title
                 }
             if !self.chartValue.interactionInProgress {
                 Spacer()

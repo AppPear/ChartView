@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// A single line of data, a view in a `LineChart`
-public struct Line: View {
-    @EnvironmentObject var chartValue: ChartValue
-    @ObservedObject var chartData: ChartData
+public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where ChartValueType.Root == Root {
+    @EnvironmentObject var chartValue: ChartValueType
+    @ObservedObject var chartData: ChartData<Root>
 
     var style: ChartStyle
 
@@ -89,7 +89,7 @@ extension Line {
         let geometryWidth = geometry.frame(in: .local).width
         let index = Int(round((touchLocation.x / geometryWidth) * CGFloat(chartData.points.count - 1)))
         if (index >= 0 && index < self.chartData.data.count){
-            self.chartValue.currentValue = self.chartData.points[index]
+            self.chartValue.currentValue = self.chartData.data[index]
         }
     }
 }
@@ -103,8 +103,8 @@ struct Line_Previews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            Line(chartData:  ChartData([8, 23, 32, 7, 23, -4]), style: blackLineStyle)
-            Line(chartData:  ChartData([8, 23, 32, 7, 23, 43]), style: redLineStyle)
+            Line<SimpleChartDataPoint, SimpleChartValue>(chartData:  ChartData([8, 23, 32, 7, 23, -4]), style: blackLineStyle)
+            Line<SimpleChartDataPoint, SimpleChartValue>(chartData:  ChartData([8, 23, 32, 7, 23, 43]), style: redLineStyle)
         }
     }
 }

@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-public struct RingsChartRow: View {
+public struct RingsChartRow<Root: ChartDataPoint, ChartValueType: ChartValue>: View where ChartValueType.Root == Root {
 
 	var width : CGFloat
 	var spacing : CGFloat
 
-	@EnvironmentObject var chartValue: ChartValue
-	@ObservedObject var chartData: ChartData
+	@EnvironmentObject var chartValue: ChartValueType
+	@ObservedObject var chartData: ChartData<Root>
 	@State var touchRadius: CGFloat = -1.0
 
 	var style: ChartStyle
@@ -59,7 +59,7 @@ public struct RingsChartRow: View {
 							let deltaY = value.location.y - frame.midY
 							self.touchRadius = sqrt(deltaX*deltaX + deltaY*deltaY) // Pythagorean equation
 
-							if let currentValue = self.getCurrentValue(maxRadius: radius) {
+							if let currentValue = self.getCurrentData(maxRadius: radius) {
 								self.chartValue.currentValue = currentValue
 								self.chartValue.interactionInProgress = true
 							}
@@ -105,10 +105,10 @@ public struct RingsChartRow: View {
 	/// Description
 	/// - Parameter maxRadius: radius of overall view circle
 	/// - Returns: percentage value of the touched circle, based on `touchRadius` if found
-	func getCurrentValue(maxRadius: CGFloat) -> Double? {
+	func getCurrentData(maxRadius: CGFloat) -> Root? {
 
 		guard let index = self.touchedCircleIndex(maxRadius: maxRadius) else { return nil }
-		return self.chartData.points[index]
+		return self.chartData.data[index]
 	}
 }
 
@@ -123,7 +123,7 @@ struct RingsChartRow_Previews: PreviewProvider {
 										 ColorGradient(.green, .yellow),
 										])
 
-		return RingsChartRow(width:20.0, spacing:10.0, chartData: ChartData([25,50,75,100,125]), style: multiStyle)
+		return RingsChartRow<SimpleChartDataPoint, SimpleChartValue>(width:20.0, spacing:10.0, chartData: ChartData([25,50,75,100,125]), style: multiStyle)
 
 			// and why does this not get centered when frame isn't specified?
 			.frame(width:300, height:400)

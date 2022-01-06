@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct LineBackgroundShapeView: View {
-    var chartData: ChartData
+struct LineBackgroundShapeView<Root: ChartDataPoint>: View {
+    var chartData: ChartData<Root>
     var geometry: GeometryProxy
     var style: ChartStyle
 

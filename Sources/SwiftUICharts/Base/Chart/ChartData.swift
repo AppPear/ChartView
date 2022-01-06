@@ -3,10 +3,10 @@ import SwiftUI
 /// An observable wrapper for an array of data for use in any chart
 public class ChartData<Root: ChartDataPoint>: ObservableObject {
     @Published public var data: [Root] = []
-    @Published public var keyPath: KeyPath<Root, Double>
+    @Published public var keyPathForGraphValue: KeyPath<Root, Double>
     
     var points: [Double] {
-        data.map { $0[keyPath: keyPath] }
+        data.map { $0[keyPath: keyPathForGraphValue] }
     }
 
     var values: [String] {
@@ -29,13 +29,14 @@ public class ChartData<Root: ChartDataPoint>: ObservableObject {
     
     
     
-    public init4(_ data: [Root], keyPath: KeyPath<Root, Double>) {
+    public init(_ data: [Root], keyPathForGraphValue: KeyPath<Root, Double>) {
         self.data = data
-        self.keyPath = \.chartPoint
+        self.keyPathForGraphValue = \.chartPoint
     }
 
-    public init() {
-        self.data = []
+    public convenience init() {
+        self.init([], keyPathForGraphValue: \.chartPoint)
+        
     }
 }
 
@@ -43,11 +44,13 @@ extension ChartData where Root == SimpleChartDataPoint {
     /// Initialize with data array
     /// - Parameter data: Array of `Double`
     public convenience init(_ data: [Double]) {
-        self.data = data.map { SimpleChartDataPoint(chartPoint: $0, chartValue: "") }
+        self.init(data.map { SimpleChartDataPoint(chartPoint: $0, chartValue: "") },
+                  keyPathForGraphValue: \.chartPoint)
     }
 
     public convenience init(_ data: [(String, Double)]) {
-        self.data = data.map { SimpleChartDataPoint(chartPoint: $0.1, chartValue: $0.0) }
-        self.keyPath = \.chartPoint
+        self.init(data.map { SimpleChartDataPoint(chartPoint: $0.1, chartValue: $0.0) },
+                  keyPathForGraphValue: \.chartPoint)
     }
+    
 }
