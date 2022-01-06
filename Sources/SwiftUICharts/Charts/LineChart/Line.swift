@@ -64,12 +64,6 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                 })
             )
         }
-        if #available(iOS 14, *) {
-            EmptyView()
-            .onChange(of: chartData.data, perform: { newValue in
-                print(newValue)
-            })
-        }
     }
 }
 
