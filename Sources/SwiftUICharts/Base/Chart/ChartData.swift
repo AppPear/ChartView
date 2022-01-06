@@ -6,8 +6,18 @@ public class ChartData<Root: ChartDataPoint>: ObservableObject {
     @Published public var keyPathForGraphValue: KeyPath<Root, Double>
     
     var points: [Double] {
-        let d = data.map { $0[keyPath: keyPathForGraphValue] }
-        print(data)
+        var d = data.map {
+            $0[keyPath: keyPathForGraphValue]
+        }
+        //CoreGraphics won't draw without this if all vals are 0
+        let notZeros = d.filter({ val in
+            val != 0.0
+        })
+        if notZeros.isEmpty {
+            d = d.map({ val in
+                return 0.01
+            })
+        }
         return d
     }
 
@@ -17,12 +27,22 @@ public class ChartData<Root: ChartDataPoint>: ObservableObject {
 
     var normalisedPoints: [Double] {
         let absolutePoints = points.map { abs($0) }
+        var absMax = absolutePoints.max()
+        //CoreGraphics won't draw without this if all vals are 0
+        if absMax == 0.0 {
+            absMax = 1.0
+        }
         let vals = points.map { $0 / (absolutePoints.max() ?? 1.0) }
         return vals
     }
 
     var normalisedRange: Double {
-        (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0)
+        //CoreGraphics won't draw without this if all vals are 0
+        var range = (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0)
+        if range == 0 {
+            range = 1.0
+        }
+        return range
     }
 
     var isInNegativeDomain: Bool {
