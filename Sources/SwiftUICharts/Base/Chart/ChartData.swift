@@ -6,7 +6,9 @@ public class ChartData<Root: ChartDataPoint>: ObservableObject {
     @Published public var keyPathForGraphValue: KeyPath<Root, Double>
     
     var points: [Double] {
-        data.map { $0[keyPath: keyPathForGraphValue] }
+        let d = data.map { $0[keyPath: keyPathForGraphValue] }
+        print(data)
+        return d
     }
 
     var values: [String] {
@@ -15,7 +17,8 @@ public class ChartData<Root: ChartDataPoint>: ObservableObject {
 
     var normalisedPoints: [Double] {
         let absolutePoints = points.map { abs($0) }
-        return points.map { $0 / (absolutePoints.max() ?? 1.0) }
+        let vals = points.map { $0 / (absolutePoints.max() ?? 1.0) }
+        return vals
     }
 
     var normalisedRange: Double {
@@ -29,15 +32,13 @@ public class ChartData<Root: ChartDataPoint>: ObservableObject {
     
     
     
-    public init(_ data: [Root], keyPathForGraphValue: KeyPath<Root, Double>) {
+    public init(_ data: [Root], keyPathForGraphValue: KeyPath<Root, Double>)  {
+        self.keyPathForGraphValue = keyPathForGraphValue
         self.data = data
-        self.keyPathForGraphValue = \.chartPoint
-    }
-
-    public convenience init() {
-        self.init([], keyPathForGraphValue: \.chartPoint)
         
     }
+
+   
 }
 
 extension ChartData where Root == SimpleChartDataPoint {
@@ -53,4 +54,8 @@ extension ChartData where Root == SimpleChartDataPoint {
                   keyPathForGraphValue: \.chartPoint)
     }
     
+    public convenience init() {
+        self.init([], keyPathForGraphValue: \.chartPoint)
+        
+    }
 }

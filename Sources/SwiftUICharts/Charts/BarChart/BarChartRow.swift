@@ -42,6 +42,8 @@ public struct BarChartRow<Root: ChartDataPoint, ChartValueType: ChartValue>: Vie
                     if let currentValue = self.getCurrentValue(width: width) {
                         self.chartValue.currentValue = currentValue
                         self.chartValue.interactionInProgress = true
+                    } else {
+                        self.chartValue.currentValue = nil
                     }
                 })
                 .onEnded({ value in

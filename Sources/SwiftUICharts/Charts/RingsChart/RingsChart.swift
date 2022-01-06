@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-public struct AdvancedRingsChart<Root: ChartDataPoint, ChartValueType: ChartValue>: View, ChartBase where Root == ChartValueType.Root {
-	public var chartData = ChartData<Root>()
+public struct AdvancedRingsChart<Root: ChartDataPoint, ChartValueType: ChartValue>: View, AdvancedChartBase where Root == ChartValueType.Root {
+    
+    
+	
 
 	@EnvironmentObject var data: ChartData<Root>
 	@EnvironmentObject var style: ChartStyle
@@ -23,7 +25,7 @@ public struct AdvancedRingsChart<Root: ChartDataPoint, ChartValueType: ChartValu
 }
 
 
-public struct RingsChart: View {
+public struct RingsChart: View, ChartBase {
     public var chartData = ChartData<SimpleChartDataPoint>()
 
     public typealias Root = SimpleChartDataPoint

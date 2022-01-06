@@ -1,7 +1,7 @@
 import SwiftUI
 
-public struct ChartGrid<Content: View, Root: ChartDataPoint, ChartValueType: ChartValue>: View, ChartBase where ChartValueType.Root == Root {
-    public var chartData = ChartData<Root>()
+public struct AdvancedChartGrid<Content: View, Root: ChartDataPoint, ChartValueType: ChartValue>: View, AdvancedChartBase where ChartValueType.Root == Root {
+    
     let content: () -> Content
     let numberOfHorizontalLines = 4
 
@@ -17,6 +17,39 @@ public struct ChartGrid<Content: View, Root: ChartDataPoint, ChartValueType: Cha
             ZStack {
                 VStack {
                     ForEach(0..<numberOfHorizontalLines) { _ in 
+                        GridElement()
+                        Spacer()
+                    }
+                }
+                self.content()
+            }
+        }
+    }
+}
+
+public struct ChartGrid<Content: View>: View, ChartBase {
+    public var chartData = ChartData<SimpleChartDataPoint>()
+    
+    public typealias Root = SimpleChartDataPoint
+    
+    public typealias ChartValueType = SimpleChartValue
+    
+    
+    let content: () -> Content
+    let numberOfHorizontalLines = 4
+
+    @EnvironmentObject var data: ChartData<Root>
+    @EnvironmentObject var style: ChartStyle
+
+    public init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content
+    }
+
+    public var body: some View {
+        HStack {
+            ZStack {
+                VStack {
+                    ForEach(0..<numberOfHorizontalLines) { _ in
                         GridElement()
                         Spacer()
                     }

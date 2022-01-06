@@ -30,6 +30,9 @@ public struct PieChartRow<Root: ChartDataPoint, ChartValueType: ChartValue>: Vie
                 guard currentTouchedIndex != -1 else { return }
                 chartValue.currentValue = chartData.data[currentTouchedIndex]
             }
+            if currentTouchedIndex == -1 {
+                chartValue.currentValue = nil
+            }
         }
     }
 

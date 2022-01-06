@@ -1,6 +1,11 @@
 import SwiftUI
 
 /// Protocol for any type of chart, to get access to underlying data
+public protocol AdvancedChartBase {
+    associatedtype ChartValueType: ChartValue
+}
+
+
 public protocol ChartBase {
     associatedtype Root
     associatedtype ChartValueType: ChartValue where ChartValueType.Root == Root

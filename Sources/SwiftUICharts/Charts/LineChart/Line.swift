@@ -64,6 +64,12 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                 })
             )
         }
+        if #available(iOS 14, *) {
+            EmptyView()
+            .onChange(of: chartData.data, perform: { newValue in
+                print(newValue)
+            })
+        }
     }
 }
 
@@ -90,6 +96,8 @@ extension Line {
         let index = Int(round((touchLocation.x / geometryWidth) * CGFloat(chartData.points.count - 1)))
         if (index >= 0 && index < self.chartData.data.count){
             self.chartValue.currentValue = self.chartData.data[index]
+        } else {
+            self.chartValue.currentValue = nil
         }
     }
 }

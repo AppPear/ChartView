@@ -62,7 +62,9 @@ public struct RingsChartRow<Root: ChartDataPoint, ChartValueType: ChartValue>: V
 							if let currentValue = self.getCurrentData(maxRadius: radius) {
 								self.chartValue.currentValue = currentValue
 								self.chartValue.interactionInProgress = true
-							}
+                            } else {
+                                self.chartValue.currentValue = nil
+                            }
 						})
 						.onEnded({ value in
 							self.chartValue.interactionInProgress = false
