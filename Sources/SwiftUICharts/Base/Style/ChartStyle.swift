@@ -8,6 +8,9 @@ public class ChartStyle: ObservableObject {
 	/// colors for foreground fill of chart
     public let foregroundColor: [ColorGradient]
     
+    /// Allows the user to hide the background if desired
+    public var showBackground: Bool = true
+    
     /// The color for the indicator point on the line graph, if not set it uses the default value
     public var indicatorPointColor: Color?
 

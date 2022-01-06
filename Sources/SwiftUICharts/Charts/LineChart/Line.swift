@@ -9,7 +9,6 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
 
     @State private var showIndicator: Bool = false
     @State private var touchLocation: CGPoint = .zero
-    @State private var showBackground: Bool = true
     @State private var didCellAppear: Bool = false
 
     var curvedLines: Bool = true
@@ -25,7 +24,7 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if self.didCellAppear && self.showBackground {
+                if self.didCellAppear && self.style.showBackground {
                     LineBackgroundShapeView(chartData: chartData,
                                             geometry: geometry,
                                             style: style)
