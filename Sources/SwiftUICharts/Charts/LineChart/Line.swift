@@ -33,7 +33,7 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                               geometry: geometry,
                               style: style,
                               trimTo: didCellAppear ? 1.0 : 0.0)
-                    .animation(.easeIn)
+
                 if self.showIndicator {
                     IndicatorPoint()
                         .position(self.getClosestPointOnPath(geometry: geometry,
