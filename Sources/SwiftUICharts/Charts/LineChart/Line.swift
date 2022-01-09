@@ -32,7 +32,7 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                     //Fully fill with a color for tapping
                     VStack {
                         HStack {
-                            Color.clear
+                            Color.red
                         }
                     }
                 }
