@@ -28,6 +28,13 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                     LineBackgroundShapeView(chartData: chartData,
                                             geometry: geometry,
                                             style: style)
+                } else {
+                    //Fully fill with a color for tapping
+                    VStack {
+                        HStack {
+                            Color.red
+                        }
+                    }
                 }
                 LineShapeView(chartData: chartData,
                               geometry: geometry,
@@ -42,13 +49,15 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                         .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                 }
             }
+            
             .onAppear {
                 didCellAppear = true
             }
             .onDisappear() {
                 didCellAppear = false
             }
-			
+            
+            
             .gesture(DragGesture()
                 .onChanged({ value in
                     self.touchLocation = value.location
