@@ -32,8 +32,10 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
                     //Fully fill with a color for tapping
                     VStack {
                         HStack {
-                            Color.clear
+                            Spacer()
+                            Color.blue.opacity(0.001) //Needs to take up some space for swiping to work
                         }
+                        Spacer()
                     }
                 }
                 LineShapeView(chartData: chartData,
