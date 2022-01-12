@@ -58,20 +58,21 @@ public struct Line<Root: ChartDataPoint, ChartValueType: ChartValue>: View where
             .onDisappear() {
                 didCellAppear = false
             }
-            
-            
-            .gesture(DragGesture()
-                .onChanged({ value in
-                    self.touchLocation = value.location
-                    self.showIndicator = true
-                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
-                    self.chartValue.interactionInProgress = true
-                })
-                .onEnded({ value in
-                    self.touchLocation = .zero
-                    self.showIndicator = false
-                    self.chartValue.interactionInProgress = false
-                })
+            .highPriorityGesture(
+                LongPressGesture(minimumDuration: 0.1, maximumDistance: 50)
+                    .sequenced(before:
+                                DragGesture(minimumDistance: 0)
+                                .onChanged({ value in
+                                    self.touchLocation = value.location
+                                    self.showIndicator = true
+                                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
+                                    self.chartValue.interactionInProgress = true
+                                })
+                                .onEnded({ value in
+                                    self.touchLocation = .zero
+                                    self.showIndicator = false
+                                    self.chartValue.interactionInProgress = false
+                                }))
             )
         }
     }
