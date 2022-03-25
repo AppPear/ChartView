@@ -1,7 +1,13 @@
 import SwiftUI
 
-struct LineShape: Shape {
+struct LineShape: Shape, Animatable {
     var data: [Double]
+    
+    var animatableData: AnimatableVector {
+        get { AnimatableVector(values: data)  }
+        set { data = newValue.values }
+    }
+    
     func path(in rect: CGRect) -> Path {
         let path = Path.quadCurvedPathWithPoints(points: data, step: CGPoint(x: 1.0, y: 1.0))
         return path
