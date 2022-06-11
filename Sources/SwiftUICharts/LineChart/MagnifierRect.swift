@@ -17,13 +17,17 @@ public struct MagnifierRect: View {
             Text("\(self.currentNumber, specifier: valueSpecifier)")
                 .font(.system(size: 18, weight: .bold))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                .padding(16)
+                .frame(width: 120, height: 20, alignment: .center)
+                .background(Color.white)
+                .padding(.top)
             Spacer()
             if let currentValue = currentXValue {
                 Text(String(describing: currentValue))
                     .font(.system(size: 18, weight: .semibold, design: .default))
-                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.gray)
-                    .padding(16)
+                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                    .frame(width: 120, height: 20, alignment: .center)
+                    .background(Color.white)
+                    .padding(.bottom)
             }
         }
         .background(colorScheme == .dark ?
