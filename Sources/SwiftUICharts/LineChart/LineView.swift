@@ -15,7 +15,8 @@ public struct LineView: View {
     public var legend: String?
     public var style: ChartStyle
     public var darkModeStyle: ChartStyle
-    public var valueSpecifier:String
+    public var valueSpecifier: String
+    public var legendSpecifier: String
     
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State private var showLegend = false
@@ -32,7 +33,8 @@ public struct LineView: View {
                 title: String? = nil,
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
-                valueSpecifier: String? = "%.1f") {
+                valueSpecifier: String? = "%.1f",
+                legendSpecifier: String? = "%.2f") {
         
         self.data = ChartData(points: data)
         self.xAxisData = xAxisData
@@ -40,6 +42,7 @@ public struct LineView: View {
         self.legend = legend
         self.style = style
         self.valueSpecifier = valueSpecifier!
+        self.legendSpecifier = legendSpecifier!
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.lineViewDarkMode
     }
     
@@ -70,13 +73,13 @@ public struct LineView: View {
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.backgroundColor : self.style.backgroundColor)
                         if(self.showLegend){
                             Legend(data: self.data,
-                                   frame: .constant(reader.frame(in: .local)), hideHorizontalLines: self.$hideHorizontalLines)
+                                   frame: .constant(reader.frame(in: .local)), hideHorizontalLines: self.$hideHorizontalLines, specifier: legendSpecifier)
                                 .transition(.opacity)
                                 .animation(Animation.easeOut(duration: 1).delay(1))
                                 .padding(.top)
                         }
                         Line(data: self.data,
-                             frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height)),
+                             frame: .constant(CGRect(x: 0, y: 0, width: reader.frame(in: .local).width - 30, height: reader.frame(in: .local).height + 25)),
                              touchLocation: self.$indicatorLocation,
                              showIndicator: self.$hideHorizontalLines,
                              minDataValue: .constant(nil),
@@ -84,6 +87,7 @@ public struct LineView: View {
                              showBackground: false,
                              gradient: self.style.gradientColor
                         )
+
                         .offset(x: 30, y: 20)
                         .onAppear(){
                             self.showLegend = true

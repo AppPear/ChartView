@@ -38,7 +38,7 @@ public struct LineChartView: View {
                 legend: String? = nil,
                 style: ChartStyle = Styles.lineChartStyleOne,
                 form: CGSize? = ChartForm.medium,
-                rateValue: Int? = 14,
+                rateValue: Int?,
                 dropShadow: Bool? = true,
                 valueSpecifier: String? = "%.1f") {
         
@@ -74,14 +74,14 @@ public struct LineChartView: View {
                         }
                         HStack {
                             
-                            if (self.rateValue ?? 0 != 0)
+                            if let rateValue = self.rateValue
                             {
-                                if (self.rateValue ?? 0 >= 0){
+                                if (rateValue ?? 0 >= 0){
                                     Image(systemName: "arrow.up")
                                 }else{
                                     Image(systemName: "arrow.down")
                                 }
-                                Text("\(self.rateValue!)%")
+                                Text("\(rateValue!)%")
                             }
                         }
                     }
@@ -108,7 +108,7 @@ public struct LineChartView: View {
                          maxDataValue: .constant(nil)
                     )
                 }
-                .frame(width: frame.width, height: frame.height + 30)
+                .frame(width: frame.width, height: frame.height)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .offset(x: 0, y: 0)
             }.frame(width: self.formSize.width, height: self.formSize.height)

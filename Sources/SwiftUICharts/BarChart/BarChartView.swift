@@ -17,8 +17,9 @@ public struct BarChartView : View {
     public var darkModeStyle: ChartStyle
     public var formSize:CGSize
     public var dropShadow: Bool
-    public var cornerImage: Image
+    public var cornerImage: Image?
     public var valueSpecifier:String
+    public var animatedToBack: Bool
     
     @State private var touchLocation: CGFloat = -1.0
     @State private var showValue: Bool = false
@@ -33,7 +34,7 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == ChartForm.large
     }
-    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f"){
+    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f", animatedToBack: Bool = false){
         self.data = data
         self.title = title
         self.legend = legend
@@ -41,8 +42,9 @@ public struct BarChartView : View {
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
         self.formSize = form!
         self.dropShadow = dropShadow!
-        self.cornerImage = cornerImage!
+        self.cornerImage = cornerImage
         self.valueSpecifier = valueSpecifier!
+        self.animatedToBack = animatedToBack
     }
     
     public var body: some View {
@@ -105,9 +107,19 @@ public struct BarChartView : View {
                     }
                 })
                 .onEnded({ value in
-                    self.showValue = false
-                    self.showLabelValue = false
-                    self.touchLocation = -1
+                    if animatedToBack {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withAnimation(Animation.easeOut(duration: 1)) {
+                                self.showValue = false
+                                self.showLabelValue = false
+                                self.touchLocation = -1
+                            }
+                        }
+                    } else {
+                        self.showValue = false
+                        self.showLabelValue = false
+                        self.touchLocation = -1
+                    }
                 })
         )
             .gesture(TapGesture()
