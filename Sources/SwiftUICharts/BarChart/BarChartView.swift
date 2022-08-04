@@ -17,7 +17,7 @@ public struct BarChartView : View {
     public var darkModeStyle: ChartStyle
     public var formSize:CGSize
     public var dropShadow: Bool
-    public var cornerImage: Image?
+    public var cornerButton: Button<AnyView>?
     public var valueSpecifier:String
     public var animatedToBack: Bool
     
@@ -34,7 +34,7 @@ public struct BarChartView : View {
     var isFullWidth:Bool {
         return self.formSize == ChartForm.large
     }
-    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerImage:Image? = Image(systemName: "waveform.path.ecg"), valueSpecifier: String? = "%.1f", animatedToBack: Bool = false){
+    public init(data:ChartData, title: String, legend: String? = nil, style: ChartStyle = Styles.barChartStyleOrangeLight, form: CGSize? = ChartForm.medium, dropShadow: Bool? = true, cornerButton: Button<AnyView>? = nil, valueSpecifier: String? = "%.1f", animatedToBack: Bool = false){
         self.data = data
         self.title = title
         self.legend = legend
@@ -42,7 +42,7 @@ public struct BarChartView : View {
         self.darkModeStyle = style.darkModeStyle != nil ? style.darkModeStyle! : Styles.barChartStyleOrangeDark
         self.formSize = form!
         self.dropShadow = dropShadow!
-        self.cornerImage = cornerImage
+        self.cornerButton = cornerButton
         self.valueSpecifier = valueSpecifier!
         self.animatedToBack = animatedToBack
     }
@@ -72,7 +72,7 @@ public struct BarChartView : View {
                             .animation(.easeOut)
                     }
                     Spacer()
-                    self.cornerImage
+                    self.cornerButton
                         .imageScale(.large)
                         .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
                 }.padding()
