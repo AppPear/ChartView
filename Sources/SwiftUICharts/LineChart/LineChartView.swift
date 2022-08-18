@@ -67,7 +67,7 @@ public struct LineChartView: View {
                             .font(.title)
                             .bold()
                             .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.textColor : self.style.textColor)
-                        if (self.legend != nil){
+                        if (self.legend != nil) {
                             Text(self.legend!)
                                 .font(.callout)
                                 .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor :self.style.legendTextColor)
@@ -76,12 +76,12 @@ public struct LineChartView: View {
                             
                             if let rateValue = self.rateValue
                             {
-                                if (rateValue ?? 0 >= 0){
+                                if (rateValue >= 0){
                                     Image(systemName: "arrow.up")
                                 }else{
                                     Image(systemName: "arrow.down")
                                 }
-                                Text("\(rateValue!)%")
+                                Text("\(rateValue)%")
                             }
                         }
                     }
@@ -142,10 +142,10 @@ public struct LineChartView: View {
 struct WidgetView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LineChartView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Basic")
+            LineChartView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Basic", rateValue: (43-8)*100/8)
                 .environment(\.colorScheme, .light)
             
-            LineChartView(data: [282.502, 284.495, 283.51, 285.019, 285.197, 286.118, 288.737, 288.455, 289.391, 287.691, 285.878, 286.46, 286.252, 284.652, 284.129, 284.188], title: "Line chart", legend: "Basic")
+            LineChartView(data: [282.502, 284.495, 283.51, 285.019, 285.197, 286.118, 288.737, 288.455, 289.391, 287.691, 285.878, 286.46, 286.252, 284.652, 284.129, 284.188], title: "Line chart", legend: "Basic", rateValue: Int((284.188-282.502)*100.0/282.502))
             .environment(\.colorScheme, .light)
         }
     }
