@@ -39,13 +39,13 @@ public struct ChartLabel: View {
     private var labelPadding: EdgeInsets {
         switch labelType {
         case .title:
-            return EdgeInsets(top: 16.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+            return EdgeInsets(top: 16.0, leading: 0, bottom: 0.0, trailing: 8.0)
         case .legend:
-            return EdgeInsets(top: 4.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+            return EdgeInsets(top: 4.0, leading: 0, bottom: 0.0, trailing: 8.0)
         case .subTitle:
-            return EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+            return EdgeInsets(top: 8.0, leading: 0, bottom: 0.0, trailing: 8.0)
         case .largeTitle:
-            return EdgeInsets(top: 24.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+            return EdgeInsets(top: 24.0, leading: 0, bottom: 0.0, trailing: 8.0)
         case .custom(_, let padding, _):
             return padding
         }
@@ -59,13 +59,13 @@ public struct ChartLabel: View {
     private var labelColor: Color {
         switch labelType {
         case .title:
-            return Color(UIColor.label)
+            return Color.primary
         case .legend:
-            return Color(UIColor.secondaryLabel)
+            return Color.secondary
         case .subTitle:
-            return Color(UIColor.label)
+            return Color.primary
         case .largeTitle:
-            return Color(UIColor.label)
+            return Color.primary
         case .custom(_, _, let color):
             return color
         }
