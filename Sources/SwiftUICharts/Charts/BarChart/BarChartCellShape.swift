@@ -3,6 +3,7 @@ import SwiftUI
 struct BarChartCellShape: Shape, Animatable {
     var value: Double
     var cornerRadius: CGFloat = 6.0
+    
     var animatableData: CGFloat {
         get { CGFloat(value) }
         set { value = Double(newValue) }
@@ -16,14 +17,14 @@ struct BarChartCellShape: Shape, Animatable {
         path.addArc(center: CGPoint(x: cornerRadius, y: adjustedOriginY +  cornerRadius),
                     radius: cornerRadius,
                     startAngle: Angle(radians: Double.pi),
-                    endAngle: Angle(radians: -Double.pi/2),
-                    clockwise: false)
-        path.addLine(to: CGPoint(x: rect.width - cornerRadius, y: adjustedOriginY))
+                    endAngle: Angle(radians: value < 0 ? Double.pi/2 : -Double.pi/2),
+                    clockwise: value < 0 ? true : false)
+        path.addLine(to: CGPoint(x: rect.width - cornerRadius, y: value < 0 ? adjustedOriginY + 2 * cornerRadius : adjustedOriginY))
         path.addArc(center: CGPoint(x: rect.width - cornerRadius, y: adjustedOriginY + cornerRadius),
                     radius: cornerRadius,
-                    startAngle: Angle(radians: -Double.pi/2),
+                    startAngle: Angle(radians: value < 0 ? Double.pi/2 : -Double.pi/2),
                     endAngle: Angle(radians: 0),
-                    clockwise: false)
+                    clockwise: value < 0 ? true : false)
         path.addLine(to: CGPoint(x: rect.width, y: rect.height))
         path.closeSubpath()
 
@@ -39,6 +40,10 @@ struct BarChartCellShape_Previews: PreviewProvider {
 
             BarChartCellShape(value: 0.3)
                 .fill(Color.blue)
+            
+            BarChartCellShape(value: -0.3)
+                .fill(Color.blue)
+                .offset(x: 0, y: -600)
         }
     }
 }
