@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// A single vertical bar in a `BarChart`
 public struct BarChartCell: View {
     var value: Double
     var index: Int = 0
@@ -19,9 +18,6 @@ public struct BarChartCell: View {
         self.touchLocation = touchLocation
     }
 
-	/// The content and behavior of the `BarChartCell`.
-	///
-	/// Animated when first displayed, using the `firstDisplay` variable, with an increasing delay through the data set.
     public var body: some View {
         BarChartCellShape(value: didCellAppear ? value : 0.0)
         .fill(gradientColor.linearGradient(from: .bottom, to: .top))        .onAppear {

@@ -1,47 +1,31 @@
 import SwiftUI
 
 extension Path {
-
-	/// Returns a tiny segment of path based on percentage along the path
-	///
-	/// TODO: Explain why more than 1 gets 0 and why less than 0 gets 1
-	/// - Parameter percent: fraction along data set, between 0.0 and 1.0 (underflow and overflow are handled)
-	/// - Returns: tiny path right around the requested fraction
     func trimmedPath(for percent: CGFloat) -> Path {
         let boundsDistance: CGFloat = 0.001
         let completion: CGFloat = 1 - boundsDistance
         
         let pct = percent > 1 ? 0 : (percent < 0 ? 1 : percent)
 
-		// Start/end points centered around given percentage, but capped if right at the very end
+        // Start/end points centered around given percentage, but capped if right at the very end
         let start = pct > completion ? completion : pct - boundsDistance
         let end = pct > completion ? 1 : pct + boundsDistance
         return trimmedPath(from: start, to: end)
     }
 
-	/// Find the `CGPoint` for the given fraction along the path.
-	///
-	/// This works by requesting a very tiny trimmed section of the path, then getting the center of the bounds rectangle
-	/// - Parameter percent: fraction along data set, between 0.0 and 1.0 (underflow and overflow are handled)
-	/// - Returns: a `CGPoint` representing the location of that section of the path
     func point(for percent: CGFloat) -> CGPoint {
         let path = trimmedPath(for: percent)
         return CGPoint(x: path.boundingRect.midX, y: path.boundingRect.midY)
     }
 
-	/// <#Description#>
-	/// - Parameter maxX: <#maxX description#>
-	/// - Returns: <#description#>
     func point(to maxX: CGFloat) -> CGPoint {
         let total = length
         let sub = length(to: maxX)
         let percent = sub / total
         return point(for: percent)
     }
-    
-	/// <#Description#>
-	/// - Returns: <#description#>
-   var length: CGFloat {
+
+    var length: CGFloat {
         var ret: CGFloat = 0.0
         var start: CGPoint?
         var point = CGPoint.zero
@@ -73,9 +57,6 @@ extension Path {
         return ret
     }
 
-	/// <#Description#>
-	/// - Parameter maxX: <#maxX description#>
-	/// - Returns: <#description#>
     func length(to maxX: CGFloat) -> CGFloat {
         var ret: CGFloat = 0.0
         var start: CGPoint?
@@ -127,19 +108,13 @@ extension Path {
         return ret
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - points: <#points description#>
-	///   - step: <#step description#>
-	///   - globalOffset: <#globalOffset description#>
-	/// - Returns: <#description#>
     static func quadCurvedPathWithPoints(points: [Double], step: CGPoint, globalOffset: Double? = nil) -> Path {
         var path = Path()
         if points.count < 2 {
             return path
         }
         let offset = globalOffset ?? points.min()!
-//        guard let offset = points.min() else { return path }
+        //        guard let offset = points.min() else { return path }
         var point1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
         path.move(to: point1)
         for pointIndex in 1..<points.count {
@@ -152,25 +127,83 @@ extension Path {
         return path
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - points: <#points description#>
-	///   - step: <#step description#>
-	///   - globalOffset: <#globalOffset description#>
-	/// - Returns: <#description#>
-    static func quadClosedCurvedPathWithPoints(points: [Double], step: CGPoint, globalOffset: Double? = nil) -> Path {
+    static func quadCurvedPathWithPoints(data: [(Double, Double)], in rect: CGRect) -> Path {
         var path = Path()
-        if points.count < 2 {
+        if data.count < 2 {
             return path
         }
-        let offset = globalOffset ?? points.min()!
 
-//        guard let offset = points.min() else { return path }
+        let convertedXValues = data.map { CGFloat($0.0) * rect.width }
+        let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
+
+        var point1 = CGPoint(x: convertedXValues[0], y: convertedYPoints[0])
+        path.move(to: point1)
+        for pointIndex in 1..<data.count {
+            let point2 = CGPoint(x: CGFloat(convertedXValues[pointIndex]), y: CGFloat(convertedYPoints[pointIndex]))
+            let midPoint = CGPoint.midPointForPoints(firstPoint: point1, secondPoint: point2)
+            path.addQuadCurve(to: midPoint, control: CGPoint.controlPointForPoints(firstPoint: midPoint, secondPoint: point1))
+            path.addQuadCurve(to: point2, control: CGPoint.controlPointForPoints(firstPoint: midPoint, secondPoint: point2))
+            point1 = point2
+        }
+        return path
+    }
+
+    static func drawChartMarkers(data: [(Double, Double)], in rect: CGRect) -> Path {
+        var path = Path()
+        if data.count < 1 {
+            return path
+        }
+
+        let convertedXValues = data.map { CGFloat($0.0) * rect.width }
+        let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
+
+        let markerSize = CGSize(width: 8, height: 8)
+        for pointIndex in 0..<data.count {
+            path.addRoundedRect(in: CGRect(origin: CGPoint(x: convertedXValues[pointIndex] - markerSize.width / 2,
+                                                           y: convertedYPoints[pointIndex] - markerSize.height / 2),
+                                           size: markerSize),
+                                cornerSize: CGSize(width: markerSize.width / 2,
+                                                   height: markerSize.height / 2))
+        }
+        return path
+    }
+
+    static func drawGridLines(numberOfHorizontalLines: Int, numberOfVerticalLines: Int, in rect: CGRect) -> Path {
+        var path = Path()
+
+        for index in 0..<numberOfHorizontalLines {
+            let normalisedSpacing = 1.0 / CGFloat(numberOfHorizontalLines - 1)
+            let startPoint = CGPoint(x: 0, y: normalisedSpacing * CGFloat(index) * rect.height)
+            let endPoint = CGPoint(x: rect.width, y: normalisedSpacing * CGFloat(index) * rect.height)
+            path.move(to: startPoint)
+            path.addLine(to: endPoint)
+        }
+
+        for index in 0..<numberOfVerticalLines {
+            let normalisedSpacing = 1.0 / CGFloat(numberOfVerticalLines - 1)
+            let startPoint = CGPoint(x: normalisedSpacing * CGFloat(index) * rect.width, y: 0)
+            let endPoint = CGPoint(x: normalisedSpacing * CGFloat(index) * rect.width, y: rect.height)
+            path.move(to: startPoint)
+            path.addLine(to: endPoint)
+        }
+
+        return path
+    }
+
+    static func quadClosedCurvedPathWithPoints(data: [(Double, Double)], in rect: CGRect) -> Path {
+        var path = Path()
+        if data.count < 2 {
+            return path
+        }
+
+        let convertedXValues = data.map { CGFloat($0.0) * rect.width }
+        let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
+
         path.move(to: .zero)
-        var point1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
+        var point1 = CGPoint(x: convertedXValues[0], y: convertedYPoints[0])
         path.addLine(to: point1)
-        for pointIndex in 1..<points.count {
-            let point2 = CGPoint(x: step.x * CGFloat(pointIndex), y: step.y*CGFloat(points[pointIndex]-offset))
+        for pointIndex in 1..<data.count {
+            let point2 = CGPoint(x: CGFloat(convertedXValues[pointIndex]), y: CGFloat(convertedYPoints[pointIndex]))
             let midPoint = CGPoint.midPointForPoints(firstPoint: point1, secondPoint: point2)
             path.addQuadCurve(to: midPoint, control: CGPoint.controlPointForPoints(firstPoint: midPoint, secondPoint: point1))
             path.addQuadCurve(to: point2, control: CGPoint.controlPointForPoints(firstPoint: midPoint, secondPoint: point2))
@@ -181,88 +214,64 @@ extension Path {
         return path
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - points: <#points description#>
-	///   - step: <#step description#>
-	/// - Returns: <#description#>
-    static func linePathWithPoints(points: [Double], step: CGPoint) -> Path {
+    static func linePathWithPoints(data: [(Double, Double)], in rect: CGRect) -> Path {
         var path = Path()
-        if points.count < 2 {
+        if data.count < 2 {
             return path
         }
-        guard let offset = points.min() else {
-            return path
-        }
-        let point1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
+
+        let convertedXValues = data.map { CGFloat($0.0) * rect.width }
+        let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
+
+        let point1 = CGPoint(x: convertedXValues[0], y: convertedYPoints[0])
         path.move(to: point1)
-        for pointIndex in 1..<points.count {
-            let point2 = CGPoint(x: step.x * CGFloat(pointIndex), y: step.y*CGFloat(points[pointIndex]-offset))
+        for pointIndex in 1..<data.count {
+            let point2 = CGPoint(x: CGFloat(convertedXValues[pointIndex]), y: CGFloat(convertedYPoints[pointIndex]))
             path.addLine(to: point2)
         }
         return path
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - points: <#points description#>
-	///   - step: <#step description#>
-	/// - Returns: <#description#>
-    static func closedLinePathWithPoints(points: [Double], step: CGPoint) -> Path {
+    static func closedLinePathWithPoints(data: [(Double, Double)], in rect: CGRect) -> Path {
         var path = Path()
-        if points.count < 2 {
+        if data.count < 2 {
             return path
         }
-        guard let offset = points.min() else {
-            return path
-        }
-        var point1 = CGPoint(x: 0, y: CGFloat(points[0]-offset)*step.y)
-        path.move(to: point1)
-        for pointIndex in 1..<points.count {
-            point1 = CGPoint(x: step.x * CGFloat(pointIndex), y: step.y*CGFloat(points[pointIndex]-offset))
-            path.addLine(to: point1)
+
+        let convertedXValues = data.map { CGFloat($0.0) * rect.width }
+        let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
+        path.move(to: .zero)
+
+        let point1 = CGPoint(x: convertedXValues[0], y: convertedYPoints[0])
+        path.addLine(to: point1)
+
+        for pointIndex in 1..<data.count {
+            let point2 = CGPoint(x: CGFloat(convertedXValues[pointIndex]), y: CGFloat(convertedYPoints[pointIndex]))
+            path.addLine(to: point2)
         }
         path.addLine(to: CGPoint(x: point1.x, y: 0))
         path.closeSubpath()
+
         return path
     }
     
 }
 
 extension CGPoint {
-
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - x: <#x description#>
-	/// - Returns: <#description#>
     func point(to: CGPoint, x: CGFloat) -> CGPoint {
         let a = (to.y - self.y) / (to.x - self.x)
         let y = self.y + (x - self.x) * a
         return CGPoint(x: x, y: y)
     }
 
-	/// <#Description#>
-	/// - Parameter to: <#to description#>
-	/// - Returns: <#description#>
     func line(to: CGPoint) -> CGFloat {
         dist(to: to)
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - x: <#x description#>
-	/// - Returns: <#description#>
     func line(to: CGPoint, x: CGFloat) -> CGFloat {
         dist(to: point(to: to, x: x))
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - control: <#control description#>
-	/// - Returns: <#description#>
     func quadCurve(to: CGPoint, control: CGPoint) -> CGFloat {
         var dist: CGFloat = 0
         let steps: CGFloat = 100
@@ -278,12 +287,6 @@ extension CGPoint {
         return dist
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - control: <#control description#>
-	///   - x: <#x description#>
-	/// - Returns: <#description#>
     func quadCurve(to: CGPoint, control: CGPoint, x: CGFloat) -> CGFloat {
         var dist: CGFloat = 0
         let steps: CGFloat = 100
@@ -309,12 +312,6 @@ extension CGPoint {
         return dist
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - t: <#t description#>
-	///   - control: <#control description#>
-	/// - Returns: <#description#>
     func point(to: CGPoint, t: CGFloat, control: CGPoint) -> CGPoint {
         let x = CGPoint.value(x: self.x, y: to.x, t: t, c: control.x)
         let y = CGPoint.value(x: self.y, y: to.y, t: t, c: control.y)
@@ -322,12 +319,6 @@ extension CGPoint {
         return CGPoint(x: x, y: y)
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - control1: <#control1 description#>
-	///   - control2: <#control2 description#>
-	/// - Returns: <#description#>
     func curve(to: CGPoint, control1: CGPoint, control2: CGPoint) -> CGFloat {
         var dist: CGFloat = 0
         let steps: CGFloat = 100
@@ -345,13 +336,6 @@ extension CGPoint {
         return dist
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - control1: <#control1 description#>
-	///   - control2: <#control2 description#>
-	///   - x: <#x description#>
-	/// - Returns: <#description#>
     func curve(to: CGPoint, control1: CGPoint, control2: CGPoint, x: CGFloat) -> CGFloat {
         var dist: CGFloat = 0
         let steps: CGFloat = 100
@@ -379,13 +363,6 @@ extension CGPoint {
         return dist
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - to: <#to description#>
-	///   - t: <#t description#>
-	///   - control1: <#control1 description#>
-	///   - control2: <#control2 description#>
-	/// - Returns: <#description#>
     func point(to: CGPoint, t: CGFloat, control1: CGPoint, control2: CGPoint) -> CGPoint {
         let x = CGPoint.value(x: self.x, y: to.x, t: t, control1: control1.x, control2: control2.x)
         let y = CGPoint.value(x: self.y, y: to.y, t: t, control1: control1.y, control2: control2.x)
@@ -393,13 +370,6 @@ extension CGPoint {
         return CGPoint(x: x, y: y)
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - x: <#x description#>
-	///   - y: <#y description#>
-	///   - t: <#t description#>
-	///   - c: <#c description#>
-	/// - Returns: <#description#>
     static func value(x: CGFloat, y: CGFloat, t: CGFloat, c: CGFloat) -> CGFloat {
         var value: CGFloat = 0.0
         // (1-t)^2 * p0 + 2 * (1-t) * t * c1 + t^2 * p1
@@ -409,14 +379,6 @@ extension CGPoint {
         return value
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - x: <#x description#>
-	///   - y: <#y description#>
-	///   - t: <#t description#>
-	///   - control1: <#control1 description#>
-	///   - control2: <#control2 description#>
-	/// - Returns: <#description#>
     static func value(x: CGFloat, y: CGFloat, t: CGFloat, control1: CGFloat, control2: CGFloat) -> CGFloat {
         var value: CGFloat = 0.0
         // (1-t)^3 * p0 + 3 * (1-t)^2 * t * c1 + 3 * (1-t) * t^2 * c2 + t^3 * p1
@@ -427,11 +389,6 @@ extension CGPoint {
         return value
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - point1: <#point1 description#>
-	///   - point2: <#point2 description#>
-	/// - Returns: <#description#>
     static func getMidPoint(point1: CGPoint, point2: CGPoint) -> CGPoint {
         return CGPoint(
             x: point1.x + (point2.x - point1.x) / 2,
@@ -439,29 +396,16 @@ extension CGPoint {
         )
     }
 
-	/// <#Description#>
-	/// - Parameter to: <#to description#>
-	/// - Returns: <#description#>
     func dist(to: CGPoint) -> CGFloat {
         return sqrt((pow(self.x - to.x, 2) + pow(self.y - to.y, 2)))
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - firstPoint: <#firstPoint description#>
-	///   - secondPoint: <#secondPoint description#>
-	/// - Returns: <#description#>
     static func midPointForPoints(firstPoint: CGPoint, secondPoint: CGPoint) -> CGPoint {
         return CGPoint(
             x: (firstPoint.x + secondPoint.x) / 2,
             y: (firstPoint.y + secondPoint.y) / 2)
     }
 
-	/// <#Description#>
-	/// - Parameters:
-	///   - firstPoint: <#firstPoint description#>
-	///   - secondPoint: <#secondPoint description#>
-	/// - Returns: <#description#>
     static func controlPointForPoints(firstPoint: CGPoint, secondPoint: CGPoint) -> CGPoint {
         var controlPoint = CGPoint.midPointForPoints(firstPoint: firstPoint, secondPoint: secondPoint)
         let diffY = abs(secondPoint.y - controlPoint.y)

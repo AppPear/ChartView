@@ -1,21 +1,23 @@
 import SwiftUI
 
-extension View where Self: ChartBase {
-	
-	/// Set data for a chart
-	/// - Parameter data: array of `Double`
-	/// - Returns: modified `View` with data attached
-    public func data(_ data: [Double]) -> some View {
-        chartData.data = data.map { ("", $0) }
+extension ChartBase {
+    public func data(_ data: [Double]) -> some ChartBase {
+        chartData.data = data.enumerated().map{ (index, value) in (Double(index), value) }
         return self
-            .environmentObject(chartData)
-            .environmentObject(ChartValue())
     }
 
-    public func data(_ data: [(String, Double)]) -> some View {
+    public func data(_ data: [(Double, Double)]) -> some ChartBase {
         chartData.data = data
         return self
-            .environmentObject(chartData)
-            .environmentObject(ChartValue())
+    }
+
+    public func rangeY(_ range: ClosedRange<FloatLiteralType>) -> some ChartBase{
+        chartData.rangeY = range
+        return self
+    }
+
+    public func rangeX(_ range: ClosedRange<FloatLiteralType>) -> some ChartBase{
+        chartData.rangeX = range
+        return self
     }
 }

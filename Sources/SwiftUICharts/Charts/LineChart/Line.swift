@@ -4,33 +4,38 @@ import SwiftUI
 public struct Line: View {
     @EnvironmentObject var chartValue: ChartValue
     @ObservedObject var chartData: ChartData
+    @ObservedObject var chartProperties: LineChartProperties
 
+    var curvedLines: Bool = true
     var style: ChartStyle
 
     @State private var showIndicator: Bool = false
     @State private var touchLocation: CGPoint = .zero
-    @State private var showBackground: Bool = true
     @State private var didCellAppear: Bool = false
 
-    var curvedLines: Bool = true
     var path: Path {
         Path.quadCurvedPathWithPoints(points: chartData.normalisedPoints,
                                       step: CGPoint(x: 1.0, y: 1.0))
     }
+
+    public init(chartData: ChartData,
+                style: ChartStyle,
+                chartProperties: LineChartProperties) {
+        self.chartData = chartData
+        self.style = style
+        self.chartProperties = chartProperties
+    }
     
-	/// The content and behavior of the `Line`.
-	/// Draw the background if showing the full line (?) and the `showBackground` option is set. Above that draw the line, and then the data indicator if the graph is currently being touched.
-	/// On appear, set the frame so that the data graph metrics can be calculated. On a drag (touch) gesture, highlight the closest touched data point.
-	/// TODO: explain rotation
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if self.didCellAppear && self.showBackground {
+                if self.didCellAppear && self.chartProperties.showBackground {
                     LineBackgroundShapeView(chartData: chartData,
                                             geometry: geometry,
                                             style: style)
                 }
                 LineShapeView(chartData: chartData,
+                              chartProperties: chartProperties,
                               geometry: geometry,
                               style: style,
                               trimTo: didCellAppear ? 1.0 : 0.0)
@@ -79,7 +84,7 @@ extension Line {
         let closest = self.path.point(to: normalisedTouchLocationX)
         var denormClosest = closest.denormalize(with: geometry)
         denormClosest.x = denormClosest.x / CGFloat(chartData.normalisedPoints.count - 1)
-        denormClosest.y = denormClosest.y / CGFloat(chartData.normalisedRange)
+        denormClosest.y = denormClosest.y / CGFloat(chartData.normalisedYRange)
         return denormClosest
     }
 
@@ -103,8 +108,12 @@ struct Line_Previews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            Line(chartData:  ChartData([8, 23, 32, 7, 23, -4]), style: blackLineStyle)
-            Line(chartData:  ChartData([8, 23, 32, 7, 23, 43]), style: redLineStyle)
+            Line(chartData: ChartData([8, 23, 32, 7, 23, -4]),
+                 style: blackLineStyle,
+                 chartProperties: LineChartProperties())
+            Line(chartData:  ChartData([8, 23, 32, 7, 23, 43]),
+                 style: redLineStyle,
+                 chartProperties: LineChartProperties())
         }
     }
 }
