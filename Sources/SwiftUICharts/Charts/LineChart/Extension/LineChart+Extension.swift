@@ -6,8 +6,8 @@ extension LineChart {
         return self
     }
 
-    public func showBackground(_ show: Bool) -> LineChart {
-        self.chartProperties.showBackground = show
+    public func setBackground(colorGradient: ColorGradient) -> LineChart {
+        self.chartProperties.backgroundGradient = colorGradient
         return self
     }
 
