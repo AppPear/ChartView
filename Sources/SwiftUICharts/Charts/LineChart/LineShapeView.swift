@@ -13,6 +13,16 @@ struct LineShapeView: View, Animatable {
         set { trimTo = Double(newValue) }
     }
 
+    var chartMarkColor: LinearGradient {
+        if let customColor = chartProperties.customChartMarksColors {
+            return customColor.linearGradient(from: .leading, to: .trailing)
+        }
+
+        return LinearGradient(gradient: style.foregroundColor.first?.gradient ?? ColorGradient.orangeBright.gradient,
+                              startPoint: .leading,
+                              endPoint: .trailing)
+    }
+
     var body: some View {
         ZStack {
             LineShape(data: chartData.normalisedData, lineStyle: chartProperties.lineStyle)
@@ -28,9 +38,7 @@ struct LineShapeView: View, Animatable {
                 MarkerShape(data: chartData.normalisedData)
                     .trim(from: 0, to: CGFloat(trimTo))
                     .fill(.white,
-                          strokeBorder: LinearGradient(gradient: style.foregroundColor.first?.gradient ?? ColorGradient.orangeBright.gradient,
-                                                               startPoint: .leading,
-                                                               endPoint: .trailing),
+                          strokeBorder: chartMarkColor,
                           lineWidth: chartProperties.lineWidth)
                     .rotationEffect(.degrees(180), anchor: .center)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
