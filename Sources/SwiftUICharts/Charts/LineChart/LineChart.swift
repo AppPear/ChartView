@@ -1,17 +1,14 @@
 import SwiftUI
 
-/// A type of chart that displays a line connecting the data points
-public struct LineChart: View, ChartBase {
+public struct LineChart: ChartBase {
     public var chartData = ChartData()
-
-    @EnvironmentObject var data: ChartData
     @EnvironmentObject var style: ChartStyle
+    public var chartProperties = LineChartProperties()
 
-	/// The content and behavior of the `LineChart`.
-	///
-	///
     public var body: some View {
-        Line(chartData: data, style: style)
+       Line(chartData: chartData,
+            style: style,
+            chartProperties: chartProperties)
     }
     
     public init() {}
