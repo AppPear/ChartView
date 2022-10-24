@@ -41,19 +41,11 @@ public class ChartData: ObservableObject {
     }
 
     var normalisedYRange: Double {
-        if let _ = rangeY {
-            return 1
-        }
-
-        return (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0)
+        return rangeY == nil ? (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0) : 1
     }
 
     var normalisedXRange: Double {
-        if let _ = rangeX {
-            return 1
-        }
-
-        return (normalisedValues.max() ?? 0.0) - (normalisedValues.min() ?? 0.0)
+        return rangeX == nil ? (normalisedValues.max() ?? 0.0) - (normalisedValues.min() ?? 0.0) : 1
     }
 
     var isInNegativeDomain: Bool {

@@ -17,13 +17,11 @@ struct ChartGridShape_Previews: PreviewProvider {
         Group {
             ChartGridShape(numberOfHorizontalLines: 5, numberOfVerticalLines: 0)
                 .stroke()
-                .rotationEffect(.degrees(180), anchor: .center)
-                                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                .toStandardCoordinateSystem()
 
             ChartGridShape(numberOfHorizontalLines: 4, numberOfVerticalLines: 4)
                 .stroke()
-                .rotationEffect(.degrees(180), anchor: .center)
-                                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                .toStandardCoordinateSystem()
         }
         .padding()
     }

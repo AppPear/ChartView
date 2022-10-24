@@ -150,15 +150,17 @@ extension Path {
 
     static func drawChartMarkers(data: [(Double, Double)], in rect: CGRect) -> Path {
         var path = Path()
-        if data.count < 1 {
+        let filteredData = data.filter { $0.1 <= 1 && $0.1 >= 0 }
+
+        if filteredData.count < 1 {
             return path
         }
 
-        let convertedXValues = data.map { CGFloat($0.0) * rect.width }
-        let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
+        let convertedXValues = filteredData.map { CGFloat($0.0) * rect.width }
+        let convertedYPoints = filteredData.map { CGFloat($0.1) * rect.height }
 
         let markerSize = CGSize(width: 8, height: 8)
-        for pointIndex in 0..<data.count {
+        for pointIndex in 0..<filteredData.count {
             path.addRoundedRect(in: CGRect(origin: CGPoint(x: convertedXValues[pointIndex] - markerSize.width / 2,
                                                            y: convertedYPoints[pointIndex] - markerSize.height / 2),
                                            size: markerSize),
@@ -199,7 +201,7 @@ extension Path {
         let convertedXValues = data.map { CGFloat($0.0) * rect.width }
         let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
 
-        path.move(to: .zero)
+        path.move(to: CGPoint(x: convertedXValues[0], y: 0))
         var point1 = CGPoint(x: convertedXValues[0], y: convertedYPoints[0])
         path.addLine(to: point1)
         for pointIndex in 1..<data.count {

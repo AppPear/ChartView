@@ -20,13 +20,11 @@ struct LineShape_Previews: PreviewProvider {
         Group {
             LineShape(data: [(0, 0), (0.25, 0.5), (0.5,0.8), (0.75, 0.6), (1, 1)])
                 .stroke()
-                .rotationEffect(.degrees(180), anchor: .center)
-                                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                .toStandardCoordinateSystem()
 
             LineShape(data: [(0, -0.5), (0.25, 0.8), (0.5,-0.6), (0.75,0.6), (1, 1)], lineStyle: .straight)
                 .stroke()
-                .rotationEffect(.degrees(180), anchor: .center)
-                                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                .toStandardCoordinateSystem()
         }
     }
 }

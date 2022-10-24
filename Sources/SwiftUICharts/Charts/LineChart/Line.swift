@@ -2,7 +2,6 @@ import SwiftUI
 
 /// A single line of data, a view in a `LineChart`
 public struct Line: View {
-    @EnvironmentObject var chartValue: ChartValue
     @ObservedObject var chartData: ChartData
     @ObservedObject var chartProperties: LineChartProperties
 
@@ -29,23 +28,22 @@ public struct Line: View {
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if self.didCellAppear && self.chartProperties.showBackground {
+                if self.didCellAppear, let backgroundColor = chartProperties.backgroundGradient {
                     LineBackgroundShapeView(chartData: chartData,
                                             geometry: geometry,
-                                            style: style)
+                                            backgroundColor: backgroundColor)
                 }
                 LineShapeView(chartData: chartData,
                               chartProperties: chartProperties,
                               geometry: geometry,
                               style: style,
                               trimTo: didCellAppear ? 1.0 : 0.0)
-                    .animation(.easeIn)
+                .animation(Animation.easeIn(duration: 0.75))
                 if self.showIndicator {
                     IndicatorPoint()
                         .position(self.getClosestPointOnPath(geometry: geometry,
                                                              touchLocation: self.touchLocation))
-                        .rotationEffect(.degrees(180), anchor: .center)
-                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                        .toStandardCoordinateSystem()
                 }
             }
             .onAppear {
@@ -54,20 +52,17 @@ public struct Line: View {
             .onDisappear() {
                 didCellAppear = false
             }
-			
-            .gesture(DragGesture()
-                .onChanged({ value in
-                    self.touchLocation = value.location
-                    self.showIndicator = true
-                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
-                    self.chartValue.interactionInProgress = true
-                })
-                .onEnded({ value in
-                    self.touchLocation = .zero
-                    self.showIndicator = false
-                    self.chartValue.interactionInProgress = false
-                })
-            )
+//            .gesture(DragGesture()
+//                .onChanged({ value in
+//                    self.touchLocation = value.location
+//                    self.showIndicator = true
+//                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
+//                })
+//                .onEnded({ value in
+//                    self.touchLocation = .zero
+//                    self.showIndicator = false
+//                })
+//            )
         }
     }
 }
@@ -94,7 +89,7 @@ extension Line {
         let geometryWidth = geometry.frame(in: .local).width
         let index = Int(round((touchLocation.x / geometryWidth) * CGFloat(chartData.points.count - 1)))
         if (index >= 0 && index < self.chartData.data.count){
-            self.chartValue.currentValue = self.chartData.points[index]
+//            self.chartValue.currentValue = self.chartData.points[index]
         }
     }
 }

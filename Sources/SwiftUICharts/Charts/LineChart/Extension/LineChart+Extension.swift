@@ -6,13 +6,14 @@ extension LineChart {
         return self
     }
 
-    public func showBackground(_ show: Bool) -> LineChart {
-        self.chartProperties.showBackground = show
+    public func setBackground(colorGradient: ColorGradient) -> LineChart {
+        self.chartProperties.backgroundGradient = colorGradient
         return self
     }
 
-    public func showChartMarks(_ show: Bool) -> LineChart {
+    public func showChartMarks(_ show: Bool, with color: ColorGradient? = nil) -> LineChart {
         self.chartProperties.showChartMarks = show
+        self.chartProperties.customChartMarksColors = color
         return self
     }
 
