@@ -21,4 +21,9 @@ extension LineChart {
         self.chartProperties.lineStyle = style
         return self
     }
+
+    public func withAnimation(_ enabled: Bool) -> LineChart {
+        self.chartProperties.animationEnabled = enabled
+        return self
+    }
 }

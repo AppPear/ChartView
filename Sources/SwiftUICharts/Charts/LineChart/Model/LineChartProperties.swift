@@ -6,7 +6,7 @@ public class LineChartProperties: ObservableObject {
     @Published var showChartMarks: Bool = true
     @Published var customChartMarksColors: ColorGradient?
     @Published var lineStyle: LineStyle = .curved
-
+    @Published var animationEnabled: Bool = true
     public init() {
         // no-op
     }
