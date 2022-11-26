@@ -33,18 +33,7 @@ public struct Line: View {
                                             geometry: geometry,
                                             backgroundColor: backgroundColor)
                 }
-                LineShapeView(chartData: chartData,
-                              chartProperties: chartProperties,
-                              geometry: geometry,
-                              style: style,
-                              trimTo: didCellAppear ? 1.0 : 0.0)
-                .animation(Animation.easeIn(duration: 0.75))
-                if self.showIndicator {
-                    IndicatorPoint()
-                        .position(self.getClosestPointOnPath(geometry: geometry,
-                                                             touchLocation: self.touchLocation))
-                        .toStandardCoordinateSystem()
-                }
+                lineShapeView(geometry: geometry)
             }
             .onAppear {
                 didCellAppear = true
@@ -52,17 +41,24 @@ public struct Line: View {
             .onDisappear() {
                 didCellAppear = false
             }
-//            .gesture(DragGesture()
-//                .onChanged({ value in
-//                    self.touchLocation = value.location
-//                    self.showIndicator = true
-//                    self.getClosestDataPoint(geometry: geometry, touchLocation: value.location)
-//                })
-//                .onEnded({ value in
-//                    self.touchLocation = .zero
-//                    self.showIndicator = false
-//                })
-//            )
+        }
+    }
+
+    @ViewBuilder
+    private func lineShapeView(geometry: GeometryProxy) -> some View {
+        if chartProperties.animationEnabled {
+            LineShapeView(chartData: chartData,
+                          chartProperties: chartProperties,
+                          geometry: geometry,
+                          style: style,
+                          trimTo: didCellAppear ? 1.0 : 0.0)
+            .animation(Animation.easeIn(duration: 0.75))
+        } else {
+            LineShapeView(chartData: chartData,
+                          chartProperties: chartProperties,
+                          geometry: geometry,
+                          style: style,
+                          trimTo: 1.0)
         }
     }
 }
