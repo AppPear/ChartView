@@ -36,6 +36,7 @@ struct BarChartCell_Previews: PreviewProvider {
         Group {
             Group {
                 BarChartCell(value: 0, gradientColor: ColorGradient.greenRed, touchLocation: CGFloat())
+                    .padding(50)
 
                 BarChartCell(value: 0.5, gradientColor: ColorGradient.greenRed, touchLocation: CGFloat())
                 BarChartCell(value: 0.75, gradientColor: ColorGradient.whiteBlack, touchLocation: CGFloat())
