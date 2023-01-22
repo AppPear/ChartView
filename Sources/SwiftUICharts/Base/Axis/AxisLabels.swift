@@ -58,7 +58,7 @@ public struct AxisLabels<Content: View>: View {
     }
 
     public var body: some View {
-        VStack(spacing: 0.0) {
+        VStack(spacing: 4.0) {
             HStack {
                 if axisLabelsStyle.axisLabelsYPosition == .leading {
                     yAxis

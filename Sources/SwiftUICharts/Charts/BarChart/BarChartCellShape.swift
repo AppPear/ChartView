@@ -12,6 +12,9 @@ struct BarChartCellShape: Shape, Animatable {
     func path(in rect: CGRect) -> Path {
         let adjustedOriginY = rect.height - (rect.height * CGFloat(value))
         var path = Path()
+        guard value != 0 else {
+            return path
+        }
         path.move(to: CGPoint(x: 0.0 , y: rect.height))
         path.addLine(to: CGPoint(x: 0.0, y: adjustedOriginY + cornerRadius))
         path.addArc(center: CGPoint(x: cornerRadius, y: adjustedOriginY +  cornerRadius),
@@ -40,6 +43,10 @@ struct BarChartCellShape_Previews: PreviewProvider {
 
             BarChartCellShape(value: 0.3)
                 .fill(Color.blue)
+
+            BarChartCellShape(value: 0)
+                .fill(Color.blue)
+                .padding(50)
             
             BarChartCellShape(value: -0.3)
                 .fill(Color.blue)
