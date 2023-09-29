@@ -35,12 +35,14 @@ public struct PieChartRow: View {
 
     public var body: some View {
         GeometryReader { geometry in
+            let slicesSnapshot = self.slices
+
             ZStack {
                 ForEach(0..<self.slices.count) { index in
                     PieChartCell(
                         rect: geometry.frame(in: .local),
-                        startDeg: self.slices[index].startDeg,
-                        endDeg: self.slices[index].endDeg,
+                        startDeg: slicesSnapshot[index].startDeg,
+                        endDeg: slicesSnapshot[index].endDeg,
                         index: index,
                         backgroundColor: self.style.backgroundColor.startColor,
                         accentColor: self.style.foregroundColor.rotate(for: index)
@@ -55,7 +57,7 @@ public struct PieChartRow: View {
                             let isTouchInPie = isPointInCircle(point: value.location, circleRect: rect)
                             if isTouchInPie {
                                 let touchDegree = degree(for: value.location, inCircleRect: rect)
-                                currentTouchedIndex = slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
+                                currentTouchedIndex = slicesSnapshot.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
                             } else {
                                 currentTouchedIndex = -1
                             }
