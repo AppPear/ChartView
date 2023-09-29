@@ -38,7 +38,7 @@ public struct PieChartRow: View {
             let slicesSnapshot = self.slices
 
             ZStack {
-                ForEach(0..<self.slices.count) { index in
+                ForEach(0..<slicesSnapshot.count) { index in
                     PieChartCell(
                         rect: geometry.frame(in: .local),
                         startDeg: slicesSnapshot[index].startDeg,
