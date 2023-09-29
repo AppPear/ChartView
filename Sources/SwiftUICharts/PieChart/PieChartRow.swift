@@ -9,6 +9,7 @@
 import SwiftUI
 
 public struct PieChartRow : View {
+    
     var data: [Double]
     var backgroundColor: Color
     var accentColor: Color
@@ -38,11 +39,17 @@ public struct PieChartRow : View {
         }
     }
     
+    private func getSlice(index: Int) -> PieSlice? {
+        return slices.count >= index ? slices[index] : nil
+    }
+    
     public var body: some View {
         GeometryReader { geometry in
+            let slicesSnapshot = self.slices
             ZStack{
-                ForEach(0..<self.slices.count){ i in
-                    PieChartCell(rect: geometry.frame(in: .local), startDeg: self.slices[i].startDeg, endDeg: self.slices[i].endDeg, index: i, backgroundColor: self.backgroundColor,accentColor: self.accentColor)
+                
+                ForEach(0..<slicesSnapshot.count){ i in
+                    PieChartCell(rect: geometry.frame(in: .local), startDeg: slicesSnapshot[i].startDeg, endDeg: slicesSnapshot[i].endDeg, index: i, backgroundColor: self.backgroundColor,accentColor: self.accentColor)
                         .scaleEffect(self.currentTouchedIndex == i ? 1.1 : 1)
                         .animation(Animation.spring())
                 }
@@ -53,7 +60,7 @@ public struct PieChartRow : View {
                             let isTouchInPie = isPointInCircle(point: value.location, circleRect: rect)
                             if isTouchInPie {
                                 let touchDegree = degree(for: value.location, inCircleRect: rect)
-                                self.currentTouchedIndex = self.slices.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
+                                self.currentTouchedIndex = slicesSnapshot.firstIndex(where: { $0.startDeg < touchDegree && $0.endDeg > touchDegree }) ?? -1
                             } else {
                                 self.currentTouchedIndex = -1
                             }
