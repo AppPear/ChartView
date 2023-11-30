@@ -91,10 +91,10 @@ struct Legend: View {
     }
 }
 
-struct Legend_Previews: PreviewProvider {
-    static var previews: some View {
-        GeometryReader{ geometry in
-            Legend(data: ChartData(points: [0.2,0.4,1.4,4.5]), frame: .constant(geometry.frame(in: .local)), hideHorizontalLines: .constant(false))
-        }.frame(width: 320, height: 200)
+#Preview {
+    GeometryReader { geometry in
+        Legend(data: ChartData(points: [0.2,0.4,1.4,4.5]), frame: .constant(geometry.frame(in: .local)), hideHorizontalLines: .constant(false))
     }
+    .frame(width: 320, height: 200)
 }
+
