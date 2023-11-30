@@ -54,12 +54,10 @@ extension CGRect {
 }
 
 #if DEBUG
-struct PieChartCell_Previews : PreviewProvider {
-    static var previews: some View {
-        GeometryReader { geometry in
-            PieChartCell(rect: geometry.frame(in: .local),startDeg: 0.0,endDeg: 90.0, index: 0, backgroundColor: Color(red: 252.0/255.0, green: 236.0/255.0, blue: 234.0/255.0), accentColor: Color(red: 225.0/255.0, green: 97.0/255.0, blue: 76.0/255.0))
-            }.frame(width:100, height:100)
-        
+#Preview {
+    GeometryReader { geometry in
+        PieChartCell(rect: geometry.frame(in: .local),startDeg: 0.0,endDeg: 90.0, index: 0, backgroundColor: Color(red: 252.0/255.0, green: 236.0/255.0, blue: 234.0/255.0), accentColor: Color(red: 225.0/255.0, green: 97.0/255.0, blue: 76.0/255.0))
     }
+    .frame(width:100, height:100)
 }
 #endif

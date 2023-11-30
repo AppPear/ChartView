@@ -149,12 +149,10 @@ public struct BarChartView : View {
 }
 
 #if DEBUG
-struct ChartView_Previews : PreviewProvider {
-    static var previews: some View {
-        BarChartView(data: TestData.values ,
-                     title: "Model 3 sales",
-                     legend: "Quarterly",
-                     valueSpecifier: "%.0f")
-    }
+#Preview {
+    BarChartView(data: TestData.values ,
+                 title: "Model 3 sales",
+                 legend: "Quarterly",
+                 valueSpecifier: "%.0f")
 }
 #endif

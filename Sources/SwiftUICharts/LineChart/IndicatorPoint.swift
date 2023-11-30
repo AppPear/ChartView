@@ -21,8 +21,7 @@ struct IndicatorPoint: View {
     }
 }
 
-struct IndicatorPoint_Previews: PreviewProvider {
-    static var previews: some View {
-        IndicatorPoint()
-    }
+#Preview {
+    IndicatorPoint()
 }
+
