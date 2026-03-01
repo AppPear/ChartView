@@ -180,6 +180,25 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testSelectionHandlerModifierCompiles() {
+        let view = AxisLabels {
+            ChartGrid {
+                BarChart()
+                    .chartData([8, 11, 13, 9, 12])
+                    .chartStyle(self.sampleStyle)
+            }
+        }
+        .chartXAxisLabels(["M", "T", "W", "T", "F"])
+        .chartSelectionHandler { event in
+            _ = event.value
+            _ = event.index
+            _ = event.isActive
+        }
+        .frame(width: 300, height: 220)
+
+        assertCanRender(view)
+    }
+
     private var sampleStyle: ChartStyle {
         ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
     }

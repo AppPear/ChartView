@@ -29,6 +29,10 @@ private struct ChartInteractionValueKey: EnvironmentKey {
     static let defaultValue: ChartValue? = nil
 }
 
+private struct ChartSelectionHandlerKey: EnvironmentKey {
+    static let defaultValue: ChartSelectionHandler? = nil
+}
+
 private struct ChartGridConfigKey: EnvironmentKey {
     static let defaultValue = ChartGridConfig()
 }
@@ -78,6 +82,11 @@ public extension EnvironmentValues {
     var chartInteractionValue: ChartValue? {
         get { self[ChartInteractionValueKey.self] }
         set { self[ChartInteractionValueKey.self] = newValue }
+    }
+
+    var chartSelectionHandler: ChartSelectionHandler? {
+        get { self[ChartSelectionHandlerKey.self] }
+        set { self[ChartSelectionHandlerKey.self] = newValue }
     }
 
     var chartGridConfig: ChartGridConfig {

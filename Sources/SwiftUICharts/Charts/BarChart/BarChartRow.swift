@@ -2,6 +2,7 @@ import SwiftUI
 
 public struct BarChartRow: View {
     @Environment(\.chartInteractionValue) private var chartValue
+    @Environment(\.chartSelectionHandler) private var selectionHandler
 
     var chartData: ChartData
     @State private var touchLocation: CGFloat = -1.0
@@ -39,13 +40,26 @@ public struct BarChartRow: View {
                     let width = safeWidth
                     guard width > 0 else { return }
                     touchLocation = value.location.x / width
-                    if let currentValue = getCurrentValue(width: width), let interactionValue = chartValue {
-                        interactionValue.currentValue = currentValue
-                        interactionValue.interactionInProgress = true
+                    if let selected = getCurrentSelection(width: width) {
+                        ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                        handler: selectionHandler,
+                                                        value: selected.value,
+                                                        index: selected.index,
+                                                        isActive: true)
+                    } else {
+                        ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                        handler: selectionHandler,
+                                                        value: nil,
+                                                        index: nil,
+                                                        isActive: false)
                     }
                 })
                 .onEnded({ _ in
-                    chartValue?.interactionInProgress = false
+                    ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                    handler: selectionHandler,
+                                                    value: nil,
+                                                    index: nil,
+                                                    isActive: false)
                     touchLocation = -1
                 })
             )
@@ -60,13 +74,13 @@ public struct BarChartRow: View {
         return CGSize(width: 1, height: 1)
     }
 
-    func getCurrentValue(width: CGFloat) -> Double? {
+    func getCurrentSelection(width: CGFloat) -> (index: Int, value: Double)? {
         guard !chartData.data.isEmpty else { return nil }
         guard width.isFinite, width > 0 else { return nil }
         let denominator = width / CGFloat(chartData.data.count)
         guard denominator > 0, denominator.isFinite else { return nil }
         let index = max(0, min(chartData.data.count - 1, Int(floor((touchLocation * width) / denominator))))
-        return chartData.points[index]
+        return (index, chartData.points[index])
     }
 
     private func formatted(_ value: Double) -> String {

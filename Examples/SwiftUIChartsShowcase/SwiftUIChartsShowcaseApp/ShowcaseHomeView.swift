@@ -12,6 +12,7 @@ struct ShowcaseHomeView: View {
     @State private var streamTimer: Timer?
     @State private var highContrastEnabled = false
     @State private var performanceModeEnabled = true
+    @State private var callbackSelectionText = "Drag bars to receive callback events"
     private let denseSeries: [(Double, Double)] = ShowcaseHomeView.makeDenseSeries()
     private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
     private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
@@ -32,6 +33,7 @@ struct ShowcaseHomeView: View {
                     accessibilitySection
                     axisEngineSection
                     performanceSection
+                    selectionCallbackSection
                     overlayLineSection
                     legendControlSection
                     mixedChartSection
@@ -189,6 +191,49 @@ struct ShowcaseHomeView: View {
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 210)
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
+        }
+    }
+
+    private var selectionCallbackSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Selection Callback (No ChartValue)")
+                .font(.headline)
+
+            Text(callbackSelectionText)
+                .font(.caption.monospacedDigit())
+                .foregroundColor(.secondary)
+
+            AxisLabels {
+                ChartGrid {
+                    BarChart()
+                        .chartData([11, 17, 15, 20, 16, 14, 19])
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                                               foregroundColor: [
+                                                   ColorGradient(.red, .orange),
+                                                   ColorGradient(.blue, .purple),
+                                                   ColorGradient(.green, .yellow)
+                                               ]))
+                }
+                .chartGridLines(horizontal: 4, vertical: 0)
+            }
+            .chartXAxisLabels([(0, "M"), (1, "T"), (2, "W"), (3, "T"), (4, "F"), (5, "S"), (6, "S")], range: 0...6)
+            .chartYAxisAutoTicks(4, format: .number)
+            .chartAxisColor(axisColor)
+            .chartAxisFont(.caption)
+            .chartSelectionHandler { event in
+                guard event.isActive,
+                      let value = event.value,
+                      let index = event.index else {
+                    callbackSelectionText = "No active selection"
+                    return
+                }
+
+                callbackSelectionText = "Selected index \(index + 1): \(String(format: "%.1f", value))"
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 220)
             .padding(12)
             .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }

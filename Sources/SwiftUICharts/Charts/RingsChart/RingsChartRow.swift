@@ -5,6 +5,7 @@ public struct RingsChartRow: View {
     var spacing: CGFloat
 
     @Environment(\.chartInteractionValue) private var chartValue
+    @Environment(\.chartSelectionHandler) private var selectionHandler
     var chartData: ChartData
     @State var touchRadius: CGFloat = -1.0
 
@@ -49,13 +50,26 @@ public struct RingsChartRow: View {
                     let deltaY = value.location.y - frame.midY
                     touchRadius = sqrt(deltaX * deltaX + deltaY * deltaY)
 
-                    if let currentValue = getCurrentValue(maxRadius: radius), let interactionValue = chartValue {
-                        interactionValue.currentValue = currentValue
-                        interactionValue.interactionInProgress = true
+                    if let selected = getCurrentSelection(maxRadius: radius) {
+                        ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                        handler: selectionHandler,
+                                                        value: selected.value,
+                                                        index: selected.index,
+                                                        isActive: true)
+                    } else {
+                        ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                        handler: selectionHandler,
+                                                        value: nil,
+                                                        index: nil,
+                                                        isActive: false)
                     }
                 })
                 .onEnded({ _ in
-                    chartValue?.interactionInProgress = false
+                    ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                    handler: selectionHandler,
+                                                    value: nil,
+                                                    index: nil,
+                                                    isActive: false)
                     touchRadius = -1
                 })
             )
@@ -80,9 +94,9 @@ public struct RingsChartRow: View {
         return touchIndex
     }
 
-    func getCurrentValue(maxRadius: CGFloat) -> Double? {
+    func getCurrentSelection(maxRadius: CGFloat) -> (index: Int, value: Double)? {
         guard let index = touchedCircleIndex(maxRadius: maxRadius) else { return nil }
-        return chartData.points[index]
+        return (index, chartData.points[index])
     }
 
     private func formatted(_ value: Double) -> String {

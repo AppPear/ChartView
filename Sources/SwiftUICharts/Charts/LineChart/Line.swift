@@ -3,6 +3,7 @@ import SwiftUI
 /// A single line of data, a view in a `LineChart`
 public struct Line: View {
     @Environment(\.chartInteractionValue) private var chartValue
+    @Environment(\.chartSelectionHandler) private var selectionHandler
 
     var chartData: ChartData
     var chartProperties: ChartLineConfig
@@ -130,12 +131,29 @@ public struct Line: View {
     }
 
     private func publishSelectionState(active: Bool) {
-        guard let interactionValue = chartValue else { return }
-
-        interactionValue.interactionInProgress = active
-        if active, let index = selectedIndex(), index < chartData.points.count {
-            interactionValue.currentValue = chartData.points[index]
+        guard active else {
+            ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                            handler: selectionHandler,
+                                            value: nil,
+                                            index: nil,
+                                            isActive: false)
+            return
         }
+
+        guard let index = selectedIndex(), index < chartData.points.count else {
+            ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                            handler: selectionHandler,
+                                            value: nil,
+                                            index: nil,
+                                            isActive: false)
+            return
+        }
+
+        ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                        handler: selectionHandler,
+                                        value: chartData.points[index],
+                                        index: index,
+                                        isActive: true)
     }
 
     private func formatted(_ value: Double) -> String {

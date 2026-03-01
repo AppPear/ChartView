@@ -3,6 +3,7 @@ import SwiftUI
 /// A single "row" (slice) of data, a view in a `PieChart`
 public struct PieChartRow: View {
     @Environment(\.chartInteractionValue) private var chartValue
+    @Environment(\.chartSelectionHandler) private var selectionHandler
 
     var chartData: ChartData
     var style: ChartStyle
@@ -25,13 +26,23 @@ public struct PieChartRow: View {
 
     @State private var currentTouchedIndex = -1 {
         didSet {
-            guard oldValue != currentTouchedIndex, let chartValue = chartValue else {
+            guard oldValue != currentTouchedIndex else {
                 return
             }
 
-            chartValue.interactionInProgress = currentTouchedIndex != -1
-            guard currentTouchedIndex != -1 else { return }
-            chartValue.currentValue = slices[currentTouchedIndex].value
+            if currentTouchedIndex == -1 {
+                ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                handler: selectionHandler,
+                                                value: nil,
+                                                index: nil,
+                                                isActive: false)
+            } else {
+                ChartSelectionDispatcher.publish(chartValue: chartValue,
+                                                handler: selectionHandler,
+                                                value: slices[currentTouchedIndex].value,
+                                                index: currentTouchedIndex,
+                                                isActive: true)
+            }
         }
     }
 
