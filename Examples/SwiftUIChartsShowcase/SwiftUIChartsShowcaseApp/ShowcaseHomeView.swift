@@ -11,6 +11,8 @@ struct ShowcaseHomeView: View {
     @State private var hiddenSeries: Set<String> = []
     @State private var streamTimer: Timer?
     @State private var highContrastEnabled = false
+    @State private var performanceModeEnabled = true
+    private let denseSeries: [(Double, Double)] = ShowcaseHomeView.makeDenseSeries()
     private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
     private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
     private var chartSurfaceColor: Color { Color(UIColor.secondarySystemBackground) }
@@ -29,6 +31,7 @@ struct ShowcaseHomeView: View {
                     lineChartSection
                     accessibilitySection
                     axisEngineSection
+                    performanceSection
                     overlayLineSection
                     legendControlSection
                     mixedChartSection
@@ -113,6 +116,45 @@ struct ShowcaseHomeView: View {
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 230)
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
+        }
+    }
+
+    private var performanceSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Large Dataset Performance Mode")
+                    .font(.headline)
+                Spacer(minLength: 8)
+                Toggle("Performance", isOn: $performanceModeEnabled)
+                    .labelsHidden()
+            }
+
+            Text("2000 points rendered with optional downsampling + simplified line style.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            AxisLabels {
+                ChartGrid {
+                    LineChart()
+                        .chartData(denseSeries)
+                        .chartYRange(-2...2)
+                        .chartXRange(0...Double(max(0, denseSeries.count - 1)))
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                                               foregroundColor: ColorGradient(.purple, .blue)))
+                        .chartPerformance(performanceModeEnabled
+                                          ? .automatic(threshold: 600, maxPoints: 180, simplifyLineStyle: true)
+                                          : .none)
+                }
+                .chartGridLines(horizontal: 4, vertical: 6)
+            }
+            .chartXAxisAutoTicks(6, format: .number)
+            .chartYAxisAutoTicks(5, format: .number)
+            .chartAxisColor(axisColor)
+            .chartAxisFont(.caption)
+            .frame(maxWidth: .infinity)
+            .frame(height: 220)
             .padding(12)
             .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
@@ -413,6 +455,14 @@ struct ShowcaseHomeView: View {
     private var weekTimeRange: ClosedRange<Double>? {
         guard let start = weekTimeSeries.first?.0, let end = weekTimeSeries.last?.0 else { return nil }
         return start...end
+    }
+
+    private static func makeDenseSeries() -> [(Double, Double)] {
+        (0..<2_000).map { index in
+            let x = Double(index)
+            let y = sin(x / 45.0) + (cos(x / 12.0) * 0.25)
+            return (x, y)
+        }
     }
 }
 

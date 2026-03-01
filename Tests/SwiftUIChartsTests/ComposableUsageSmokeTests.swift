@@ -165,6 +165,21 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testPerformanceModeModifierCompiles() {
+        let data = (0..<1200).map { index -> (Double, Double) in
+            let x = Double(index)
+            return (x, sin(x / 30.0))
+        }
+
+        let view = LineChart()
+            .chartData(data)
+            .chartPerformance(.automatic(threshold: 500, maxPoints: 120, simplifyLineStyle: true))
+            .chartStyle(sampleStyle)
+            .frame(width: 300, height: 180)
+
+        assertCanRender(view)
+    }
+
     private var sampleStyle: ChartStyle {
         ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
     }
