@@ -6,6 +6,7 @@ struct ShowcaseHomeView: View {
     private let sharedBarValue = ChartValue()
     private let lineSelectionValue = ChartValue()
     @ObservedObject private var liveFeed = MockLiveChartFeed()
+    @State private var hiddenSeries: Set<String> = []
     private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
     private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
     private var chartSurfaceColor: Color { Color(UIColor.secondarySystemBackground) }
@@ -23,6 +24,7 @@ struct ShowcaseHomeView: View {
                     dynamicDataSection
                     lineChartSection
                     overlayLineSection
+                    legendControlSection
                     mixedChartSection
                     interactiveBarCard
                     pieAndRingsSection
@@ -215,6 +217,48 @@ struct ShowcaseHomeView: View {
                 .chartGridLines(horizontal: 5, vertical: 5)
             }
             .chartXAxisLabels([(0, "A"), (1, "B"), (2, "C"), (3, "D"), (4, "E")], range: 0...4)
+            .chartAxisColor(axisColor)
+            .chartAxisFont(.caption)
+            .frame(maxWidth: .infinity)
+            .frame(height: 220)
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
+        }
+    }
+
+    private var legendControlSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Legend + Series Visibility")
+                .font(.headline)
+
+            ChartLegend(items: [
+                ChartLegendItem(id: "sales", title: "Sales", color: ColorGradient(.orange, .red)),
+                ChartLegendItem(id: "forecast", title: "Forecast", color: ColorGradient(.blue, .purple))
+            ], hiddenSeries: $hiddenSeries)
+            .padding(.horizontal, 8)
+
+            AxisLabels {
+                ChartGrid {
+                    LineChart()
+                        .chartSeriesID("sales")
+                        .chartLineMarks(true)
+                        .chartData([2, 4, 3, 5, 4, 6, 7])
+                        .chartYRange(0...8)
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                                               foregroundColor: ColorGradient(.orange, .red)))
+
+                    LineChart()
+                        .chartSeriesID("forecast")
+                        .chartLineMarks(true)
+                        .chartData([1, 3, 4, 4, 5, 5, 6])
+                        .chartYRange(0...8)
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                                               foregroundColor: ColorGradient(.blue, .purple)))
+                }
+                .chartGridLines(horizontal: 5, vertical: 6)
+            }
+            .chartHiddenSeries(hiddenSeries)
+            .chartXAxisLabels([(0, "Mon"), (1, "Tue"), (2, "Wed"), (3, "Thu"), (4, "Fri"), (5, "Sat"), (6, "Sun")], range: 0...6)
             .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)

@@ -7,12 +7,20 @@ public struct LineChart: View {
     @Environment(\.chartXDomainMode) private var xDomainMode
     @Environment(\.chartStyle) private var style
     @Environment(\.chartLineConfig) private var lineConfig
+    @Environment(\.chartSeriesConfig) private var seriesConfig
 
     public init() {}
 
     public var body: some View {
-        Line(chartData: ChartData(points, rangeY: rangeY, rangeX: rangeX, xDomainMode: xDomainMode),
-             style: style,
-             chartProperties: lineConfig)
+        if isSeriesVisible {
+            Line(chartData: ChartData(points, rangeY: rangeY, rangeX: rangeX, xDomainMode: xDomainMode),
+                 style: style,
+                 chartProperties: lineConfig)
+        }
+    }
+
+    private var isSeriesVisible: Bool {
+        guard let seriesID = seriesConfig.seriesID else { return true }
+        return !seriesConfig.hiddenSeriesIDs.contains(seriesID)
     }
 }

@@ -41,6 +41,10 @@ private struct ChartLineConfigKey: EnvironmentKey {
     static let defaultValue = ChartLineConfig()
 }
 
+private struct ChartSeriesConfigKey: EnvironmentKey {
+    static let defaultValue = ChartSeriesConfig()
+}
+
 public extension EnvironmentValues {
     var chartDataPoints: [(Double, Double)] {
         get { self[ChartDataPointsKey.self] }
@@ -85,5 +89,10 @@ public extension EnvironmentValues {
     var chartLineConfig: ChartLineConfig {
         get { self[ChartLineConfigKey.self] }
         set { self[ChartLineConfigKey.self] = newValue }
+    }
+
+    var chartSeriesConfig: ChartSeriesConfig {
+        get { self[ChartSeriesConfigKey.self] }
+        set { self[ChartSeriesConfigKey.self] = newValue }
     }
 }

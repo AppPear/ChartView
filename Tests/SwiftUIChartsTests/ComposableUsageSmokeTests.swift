@@ -88,6 +88,32 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testLegendAndSeriesVisibilityModifiersCompile() {
+        let hidden: Set<String> = ["forecast"]
+        let view = VStack(alignment: .leading, spacing: 8) {
+            ChartLegend(items: [
+                ChartLegendItem(id: "sales", title: "Sales", color: ColorGradient(.orange, .red)),
+                ChartLegendItem(id: "forecast", title: "Forecast", color: ColorGradient(.blue, .purple))
+            ], hiddenSeries: .constant(hidden))
+            AxisLabels {
+                ChartGrid {
+                    LineChart()
+                        .chartSeriesID("sales")
+                        .chartData([2, 4, 3, 5, 4])
+                        .chartStyle(self.sampleStyle)
+                    LineChart()
+                        .chartSeriesID("forecast")
+                        .chartData([1, 2, 4, 4, 5])
+                        .chartStyle(self.sampleStyle)
+                }
+            }
+            .chartHiddenSeries(hidden)
+        }
+        .frame(width: 280, height: 260)
+
+        assertCanRender(view)
+    }
+
     private var sampleStyle: ChartStyle {
         ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
     }
