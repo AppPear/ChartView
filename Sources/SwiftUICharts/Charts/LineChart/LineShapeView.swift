@@ -36,7 +36,7 @@ struct LineShapeView: View, Animatable {
             if chartProperties.showChartMarks {
                 MarkerShape(data: chartData.normalisedData)
                     .trim(from: 0, to: CGFloat(trimTo))
-                    .fill(.white,
+                    .fill(style.backgroundColor.startColor.opacity(0.95),
                           strokeBorder: chartMarkColor,
                           lineWidth: chartProperties.lineWidth)
                     .toStandardCoordinateSystem()

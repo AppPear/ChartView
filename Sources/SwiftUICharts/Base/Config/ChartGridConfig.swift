@@ -11,7 +11,7 @@ public struct ChartGridConfig {
     public init(numberOfHorizontalLines: Int = 3,
                 numberOfVerticalLines: Int = 3,
                 strokeStyle: StrokeStyle = StrokeStyle(lineWidth: 1, lineCap: .round, dash: [5, 10]),
-                color: Color = Color(white: 0.85),
+                color: Color = Color.secondary.opacity(0.35),
                 showBaseLine: Bool = true,
                 baseStrokeStyle: StrokeStyle = StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [5, 0])) {
         self.numberOfHorizontalLines = numberOfHorizontalLines

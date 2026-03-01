@@ -22,7 +22,7 @@ private struct ChartYRangeKey: EnvironmentKey {
 }
 
 private struct ChartStyleKey: EnvironmentKey {
-    static let defaultValue = ChartStyle(backgroundColor: .white, foregroundColor: .orangeBright)
+    static let defaultValue = ChartStyle(backgroundColor: Color.primary.opacity(0.04), foregroundColor: .orangeBright)
 }
 
 private struct ChartInteractionValueKey: EnvironmentKey {

@@ -1,9 +1,17 @@
 import SwiftUI
 import SwiftUICharts
+import UIKit
 
 struct ShowcaseHomeView: View {
     private let sharedBarValue = ChartValue()
     @ObservedObject private var liveFeed = MockLiveChartFeed()
+    private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
+    private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
+    private var chartSurfaceColor: Color { Color(UIColor.secondarySystemBackground) }
+    private var axisColor: Color { .secondary }
+    private var ringsBackgroundGradient: ColorGradient {
+        ColorGradient(chartSurfaceColor, Color(UIColor.tertiarySystemBackground))
+    }
 
     var body: some View {
         NavigationView {
@@ -21,7 +29,7 @@ struct ShowcaseHomeView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .navigationBarTitle("SwiftUICharts Showcase", displayMode: .inline)
-            .background(Color(white: 0.95))
+            .background(pageBackgroundColor)
         }
     }
 
@@ -52,19 +60,19 @@ struct ShowcaseHomeView: View {
                         .chartData([12, 34, 23, 18, 36, 22, 26])
                         .chartYRange(10...40)
                         .chartXRange(0...6)
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.blue, .purple)))
                 }
                 .chartGridLines(horizontal: 5, vertical: 6)
             }
             .chartXAxisLabels([(0, "M"), (1, "T"), (2, "W"), (3, "T"), (4, "F"), (5, "S"), (6, "S")], range: 0...6)
             .chartYAxisLabels([(0, "10"), (1, "20"), (2, "30"), (3, "40")], range: 0...3)
-            .chartAxisColor(.gray)
+            .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 220)
             .padding(12)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.white))
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
     }
 
@@ -92,18 +100,18 @@ struct ShowcaseHomeView: View {
                         .chartData(liveFeed.points)
                         .chartYRange(liveFeed.yRange)
                         .chartXRange(0...Double(max(0, liveFeed.points.count - 1)))
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.green, .blue)))
                 }
                 .chartGridLines(horizontal: 5, vertical: max(2, liveFeed.points.count))
             }
             .chartXAxisLabels(liveFeed.xLabels)
-            .chartAxisColor(.gray)
+            .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 220)
             .padding(12)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.white))
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
         .onAppear {
             liveFeed.start()
@@ -126,7 +134,7 @@ struct ShowcaseHomeView: View {
                         .chartData([3, 5, 4, 1, 0, 2, 4])
                         .chartYRange(0...8)
                         .chartXRange(0...6)
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.orange, .red)))
 
                     LineChart()
@@ -136,18 +144,18 @@ struct ShowcaseHomeView: View {
                         .chartData([4, 1, 0, 2, 6, 3, 5])
                         .chartYRange(0...8)
                         .chartXRange(0...6)
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.green, .yellow)))
                 }
                 .chartGridLines(horizontal: 5, vertical: 6)
             }
             .chartXAxisLabels([(0, "1"), (1, "2"), (2, "3"), (3, "4"), (4, "5"), (5, "6"), (6, "7")], range: 0...6)
-            .chartAxisColor(.gray)
+            .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 220)
             .padding(12)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.white))
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
     }
 
@@ -160,24 +168,24 @@ struct ShowcaseHomeView: View {
                 ChartGrid {
                     BarChart()
                         .chartData([2, 4, 1, 3, 5])
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.orange, .red)))
 
                     LineChart()
                         .chartLineMarks(true)
                         .chartData([2, 4, 1, 3, 5])
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.blue, .purple)))
                 }
                 .chartGridLines(horizontal: 5, vertical: 5)
             }
             .chartXAxisLabels([(0, "A"), (1, "B"), (2, "C"), (3, "D"), (4, "E")], range: 0...4)
-            .chartAxisColor(.gray)
+            .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 220)
             .padding(12)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.white))
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
     }
 
@@ -190,7 +198,7 @@ struct ShowcaseHomeView: View {
                 ChartGrid {
                     BarChart()
                         .chartData([14, 22, 18, 31, 26, 19, 24])
-                        .chartStyle(ChartStyle(backgroundColor: .white,
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: [
                                                    ColorGradient(.red, .orange),
                                                    ColorGradient(.blue, .purple),
@@ -200,7 +208,7 @@ struct ShowcaseHomeView: View {
                 .chartGridLines(horizontal: 5, vertical: 0)
             }
             .chartXAxisLabels([(0, "M"), (1, "T"), (2, "W"), (3, "T"), (4, "F"), (5, "S"), (6, "S")], range: 0...6)
-            .chartAxisColor(.gray)
+            .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 170)
@@ -208,7 +216,7 @@ struct ShowcaseHomeView: View {
         .frame(maxWidth: .infinity)
         .frame(height: 280)
         .padding(6)
-        .chartStyle(ChartStyle(backgroundColor: .white,
+        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                foregroundColor: ColorGradient(.blue, .purple)))
         .chartInteractionValue(sharedBarValue)
     }
@@ -221,7 +229,7 @@ struct ShowcaseHomeView: View {
             HStack(spacing: 12) {
                 PieChart()
                     .chartData([34, 23, 12])
-                    .chartStyle(ChartStyle(backgroundColor: .white,
+                    .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                            foregroundColor: [
                                                ColorGradient(.red, .orange),
                                                ColorGradient(.blue, .purple),
@@ -230,11 +238,11 @@ struct ShowcaseHomeView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 180)
                     .padding(10)
-                    .background(RoundedRectangle(cornerRadius: 14).fill(Color.white))
+                    .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
 
                 RingsChart()
                     .chartData([25, 50, 75, 90])
-                    .chartStyle(ChartStyle(backgroundColor: ColorGradient(.white, .gray.opacity(0.12)),
+                    .chartStyle(ChartStyle(backgroundColor: ringsBackgroundGradient,
                                            foregroundColor: [
                                                ColorGradient(.purple, .blue),
                                                ColorGradient(.orange, .red),
@@ -244,7 +252,7 @@ struct ShowcaseHomeView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 180)
                     .padding(10)
-                    .background(RoundedRectangle(cornerRadius: 14).fill(Color.white))
+                    .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
             }
         }
     }
