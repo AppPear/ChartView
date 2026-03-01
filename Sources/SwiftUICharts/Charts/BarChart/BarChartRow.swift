@@ -27,6 +27,8 @@ public struct BarChartRow: View {
                         .scaleEffect(getScaleSize(touchLocation: touchLocation, index: index), anchor: .bottom)
                         .animation(Animation.easeIn(duration: 0.2))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                        .accessibilityElement(children: .ignore)
+                        .accessibility(label: Text("Bar \(index + 1), value \(formatted(chartData.points[index]))"))
                 }
             }
             .frame(width: safeWidth,
@@ -65,6 +67,13 @@ public struct BarChartRow: View {
         guard denominator > 0, denominator.isFinite else { return nil }
         let index = max(0, min(chartData.data.count - 1, Int(floor((touchLocation * width) / denominator))))
         return chartData.points[index]
+    }
+
+    private func formatted(_ value: Double) -> String {
+        if abs(value.rounded() - value) < 0.001 {
+            return String(Int(value.rounded()))
+        }
+        return String(format: "%.2f", value)
     }
 }
 

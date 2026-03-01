@@ -10,6 +10,7 @@ struct ShowcaseHomeView: View {
                                                                            autoScroll: true)
     @State private var hiddenSeries: Set<String> = []
     @State private var streamTimer: Timer?
+    @State private var highContrastEnabled = false
     private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
     private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
     private var chartSurfaceColor: Color { Color(UIColor.secondarySystemBackground) }
@@ -26,6 +27,7 @@ struct ShowcaseHomeView: View {
                     lineInteractionSection
                     dynamicDataSection
                     lineChartSection
+                    accessibilitySection
                     axisEngineSection
                     overlayLineSection
                     legendControlSection
@@ -111,6 +113,40 @@ struct ShowcaseHomeView: View {
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 230)
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
+        }
+    }
+
+    private var accessibilitySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Accessibility + High Contrast")
+                    .font(.headline)
+                Spacer(minLength: 8)
+                Toggle("High Contrast", isOn: $highContrastEnabled)
+                    .labelsHidden()
+            }
+
+            Text("VoiceOver labels are available for bars, points, slices, and rings.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            AxisLabels {
+                ChartGrid {
+                    BarChart()
+                        .chartData([8, 14, 11, 17, 15, 19, 16])
+                        .chartStyle(highContrastEnabled ? .highContrast : ChartStyle(backgroundColor: chartSurfaceColor,
+                                                                                      foregroundColor: ColorGradient(.orange, .red)))
+                }
+                .chartGridLines(horizontal: 4, vertical: 0)
+            }
+            .chartXAxisLabels([(0, "M"), (1, "T"), (2, "W"), (3, "T"), (4, "F"), (5, "S"), (6, "S")], range: 0...6)
+            .chartYAxisAutoTicks(4, format: .number)
+            .chartAxisColor(axisColor)
+            .chartAxisFont(.caption)
+            .frame(maxWidth: .infinity)
+            .frame(height: 210)
             .padding(12)
             .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }

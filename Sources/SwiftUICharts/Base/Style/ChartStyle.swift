@@ -24,3 +24,20 @@ public struct ChartStyle {
         self.foregroundColor = foregroundColor
     }
 }
+
+public extension ChartStyle {
+    static var highContrast: ChartStyle {
+        ChartStyle(backgroundColor: Color.primary.opacity(0.12),
+                   foregroundColor: [
+                    ColorGradient(.yellow, .orange),
+                    ColorGradient(.blue, .purple),
+                    ColorGradient(.green, .yellow),
+                    ColorGradient(.pink, .purple)
+                   ])
+    }
+
+    static var highContrastMono: ChartStyle {
+        ChartStyle(backgroundColor: Color.primary.opacity(0.15),
+                   foregroundColor: ColorGradient(.white, .primary))
+    }
+}

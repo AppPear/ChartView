@@ -151,6 +151,20 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testHighContrastStylePresetCompiles() {
+        let view = AxisLabels {
+            ChartGrid {
+                BarChart()
+                    .chartData([8, 14, 11, 17])
+                    .chartStyle(.highContrast)
+            }
+        }
+        .chartXAxisLabels(["Q1", "Q2", "Q3", "Q4"])
+        .frame(width: 280, height: 220)
+
+        assertCanRender(view)
+    }
+
     private var sampleStyle: ChartStyle {
         ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
     }

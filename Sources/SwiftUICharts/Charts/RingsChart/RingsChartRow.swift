@@ -36,6 +36,8 @@ public struct RingsChartRow: View {
                         .zIndex(scaleUp ? 1 : 0)
                         .padding(padding)
                         .animation(Animation.easeIn(duration: 0.5))
+                        .accessibilityElement(children: .ignore)
+                        .accessibility(label: Text("Ring \(index + 1), value \(formatted(chartData.points[index])) percent"))
                 }
             }
             .frame(width: safeSize.width, height: safeSize.height, alignment: .topLeading)
@@ -81,6 +83,13 @@ public struct RingsChartRow: View {
     func getCurrentValue(maxRadius: CGFloat) -> Double? {
         guard let index = touchedCircleIndex(maxRadius: maxRadius) else { return nil }
         return chartData.points[index]
+    }
+
+    private func formatted(_ value: Double) -> String {
+        if abs(value.rounded() - value) < 0.001 {
+            return String(Int(value.rounded()))
+        }
+        return String(format: "%.1f", value)
     }
 }
 

@@ -38,6 +38,7 @@ public struct PieChartRow: View {
     public var body: some View {
         GeometryReader { geometry in
             let rect = geometry.frame(in: .local).sanitized
+            let total = max(0.0001, chartData.points.reduce(0, +))
             ZStack {
                 ForEach(Array(slices.indices), id: \.self) { index in
                     PieChartCell(rect: rect,
@@ -48,6 +49,8 @@ public struct PieChartRow: View {
                                  accentColor: style.foregroundColor.rotate(for: index))
                         .scaleEffect(currentTouchedIndex == index ? 1.1 : 1)
                         .animation(Animation.spring())
+                        .accessibilityElement(children: .ignore)
+                        .accessibility(label: Text("Slice \(index + 1), value \(formatted(slices[index].value)), \(formatted((slices[index].value / total) * 100)) percent"))
                 }
             }
             .frame(width: rect.width, height: rect.height, alignment: .topLeading)
@@ -66,5 +69,12 @@ public struct PieChartRow: View {
                 })
             )
         }
+    }
+
+    private func formatted(_ value: Double) -> String {
+        if abs(value.rounded() - value) < 0.001 {
+            return String(Int(value.rounded()))
+        }
+        return String(format: "%.1f", value)
     }
 }

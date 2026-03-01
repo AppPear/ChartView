@@ -31,6 +31,7 @@ public struct Line: View {
                 }
                 lineShapeView(geometry: geometry)
                 selectionOverlay(size: safeFrame.size)
+                accessibilityOverlay(size: safeFrame.size)
             }
             .frame(width: safeFrame.width, height: safeFrame.height, alignment: .topLeading)
             .contentShape(Rectangle())
@@ -91,6 +92,25 @@ public struct Line: View {
         }
     }
 
+    @ViewBuilder
+    private func accessibilityOverlay(size: CGSize) -> some View {
+        if !chartData.normalisedData.isEmpty {
+            ZStack {
+                ForEach(Array(chartData.normalisedData.enumerated()), id: \.offset) { index, point in
+                    Circle()
+                        .fill(Color.clear)
+                        .frame(width: 30, height: 30)
+                        .position(x: CGFloat(point.0) * size.width,
+                                  y: CGFloat(point.1) * size.height)
+                        .accessibilityElement(children: .ignore)
+                        .accessibility(label: Text("Point \(index + 1), value \(formatted(chartData.points[index]))"))
+                }
+            }
+            .toStandardCoordinateSystem()
+            .allowsHitTesting(false)
+        }
+    }
+
     private func selectedIndex() -> Int? {
         guard !chartData.normalisedData.isEmpty, touchLocation >= 0 else { return nil }
 
@@ -116,6 +136,13 @@ public struct Line: View {
         if active, let index = selectedIndex(), index < chartData.points.count {
             interactionValue.currentValue = chartData.points[index]
         }
+    }
+
+    private func formatted(_ value: Double) -> String {
+        if abs(value.rounded() - value) < 0.001 {
+            return String(Int(value.rounded()))
+        }
+        return String(format: "%.2f", value)
     }
 }
 
