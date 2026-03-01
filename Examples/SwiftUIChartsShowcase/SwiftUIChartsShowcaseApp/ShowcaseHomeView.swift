@@ -5,8 +5,11 @@ import UIKit
 struct ShowcaseHomeView: View {
     private let sharedBarValue = ChartValue()
     private let lineSelectionValue = ChartValue()
-    @ObservedObject private var liveFeed = MockLiveChartFeed()
+    @ObservedObject private var streamingSource = ChartStreamingDataSource(initialValues: [18, 23, 20, 27, 29, 24, 28, 31],
+                                                                           windowSize: 8,
+                                                                           autoScroll: true)
     @State private var hiddenSeries: Set<String> = []
+    @State private var streamTimer: Timer?
     private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
     private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
     private var chartSurfaceColor: Color { Color(UIColor.secondarySystemBackground) }
@@ -35,6 +38,8 @@ struct ShowcaseHomeView: View {
             .navigationBarTitle("SwiftUICharts Showcase", displayMode: .inline)
             .background(pageBackgroundColor)
         }
+        .onAppear(perform: startStreamingSimulation)
+        .onDisappear(perform: stopStreamingSimulation)
     }
 
     private var headline: some View {
@@ -116,14 +121,14 @@ struct ShowcaseHomeView: View {
     private var dynamicDataSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Live Dynamic Data Source (Mock)")
+                Text("Streaming Data Source")
                     .font(.headline)
                 Spacer(minLength: 8)
-                Text(String(format: "%.1f", liveFeed.latestValue))
+                Text(String(format: "%.1f", streamingSource.latestValue))
                     .font(.subheadline.monospacedDigit())
                     .foregroundColor(.secondary)
             }
-            Text("Updates every few seconds with simulated network delay.")
+            Text("First-class streaming helper with append/window/auto-scroll.")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
@@ -134,27 +139,20 @@ struct ShowcaseHomeView: View {
                         .chartLineMarks(true, color: ColorGradient(.green, .blue))
                         .chartLineStyle(.curved)
                         .chartLineAnimation(true)
-                        .chartData(liveFeed.points)
-                        .chartYRange(liveFeed.yRange)
-                        .chartXRange(0...Double(max(0, liveFeed.points.count - 1)))
+                        .chartData(streamingSource)
+                        .chartYRange(streamingSource.suggestedYRange)
                         .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
                                                foregroundColor: ColorGradient(.green, .blue)))
                 }
-                .chartGridLines(horizontal: 5, vertical: max(2, liveFeed.points.count))
+                .chartGridLines(horizontal: 5, vertical: max(2, streamingSource.values.count))
             }
-            .chartXAxisLabels(liveFeed.xLabels)
+            .chartXAxisLabels(streamingSource.xLabels)
             .chartAxisColor(axisColor)
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 220)
             .padding(12)
             .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
-        }
-        .onAppear {
-            liveFeed.start()
-        }
-        .onDisappear {
-            liveFeed.stop()
         }
     }
 
@@ -343,66 +341,22 @@ struct ShowcaseHomeView_Previews: PreviewProvider {
     }
 }
 
-final class MockLiveChartFeed: ObservableObject {
-    @Published private(set) var points: [Double] = [18, 23, 20, 27, 29, 24, 28, 31]
-    @Published private(set) var latestValue: Double = 31
+private extension ShowcaseHomeView {
+    func startStreamingSimulation() {
+        guard streamTimer == nil else { return }
 
-    private var timer: Timer?
-
-    var xLabels: [String] {
-        (1...points.count).map(String.init)
-    }
-
-    var yRange: ClosedRange<Double> {
-        let minValue = points.min() ?? 0
-        let maxValue = points.max() ?? 10
-        let lower = max(0, floor(minValue / 5) * 5 - 5)
-        let upper = max(lower + 10, ceil(maxValue / 5) * 5 + 5)
-        return lower...upper
-    }
-
-    func start() {
-        guard timer == nil else { return }
-        let liveTimer = Timer.scheduledTimer(withTimeInterval: 2.2, repeats: true) { [weak self] _ in
-            self?.simulateFetch()
-        }
-        liveTimer.tolerance = 0.4
-        timer = liveTimer
-    }
-
-    func stop() {
-        timer?.invalidate()
-        timer = nil
-    }
-
-    deinit {
-        stop()
-    }
-
-    private func simulateFetch() {
-        let current = points.last ?? 25
-        let delay = Double.random(in: 0.15...0.7)
-
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + delay) { [weak self] in
-            guard let self = self else { return }
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.8, repeats: true) { _ in
+            let current = streamingSource.latestValue
             let delta = Double.random(in: -4.5...4.5)
-            let nextValue = min(45, max(10, current + delta))
-
-            DispatchQueue.main.async {
-                self.push(nextValue)
-            }
+            let next = min(45, max(10, current + delta))
+            streamingSource.append(next)
         }
+        timer.tolerance = 0.35
+        streamTimer = timer
     }
 
-    private func push(_ value: Double) {
-        guard !points.isEmpty else {
-            points = [value]
-            latestValue = value
-            return
-        }
-
-        points.removeFirst()
-        points.append(value)
-        latestValue = value
+    func stopStreamingSimulation() {
+        streamTimer?.invalidate()
+        streamTimer = nil
     }
 }

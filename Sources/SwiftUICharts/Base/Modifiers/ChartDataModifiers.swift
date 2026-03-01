@@ -32,6 +32,10 @@ private struct ChartYRangeModifier: ViewModifier {
 }
 
 public extension View {
+    func chartData(_ stream: ChartStreamingDataSource) -> some View {
+        chartData(stream.values)
+    }
+
     func chartData(_ points: [Double]) -> some View {
         let indexed = points.enumerated().map { (index, value) in (Double(index), value) }
         return modifier(ChartDataValuesModifier(points: indexed, xDomainMode: .categorical))

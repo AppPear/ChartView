@@ -114,6 +114,21 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testStreamingDataSourceOverloadCompiles() {
+        let stream = ChartStreamingDataSource(initialValues: [12, 14, 18, 16],
+                                              windowSize: 4,
+                                              autoScroll: true)
+        stream.append(20)
+
+        let view = LineChart()
+            .chartData(stream)
+            .chartYRange(stream.suggestedYRange)
+            .chartStyle(sampleStyle)
+            .frame(width: 280, height: 180)
+
+        assertCanRender(view)
+    }
+
     private var sampleStyle: ChartStyle {
         ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
     }
