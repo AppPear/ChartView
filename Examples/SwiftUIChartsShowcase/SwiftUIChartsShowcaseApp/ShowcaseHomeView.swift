@@ -4,6 +4,7 @@ import UIKit
 
 struct ShowcaseHomeView: View {
     private let sharedBarValue = ChartValue()
+    private let lineSelectionValue = ChartValue()
     @ObservedObject private var liveFeed = MockLiveChartFeed()
     private var pageBackgroundColor: Color { Color(UIColor.systemGroupedBackground) }
     private var cardBackgroundColor: Color { Color(UIColor.secondarySystemGroupedBackground) }
@@ -18,6 +19,7 @@ struct ShowcaseHomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     headline
+                    lineInteractionSection
                     dynamicDataSection
                     lineChartSection
                     overlayLineSection
@@ -74,6 +76,39 @@ struct ShowcaseHomeView: View {
             .padding(12)
             .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
+    }
+
+    private var lineInteractionSection: some View {
+        CardView {
+            ChartLabel("Line Selection", type: .title)
+            ChartLabel("Drag to inspect points", type: .legend, format: "%.1f")
+
+            AxisLabels {
+                ChartGrid {
+                    LineChart()
+                        .chartLineWidth(3)
+                        .chartLineMarks(true, color: ColorGradient(.pink, .purple))
+                        .chartLineStyle(.curved)
+                        .chartData([14, 18, 12, 26, 22, 30, 24])
+                        .chartYRange(10...35)
+                        .chartXRange(0...6)
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                                               foregroundColor: ColorGradient(.pink, .purple)))
+                }
+                .chartGridLines(horizontal: 5, vertical: 6)
+            }
+            .chartXAxisLabels([(0, "M"), (1, "T"), (2, "W"), (3, "T"), (4, "F"), (5, "S"), (6, "S")], range: 0...6)
+            .chartAxisColor(axisColor)
+            .chartAxisFont(.caption)
+            .frame(maxWidth: .infinity)
+            .frame(height: 170)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 280)
+        .padding(6)
+        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                               foregroundColor: ColorGradient(.pink, .purple)))
+        .chartInteractionValue(lineSelectionValue)
     }
 
     private var dynamicDataSection: some View {
