@@ -12,6 +12,7 @@ private struct ChartXAxisLabelsModifier: ViewModifier {
         updated.axisXLabels = labels
         updated.axisXRange = range
         updated.axisXDomainMode = mode
+        updated.axisXAutoTickCount = nil
         return content.environment(\.chartAxisConfig, updated)
     }
 }
@@ -26,6 +27,51 @@ private struct ChartYAxisLabelsModifier: ViewModifier {
         var updated = currentConfig
         updated.axisYLabels = labels
         updated.axisLabelsYPosition = position
+        updated.axisYAutoTickCount = nil
+        return content.environment(\.chartAxisConfig, updated)
+    }
+}
+
+private struct ChartXAxisAutoTicksModifier: ViewModifier {
+    @Environment(\.chartAxisConfig) private var currentConfig
+
+    let count: Int
+    let format: ChartAxisTickFormat
+
+    func body(content: Content) -> some View {
+        var updated = currentConfig
+        updated.axisXAutoTickCount = max(2, count)
+        updated.axisXTickFormat = format
+        updated.axisXLabels = []
+        return content.environment(\.chartAxisConfig, updated)
+    }
+}
+
+private struct ChartYAxisAutoTicksModifier: ViewModifier {
+    @Environment(\.chartAxisConfig) private var currentConfig
+
+    let count: Int
+    let format: ChartAxisTickFormat
+    let position: AxisLabelsYPosition
+
+    func body(content: Content) -> some View {
+        var updated = currentConfig
+        updated.axisYAutoTickCount = max(2, count)
+        updated.axisYTickFormat = format
+        updated.axisYLabels = []
+        updated.axisLabelsYPosition = position
+        return content.environment(\.chartAxisConfig, updated)
+    }
+}
+
+private struct ChartXAxisLabelRotationModifier: ViewModifier {
+    @Environment(\.chartAxisConfig) private var currentConfig
+
+    let angle: Angle
+
+    func body(content: Content) -> some View {
+        var updated = currentConfig
+        updated.axisXLabelRotation = angle
         return content.environment(\.chartAxisConfig, updated)
     }
 }
@@ -85,6 +131,23 @@ public extension View {
 
     func chartAxisColor(_ color: Color) -> some View {
         modifier(ChartAxisColorModifier(color: color))
+    }
+
+    func chartXAxisAutoTicks(_ count: Int = 5,
+                             format: ChartAxisTickFormat = .number) -> some View {
+        modifier(ChartXAxisAutoTicksModifier(count: count, format: format))
+    }
+
+    func chartYAxisAutoTicks(_ count: Int = 5,
+                             format: ChartAxisTickFormat = .number,
+                             position: AxisLabelsYPosition = .leading) -> some View {
+        modifier(ChartYAxisAutoTicksModifier(count: count,
+                                             format: format,
+                                             position: position))
+    }
+
+    func chartXAxisLabelRotation(_ angle: Angle) -> some View {
+        modifier(ChartXAxisLabelRotationModifier(angle: angle))
     }
 }
 

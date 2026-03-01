@@ -26,6 +26,7 @@ struct ShowcaseHomeView: View {
                     lineInteractionSection
                     dynamicDataSection
                     lineChartSection
+                    axisEngineSection
                     overlayLineSection
                     legendControlSection
                     mixedChartSection
@@ -80,6 +81,36 @@ struct ShowcaseHomeView: View {
             .chartAxisFont(.caption)
             .frame(maxWidth: .infinity)
             .frame(height: 220)
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
+        }
+    }
+
+    private var axisEngineSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Auto Tick Engine (Date + Collision + Rotation)")
+                .font(.headline)
+
+            AxisLabels {
+                ChartGrid {
+                    LineChart()
+                        .chartLineWidth(3)
+                        .chartLineMarks(true)
+                        .chartData(weekTimeSeries)
+                        .chartYRange(10...40)
+                        .chartXRange(weekTimeRange)
+                        .chartStyle(ChartStyle(backgroundColor: chartSurfaceColor,
+                                               foregroundColor: ColorGradient(.green, .blue)))
+                }
+                .chartGridLines(horizontal: 4, vertical: 6)
+            }
+            .chartXAxisAutoTicks(6, format: .shortDate)
+            .chartYAxisAutoTicks(4, format: .number)
+            .chartXAxisLabelRotation(.degrees(-24))
+            .chartAxisColor(axisColor)
+            .chartAxisFont(.caption)
+            .frame(maxWidth: .infinity)
+            .frame(height: 230)
             .padding(12)
             .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
         }
@@ -332,6 +363,20 @@ struct ShowcaseHomeView: View {
                     .background(RoundedRectangle(cornerRadius: 14).fill(cardBackgroundColor))
             }
         }
+    }
+
+    private var weekTimeSeries: [(Double, Double)] {
+        let day: TimeInterval = 24 * 60 * 60
+        let start = Date(timeIntervalSince1970: 1_704_067_200).timeIntervalSince1970
+        let points: [Double] = [12, 16, 21, 19, 28, 24, 31]
+        return points.enumerated().map { index, value in
+            (start + (Double(index) * day), value)
+        }
+    }
+
+    private var weekTimeRange: ClosedRange<Double>? {
+        guard let start = weekTimeSeries.first?.0, let end = weekTimeSeries.last?.0 else { return nil }
+        return start...end
     }
 }
 

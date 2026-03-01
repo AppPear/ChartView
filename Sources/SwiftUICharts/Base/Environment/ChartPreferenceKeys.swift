@@ -32,6 +32,16 @@ struct ChartXRangePreferenceKey: PreferenceKey {
     }
 }
 
+struct ChartYRangePreferenceKey: PreferenceKey {
+    static var defaultValue: ClosedRange<Double>? = nil
+
+    static func reduce(value: inout ClosedRange<Double>?, nextValue: () -> ClosedRange<Double>?) {
+        if let next = nextValue() {
+            value = next
+        }
+    }
+}
+
 struct ChartXDomainModePreferenceKey: PreferenceKey {
     static var defaultValue: ChartXDomainMode = .numeric
 

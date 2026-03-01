@@ -129,6 +129,28 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testAutoTickAndRotationModifiersCompile() {
+        let timestamps: [(Double, Double)] = [
+            (1_704_067_200, 10), (1_704_153_600, 14), (1_704_240_000, 18), (1_704_326_400, 20)
+        ]
+
+        let view = AxisLabels {
+            ChartGrid {
+                LineChart()
+                    .chartData(timestamps)
+                    .chartYRange(8...24)
+                    .chartXRange(1_704_067_200...1_704_326_400)
+                    .chartStyle(self.sampleStyle)
+            }
+        }
+        .chartXAxisAutoTicks(4, format: .shortDate)
+        .chartYAxisAutoTicks(4, format: .number)
+        .chartXAxisLabelRotation(.degrees(-22))
+        .frame(width: 300, height: 220)
+
+        assertCanRender(view)
+    }
+
     private var sampleStyle: ChartStyle {
         ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
     }

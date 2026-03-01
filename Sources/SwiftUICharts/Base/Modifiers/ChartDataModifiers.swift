@@ -27,7 +27,9 @@ private struct ChartYRangeModifier: ViewModifier {
     let range: ClosedRange<Double>?
 
     func body(content: Content) -> some View {
-        content.environment(\.chartYRange, range)
+        content
+            .environment(\.chartYRange, range)
+            .preference(key: ChartYRangePreferenceKey.self, value: range)
     }
 }
 
