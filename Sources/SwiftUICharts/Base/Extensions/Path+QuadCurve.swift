@@ -1,6 +1,10 @@
 import SwiftUI
 
 extension Path {
+    private static func sanitizedRect(_ rect: CGRect) -> CGRect {
+        rect.sanitized
+    }
+
     func trimmedPath(for percent: CGFloat) -> Path {
         let boundsDistance: CGFloat = 0.001
         let completion: CGFloat = 1 - boundsDistance
@@ -132,6 +136,7 @@ extension Path {
         if data.count < 2 {
             return path
         }
+        let rect = sanitizedRect(rect)
 
         let convertedXValues = data.map { CGFloat($0.0) * rect.width }
         let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
@@ -155,6 +160,7 @@ extension Path {
         if filteredData.count < 1 {
             return path
         }
+        let rect = sanitizedRect(rect)
 
         let convertedXValues = filteredData.map { CGFloat($0.0) * rect.width }
         let convertedYPoints = filteredData.map { CGFloat($0.1) * rect.height }
@@ -172,21 +178,32 @@ extension Path {
 
     static func drawGridLines(numberOfHorizontalLines: Int, numberOfVerticalLines: Int, in rect: CGRect) -> Path {
         var path = Path()
+        let rect = sanitizedRect(rect)
 
-        for index in 0..<numberOfHorizontalLines {
-            let normalisedSpacing = 1.0 / CGFloat(numberOfHorizontalLines - 1)
-            let startPoint = CGPoint(x: 0, y: normalisedSpacing * CGFloat(index) * rect.height)
-            let endPoint = CGPoint(x: rect.width, y: normalisedSpacing * CGFloat(index) * rect.height)
-            path.move(to: startPoint)
-            path.addLine(to: endPoint)
+        if numberOfHorizontalLines > 1 {
+            for index in 0..<numberOfHorizontalLines {
+                let normalisedSpacing = 1.0 / CGFloat(numberOfHorizontalLines - 1)
+                let startPoint = CGPoint(x: 0, y: normalisedSpacing * CGFloat(index) * rect.height)
+                let endPoint = CGPoint(x: rect.width, y: normalisedSpacing * CGFloat(index) * rect.height)
+                path.move(to: startPoint)
+                path.addLine(to: endPoint)
+            }
+        } else if numberOfHorizontalLines == 1 {
+            path.move(to: CGPoint(x: 0, y: 0))
+            path.addLine(to: CGPoint(x: rect.width, y: 0))
         }
 
-        for index in 0..<numberOfVerticalLines {
-            let normalisedSpacing = 1.0 / CGFloat(numberOfVerticalLines - 1)
-            let startPoint = CGPoint(x: normalisedSpacing * CGFloat(index) * rect.width, y: 0)
-            let endPoint = CGPoint(x: normalisedSpacing * CGFloat(index) * rect.width, y: rect.height)
-            path.move(to: startPoint)
-            path.addLine(to: endPoint)
+        if numberOfVerticalLines > 1 {
+            for index in 0..<numberOfVerticalLines {
+                let normalisedSpacing = 1.0 / CGFloat(numberOfVerticalLines - 1)
+                let startPoint = CGPoint(x: normalisedSpacing * CGFloat(index) * rect.width, y: 0)
+                let endPoint = CGPoint(x: normalisedSpacing * CGFloat(index) * rect.width, y: rect.height)
+                path.move(to: startPoint)
+                path.addLine(to: endPoint)
+            }
+        } else if numberOfVerticalLines == 1 {
+            path.move(to: CGPoint(x: 0, y: 0))
+            path.addLine(to: CGPoint(x: 0, y: rect.height))
         }
 
         return path
@@ -197,6 +214,7 @@ extension Path {
         if data.count < 2 {
             return path
         }
+        let rect = sanitizedRect(rect)
 
         let convertedXValues = data.map { CGFloat($0.0) * rect.width }
         let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
@@ -221,6 +239,7 @@ extension Path {
         if data.count < 2 {
             return path
         }
+        let rect = sanitizedRect(rect)
 
         let convertedXValues = data.map { CGFloat($0.0) * rect.width }
         let convertedYPoints = data.map { CGFloat($0.1) * rect.height }
@@ -239,6 +258,7 @@ extension Path {
         if data.count < 2 {
             return path
         }
+        let rect = sanitizedRect(rect)
 
         let convertedXValues = data.map { CGFloat($0.0) * rect.width }
         let convertedYPoints = data.map { CGFloat($0.1) * rect.height }

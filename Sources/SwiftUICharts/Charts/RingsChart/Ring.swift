@@ -110,6 +110,7 @@ struct Ring: View {
 
 	var body: some View {
 		GeometryReader { geometry in
+            let safeFrame = geometry.size.sanitized
 			ZStack {
 				// Background for the ring. Use the final color with reduced opacity
 				RingShape()
@@ -120,18 +121,19 @@ struct Ring: View {
 					.stroke(style: StrokeStyle(lineWidth: self.ringWidth, lineCap: .round))
 					.fill(self.ringGradient)
 				// End of ring with drop shadow
-				if self.getShowShadow(frame: geometry.size) {
+				if self.getShowShadow(frame: safeFrame) {
 					Circle()
 						.fill(self.lastGradientColor)
 						.frame(width: self.ringWidth, height: self.ringWidth, alignment: .center)
-						.offset(x: self.getEndCircleLocation(frame: geometry.size).0,
-								y: self.getEndCircleLocation(frame: geometry.size).1)
+						.offset(x: self.getEndCircleLocation(frame: safeFrame).0,
+								y: self.getEndCircleLocation(frame: safeFrame).1)
 						.shadow(color: Ring.ShadowColor,
 								radius: Ring.ShadowRadius,
 								x: self.getEndCircleShadowOffset().0,
 								y: self.getEndCircleShadowOffset().1)
 				}
 			}
+            .frame(width: safeFrame.width, height: safeFrame.height, alignment: .topLeading)
 		}
 		// Padding to ensure that the entire ring fits within the view size allocated
 		.padding(self.ringWidth / 2)

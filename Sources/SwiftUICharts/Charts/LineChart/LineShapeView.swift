@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LineShapeView: View, Animatable {
     var chartData: ChartData
-    var chartProperties: LineChartProperties
+    var chartProperties: ChartLineConfig
 
     var geometry: GeometryProxy
     var style: ChartStyle
@@ -48,30 +48,30 @@ struct LineShapeView: View, Animatable {
 struct LineShapeView_Previews: PreviewProvider {
     static let chartData = ChartData([6, 8, 6], rangeY: 6...10)
     static let chartDataOutOfRange = ChartData([-1, 8, 6, 12, 3], rangeY: -5...15)
-
-    static let chartDataOutOfRange2 = ChartData([6,6,8,5], rangeY: 5...10)
+    static let chartDataOutOfRange2 = ChartData([6, 6, 8, 5], rangeY: 5...10)
 
     static let chartStyle = ChartStyle(backgroundColor: Color.white,
                                        foregroundColor: [ColorGradient(Color.orange, Color.red)])
+
     static var previews: some View {
         Group {
             GeometryReader { geometry in
                 LineShapeView(chartData: chartData,
-                              chartProperties: LineChartProperties(),
+                              chartProperties: ChartLineConfig(),
                               geometry: geometry,
                               style: chartStyle,
                               trimTo: 1.0)
             }
             GeometryReader { geometry in
                 LineShapeView(chartData: chartDataOutOfRange,
-                              chartProperties: LineChartProperties(),
+                              chartProperties: ChartLineConfig(),
                               geometry: geometry,
                               style: chartStyle,
                               trimTo: 1.0)
             }
             GeometryReader { geometry in
                 LineShapeView(chartData: chartDataOutOfRange2,
-                              chartProperties: LineChartProperties(),
+                              chartProperties: ChartLineConfig(),
                               geometry: geometry,
                               style: chartStyle,
                               trimTo: 1.0)
@@ -79,5 +79,3 @@ struct LineShapeView_Previews: PreviewProvider {
         }
     }
 }
-
-

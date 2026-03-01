@@ -1,0 +1,108 @@
+@testable import SwiftUICharts
+import SwiftUI
+import XCTest
+
+#if canImport(AppKit)
+import AppKit
+#endif
+
+final class ComposableUsageSmokeTests: XCTestCase {
+
+    func testBarChartRendersWithOptionalInteractionValue() {
+        let view = BarChart()
+            .chartData([12, 34, 23])
+            .chartStyle(sampleStyle)
+            .frame(width: 240, height: 140)
+
+        assertCanRender(view)
+    }
+
+    func testPieChartRendersWithOptionalInteractionValue() {
+        let view = PieChart()
+            .chartData([34, 23, 12])
+            .chartStyle(sampleStyle)
+            .frame(width: 240, height: 240)
+
+        assertCanRender(view)
+    }
+
+    func testRingsChartRendersWithOptionalInteractionValue() {
+        let view = RingsChart()
+            .chartData([25, 50, 75])
+            .chartStyle(sampleStyle)
+            .frame(width: 240, height: 240)
+
+        assertCanRender(view)
+    }
+
+    func testPieAndRingsRenderInHeightOnlyHStackWithoutLayoutCrash() {
+        let view = HStack(spacing: 12) {
+            PieChart()
+                .chartData([34, 23, 12])
+                .chartStyle(sampleStyle)
+                .frame(height: 180)
+
+            RingsChart()
+                .chartData([25, 50, 75, 90])
+                .chartStyle(sampleStyle)
+                .frame(height: 180)
+        }
+
+        assertCanRender(view)
+    }
+
+    func testChartLabelCanShareExternalChartValue() {
+        let sharedChartValue = ChartValue()
+
+        let view = VStack(alignment: .leading) {
+            ChartLabel("Sales", type: .title)
+            BarChart()
+                .chartData([12, 34, 23])
+                .chartStyle(sampleStyle)
+                .frame(height: 140)
+        }
+        .frame(width: 280, height: 220)
+        .chartInteractionValue(sharedChartValue)
+
+        assertCanRender(view)
+    }
+
+    func testMixedBarAndLineWithAxisLabelsRenders() {
+        let view = AxisLabels {
+            ChartGrid {
+                BarChart()
+                    .chartData([2, 4, 1, 3, 5])
+                    .chartStyle(self.sampleStyle)
+                LineChart()
+                    .chartLineMarks(true)
+                    .chartData([2, 4, 1, 3, 5])
+                    .chartStyle(self.sampleStyle)
+            }
+            .chartGridLines(horizontal: 5, vertical: 5)
+        }
+        .chartXAxisLabels([(0, "A"), (1, "B"), (2, "C"), (3, "D"), (4, "E")], range: 0...4)
+        .chartAxisColor(.gray)
+        .chartAxisFont(.caption)
+        .frame(width: 280, height: 220)
+
+        assertCanRender(view)
+    }
+
+    private var sampleStyle: ChartStyle {
+        ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red))
+    }
+
+    private func assertCanRender<Content: View>(_ view: Content,
+                                                file: StaticString = #filePath,
+                                                line: UInt = #line) {
+        #if canImport(AppKit)
+        let hostingView = NSHostingView(rootView: view)
+        hostingView.layoutSubtreeIfNeeded()
+        _ = hostingView.fittingSize
+        #else
+        _ = view
+        #endif
+
+        XCTAssertTrue(true, file: file, line: line)
+    }
+}

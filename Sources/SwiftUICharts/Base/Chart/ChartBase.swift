@@ -1,6 +1,4 @@
 import SwiftUI
 
-/// Protocol for any type of chart, to get access to underlying data
-public protocol ChartBase: View {
-    var chartData: ChartData { get }
-}
+@available(*, deprecated, message: "Use View-based chart modifiers (chartData, chartXRange, chartYRange) with chart views.")
+public protocol ChartBase: View {}

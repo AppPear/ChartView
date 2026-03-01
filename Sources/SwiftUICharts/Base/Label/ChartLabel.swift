@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// What kind of label - this affects color, size, position of the label
+/// What kind of label - this affects color, size, position of the label.
 public enum ChartLabelType {
     case title
     case subTitle
@@ -9,16 +9,42 @@ public enum ChartLabelType {
     case legend
 }
 
-/// A chart may contain any number of labels in pre-set positions based on their `ChartLabelType`
+/// A chart may contain any number of labels in pre-set positions based on their `ChartLabelType`.
 public struct ChartLabel: View {
-    @EnvironmentObject var chartValue: ChartValue
-    @State var textToDisplay:String = ""
-    var format: String = "%.01f"
+    @Environment(\.chartInteractionValue) private var chartValue
 
     private var title: String
+    private var format: String
+    private let labelType: ChartLabelType
 
-	/// Label font size
-	/// - Returns: the font size of the label
+    public init(_ title: String,
+                type: ChartLabelType = .title,
+                format: String = "%.01f") {
+        self.title = title
+        self.labelType = type
+        self.format = format
+    }
+
+    public var body: some View {
+        if let chartValue = chartValue {
+            ChartLabelObservedValue(title: title,
+                                    format: format,
+                                    labelSize: labelSize,
+                                    labelPadding: labelPadding,
+                                    labelColor: labelColor,
+                                    chartValue: chartValue)
+        } else {
+            HStack {
+                Text(title)
+                    .font(.system(size: labelSize))
+                    .bold()
+                    .foregroundColor(labelColor)
+                    .padding(labelPadding)
+                Spacer()
+            }
+        }
+    }
+
     private var labelSize: CGFloat {
         switch labelType {
         case .title:
@@ -34,8 +60,6 @@ public struct ChartLabel: View {
         }
     }
 
-	/// Padding around label
-	/// - Returns: the edge padding to use based on position of the label
     private var labelPadding: EdgeInsets {
         switch labelType {
         case .title:
@@ -51,55 +75,56 @@ public struct ChartLabel: View {
         }
     }
 
-	/// Which type (color, size, position) for label
-    private let labelType: ChartLabelType
-
-	/// Foreground color for this label
-	/// - Returns: Color of label based on its `ChartLabelType`
     private var labelColor: Color {
         switch labelType {
         case .title:
-            return Color.primary
+            return .primary
         case .legend:
-            return Color.secondary
+            return .secondary
         case .subTitle:
-            return Color.primary
+            return .primary
         case .largeTitle:
-            return Color.primary
+            return .primary
         case .custom(_, _, let color):
             return color
         }
     }
+}
 
-	/// Initialize
-	/// - Parameters:
-	///   - title: Any `String`
-	///   - type: Which `ChartLabelType` to use
-    public init (_ title: String,
-                 type: ChartLabelType = .title,
-                 format: String = "%.01f") {
+private struct ChartLabelObservedValue: View {
+    @ObservedObject var chartValue: ChartValue
+
+    let title: String
+    let format: String
+    let labelSize: CGFloat
+    let labelPadding: EdgeInsets
+    let labelColor: Color
+
+    init(title: String,
+         format: String,
+         labelSize: CGFloat,
+         labelPadding: EdgeInsets,
+         labelColor: Color,
+         chartValue: ChartValue) {
         self.title = title
-        labelType = type
         self.format = format
+        self.labelSize = labelSize
+        self.labelPadding = labelPadding
+        self.labelColor = labelColor
+        self.chartValue = chartValue
     }
 
-	/// The content and behavior of the `ChartLabel`.
-	///
-	/// Displays current value if chart is currently being touched along a data point, otherwise the specified text.
-    public var body: some View {
+    var body: some View {
         HStack {
-            Text(textToDisplay)
+            Text(chartValue.interactionInProgress
+                 ? String(format: format, chartValue.currentValue)
+                 : title)
                 .font(.system(size: labelSize))
                 .bold()
-                .foregroundColor(self.labelColor)
-                .padding(self.labelPadding)
-                .onAppear {
-                    self.textToDisplay = self.title
-                }
-                .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? String(format: format, self.chartValue.currentValue) : self.title
-                }
-            if !self.chartValue.interactionInProgress {
+                .foregroundColor(labelColor)
+                .padding(labelPadding)
+
+            if !chartValue.interactionInProgress {
                 Spacer()
             }
         }

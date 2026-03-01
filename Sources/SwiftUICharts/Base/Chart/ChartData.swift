@@ -1,10 +1,11 @@
 import SwiftUI
 
-/// An observable wrapper for an array of data for use in any chart
-public class ChartData: ObservableObject {
-    @Published public var data: [(Double, Double)] = []
+/// Value-backed data model for chart rendering.
+public struct ChartData {
+    public var data: [(Double, Double)]
     public var rangeY: ClosedRange<Double>?
     public var rangeX: ClosedRange<Double>?
+    public var xDomainMode: ChartXDomainMode
 
     var points: [Double] {
         data.filter { rangeX?.contains($0.0) ?? true }.map { $0.1 }
@@ -26,14 +27,11 @@ public class ChartData: ObservableObject {
     }
 
     var normalisedValues: [Double] {
-        let absoluteValues = values.map { abs($0) }
-        var maxValue = absoluteValues.max()
-        if let rangeX = rangeX {
-            maxValue = Double(rangeX.overreach)
-            return values.map { ($0 - rangeX.lowerBound) / (maxValue ?? 1.0) }
-        }
-
-        return values.map { $0 / (maxValue ?? 1.0) }
+        let xScale = ChartXScale(values: values,
+                                 rangeX: rangeX,
+                                 mode: xDomainMode,
+                                 slotCountHint: values.count)
+        return values.map { xScale.normalizedX(for: $0) }
     }
 
     var normalisedData: [(Double, Double)] {
@@ -41,11 +39,11 @@ public class ChartData: ObservableObject {
     }
 
     var normalisedYRange: Double {
-        return rangeY == nil ? (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0) : 1
+        rangeY == nil ? (normalisedPoints.max() ?? 0.0) - (normalisedPoints.min() ?? 0.0) : 1
     }
 
     var normalisedXRange: Double {
-        return rangeX == nil ? (normalisedValues.max() ?? 0.0) - (normalisedValues.min() ?? 0.0) : 1
+        rangeX == nil ? (normalisedValues.max() ?? 0.0) - (normalisedValues.min() ?? 0.0) : 1
     }
 
     var isInNegativeDomain: Bool {
@@ -56,19 +54,30 @@ public class ChartData: ObservableObject {
         return (points.min() ?? 0.0) < 0
     }
 
-    /// Initialize with data array
-    /// - Parameter data: Array of `Double`
-    public init(_ data: [Double], rangeY: ClosedRange<FloatLiteralType>? = nil) {
-        self.data = data.enumerated().map{ (index, value) in (Double(index), value) }
+    public init(_ data: [Double],
+                rangeY: ClosedRange<Double>? = nil,
+                rangeX: ClosedRange<Double>? = nil,
+                xDomainMode: ChartXDomainMode = .categorical) {
+        self.data = data.enumerated().map { (index, value) in (Double(index), value) }
         self.rangeY = rangeY
+        self.rangeX = rangeX
+        self.xDomainMode = xDomainMode
     }
 
-    public init(_ data: [(Double, Double)], rangeY: ClosedRange<FloatLiteralType>? = nil) {
+    public init(_ data: [(Double, Double)],
+                rangeY: ClosedRange<Double>? = nil,
+                rangeX: ClosedRange<Double>? = nil,
+                xDomainMode: ChartXDomainMode = .numeric) {
         self.data = data
         self.rangeY = rangeY
+        self.rangeX = rangeX
+        self.xDomainMode = xDomainMode
     }
 
-    public init() {
+    public init(xDomainMode: ChartXDomainMode = .numeric) {
         self.data = []
+        self.rangeY = nil
+        self.rangeX = nil
+        self.xDomainMode = xDomainMode
     }
 }

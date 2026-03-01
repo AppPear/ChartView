@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ChartGridBaseShape: Shape {
     func path(in rect: CGRect) -> Path {
+        let rect = rect.sanitized
         var path = Path()
         path.move(to: CGPoint(x: 0, y: 0))
         path.addLine(to: CGPoint(x: rect.width, y: 0))

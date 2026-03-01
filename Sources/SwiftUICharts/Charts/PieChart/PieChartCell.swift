@@ -12,8 +12,11 @@ struct PieSlice: Identifiable {
 public struct PieChartCell: View {
     @State private var show: Bool = false
     var rect: CGRect
+    private var safeRect: CGRect {
+        rect.sanitized
+    }
     var radius: CGFloat {
-        return min(rect.width, rect.height)/2
+        return min(safeRect.width, safeRect.height)/2
     }
     var startDeg: Double
 	var endDeg: Double
@@ -22,12 +25,12 @@ public struct PieChartCell: View {
     var path: Path {
         var path = Path()
         path.addArc(
-            center: rect.mid,
+            center: safeRect.mid,
             radius: self.radius,
             startAngle: Angle(degrees: self.startDeg),
             endAngle: Angle(degrees: self.endDeg),
             clockwise: false)
-        path.addLine(to: rect.mid)
+        path.addLine(to: safeRect.mid)
         path.closeSubpath()
         return path
     }

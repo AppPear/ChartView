@@ -1,192 +1,124 @@
 # SwiftUICharts
 
-Swift package for displaying charts effortlessly.
+SwiftUICharts is an open-source chart library for SwiftUI with iOS 13 compatibility.
 
-![SwiftUI Charts](./Resources/showcase1.gif "SwiftUI Charts")
+This release uses a fully composable, SwiftUI-idiomatic API based on immutable configuration and `ViewModifier` chains.
 
-It supports:
-* Line charts
-* Bar charts
-* Pie charts
+<p align="center">
+<img src="Resources/linevid2.gif" width="30%"/> <img src="Resources/barvid2.gif" width="30%"/> <img src="Resources/pievid2.gif" width="30%"/>
+</p>
 
-### Installation:
+## Charts
 
-It requires iOS 13 and Xcode 11!
+- `LineChart`
+- `BarChart`
+- `PieChart`
+- `RingsChart`
 
-In Xcode got to `File -> Swift Packages -> Add Package Dependency` and paste inthe repo's url: `https://github.com/AppPear/ChartView`
+## Installation
 
-### Usage:
+Use Swift Package Manager in Xcode and add:
 
-import the package in the file you would like to use it: `import SwiftUICharts`
+`https://github.com/AppPear/ChartView`
 
-You can display a Chart by adding a chart view to your parent view: 
+## Migration
 
-### Demo
+This is a major composable API release.
 
-Added an example project, with **iOS, watchOS** target: https://github.com/AppPear/ChartViewDemo
+- Previous chain APIs like `.data`, `.rangeX`, `.rangeY`, `.setAxisXLabels`, `.setNumberOfHorizontalLines`, and line-specific setters were replaced by typed chart modifiers.
+- Full old-to-new mapping: [MIGRATION.md](./MIGRATION.md)
 
-## Line charts
+## Quick Start
 
-**LineChartView with multiple lines!**
-First release of this feature, interaction is disabled for now, I'll figure it out how could be the best to interact with multiple lines with a single touch.
-![Multiine Charts](./Resources/multiline1.gif "Multiine Charts")
+**Simple line chart**
 
-Usage:
-```swift
-MultiLineChartView(data: [([8,32,11,23,40,28], GradientColors.green), ([90,99,78,111,70,60,77], GradientColors.purple), ([34,56,72,38,43,100,50], GradientColors.orngPink)], title: "Title")
-```
-Gradient colors are now under the `GradientColor` struct you can create your own gradient by `GradientColor(start: Color, end: Color)`
-
-Available preset gradients: 
-* orange 
-* blue
-* green
-* blu 
-* bluPurpl
-* purple
-* prplPink 
-* prplNeon
-* orngPink
-
-**Full screen view called LineView!!!**
-
-![Line Charts](./Resources/fullscreen2.gif "Line Charts")
+<p align="left">
+<img src="Resources/chartpic1.png" width="350px"/>
+</p>
 
 ```swift
- LineView(data: [8,23,54,32,12,37,7,23,43], title: "Line chart", legend: "Full screen") // legend is optional, use optional .padding()
+LineChart()
+    .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
+    .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
 ```
 
-Adopts to dark mode automatically 
+**Add background grid**
 
-![Line Charts](./Resources/showcase3.gif "Line Charts")
-
-You can add your custom darkmode style by specifying:
+<p align="left">
+<img src="Resources/chartpic2.png" width="350px"/>
+</p>
 
 ```swift
-let myCustomStyle = ChartStyle(...)
-let myCutsomDarkModeStyle = ChartStyle(...)
-myCustomStyle.darkModeStyle = myCutsomDarkModeStyle
+ChartGrid {
+    LineChart()
+        .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
+        .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
+}
+.chartGridLines(horizontal: 5, vertical: 4)
 ```
 
-**Line chart is interactive, so you can drag across to reveal the data points**
+**Axis labels**
 
-You can add a line chart with the following code: 
+<p align="left">
+<img src="Resources/chartpic3.png" width="350px"/>
+</p>
 
 ```swift
- LineChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", legend: "Legendary") // legend is optional
+AxisLabels {
+    ChartGrid {
+        LineChart()
+            .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
+            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
+    }
+    .chartGridLines(horizontal: 5, vertical: 4)
+}
+.chartXAxisLabels([(1, "Nov"), (2, "Dec"), (3, "Jan")], range: 1...3)
 ```
 
-**Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
+**Line config + ranges**
 
-
-## Bar charts
-![Bar Charts](./Resources/showcase2.gif "Bar Charts")
-
-**[New feature] you can display labels also along values and points for each bar to descirbe your data better!**
-**Bar chart is interactive, so you can drag across to reveal the data points**
-
-You can add a bar chart with the following code: 
-
-Labels and points:
+<p align="left">
+<img src="Resources/chartpic5.png" width="350px"/>
+</p>
 
 ```swift
- BarChartView(data: ChartData(values: [("2018 Q4",63150), ("2019 Q1",50900), ("2019 Q2",77550), ("2019 Q3",79600), ("2019 Q4",92550)]), title: "Sales", legend: "Quarterly") // legend is optional
+AxisLabels {
+    ChartGrid {
+        LineChart()
+            .chartLineMarks(true)
+            .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
+            .chartYRange(0...10)
+            .chartXRange(0...5)
+            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
+    }
+    .chartGridLines(horizontal: 5, vertical: 4)
+}
+.chartXAxisLabels([(1, "Nov"), (2, "Dec"), (3, "Jan")], range: 1...3)
 ```
-Only points:
+
+**Mix chart types**
+
+<p align="left">
+<img src="Resources/chartpic7.png" width="350px"/>
+</p>
 
 ```swift
- BarChartView(data: ChartData(points: [8,23,54,32,12,37,7,23,43]), title: "Title", legend: "Legendary") // legend is optional
+AxisLabels {
+    ChartGrid {
+        BarChart()
+            .chartData([2, 4, 1, 3])
+            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
+
+        LineChart()
+            .chartLineMarks(true)
+            .chartData([2, 4, 1, 3])
+            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.blue, .purple)))
+    }
+    .chartGridLines(horizontal: 5, vertical: 4)
+}
+.chartXAxisLabels([(1, "Nov"), (2, "Dec"), (3, "Jan")], range: 1...3)
 ```
 
-**ChartData** structure
-Stores values in data pairs (actually tuple): `(String,Double)`
-* you can have duplicate values
-* keeps the data order
+## Full Examples
 
-You can initialise ChartData multiple ways:
-* For integer values: `ChartData(points: [8,23,54,32,12,37,7,23,43])`
-* For floating point values: `ChartData(points: [2.34,3.14,4.56])`
-* For label,value pairs: `ChartData(values: [("2018 Q4",63150), ("2019 Q1",50900)])`
-
-
-You can add different formats: 
-* Small `ChartForm.small`
-* Medium  `ChartForm.medium`
-* Large `ChartForm.large` 
-
-```swift
-BarChartView(data: ChartData(points: [8,23,54,32,12,37,7,23,43]), title: "Title", form: ChartForm.small)
-```
-
-For floating point numbers, you can set a custom specifier: 
-
-```swift
-BarChartView(data: ChartData(points:[1.23,2.43,3.37]) ,title: "A", valueSpecifier: "%.2f")
-```
-For integers you can disable by passing: `valueSpecifier: "%.0f"`
-
-
-You can set your custom image in the upper right corner by passing in the initialiser: `cornerImage:Image(systemName: "waveform.path.ecg")` 
-
-
- **Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
-
- ### You can customize styling of the chart with a ChartStyle object: 
-
-Customizable: 
-* background color
-* accent color
-* second gradient color
-* text color
-* legend text color
-
-```swift
- let chartStyle = ChartStyle(backgroundColor: Color.black, accentColor: Colors.OrangeStart, secondGradientColor: Colors.OrangeEnd, chartFormSize: ChartForm.medium, textColor: Color.white, legendTextColor: Color.white )
- ...
- BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", style: chartStyle)
-```
-
-You can access built-in styles: 
-```swift
- BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", style: Styles.barChartMidnightGreen)
-```
-#### All styles available as a preset: 
-* barChartStyleOrangeLight
-* barChartStyleOrangeDark
-* barChartStyleNeonBlueLight
-* barChartStyleNeonBlueDark
-* barChartMidnightGreenLight
-* barChartMidnightGreenDark
-
-![Midnightgreen](./Resources/midnightgreen.gif "Midnightgreen")
-
-![Custom Charts](./Resources/showcase5.png "Custom Charts")
-
-
-### You can customize the size of the chart with a ChartForm object: 
-
-**ChartForm**
-* `.small`
-* `.medium`
-* `.large`
-* `.detail`
-
-```swift
-BarChartView(data: [8,23,54,32,12,37,7,23,43], title: "Title", form: ChartForm.small)
-```
-
-### WatchOS support for Bar charts: 
-
-![Pie Charts](./Resources/watchos1.png "Pie Charts")
-
-## Pie charts
-![Pie Charts](./Resources/showcase4.png "Pie Charts")
-
-You can add a pie chart with the following code: 
-
-```swift
- PieChartView(data: [8,23,54,32], title: "Title", legend: "Legendary") // legend is optional
-```
-
-**Turn drop shadow off by adding to the Initialiser: `dropShadow: false`**
-
+See [example.md](./example.md) and [`Examples/SwiftUIChartsShowcase`](./Examples/SwiftUIChartsShowcase) for complete showcase code.

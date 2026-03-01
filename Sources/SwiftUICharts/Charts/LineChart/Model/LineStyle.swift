@@ -1,6 +1,6 @@
 import Foundation
 
-public enum LineStyle {
+public enum LineStyle: Sendable {
     case curved
     case straight
 }

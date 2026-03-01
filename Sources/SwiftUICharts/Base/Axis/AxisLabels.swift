@@ -1,15 +1,13 @@
 import SwiftUI
 
 public struct AxisLabels<Content: View>: View {
-    struct YAxisViewKey: ViewPreferenceKey { }
-    struct ChartViewKey: ViewPreferenceKey { }
+    @Environment(\.chartAxisConfig) private var axisConfig
+    @State private var preferredDataPoints: [(Double, Double)] = []
+    @State private var preferredXRange: ClosedRange<Double>?
+    @State private var preferredXDomainMode: ChartXDomainMode = .numeric
 
-    var axisLabelsData = AxisLabelsData()
-    var axisLabelsStyle = AxisLabelsStyle()
-
-    @State private var yAxisWidth: CGFloat = 25
-    @State private var chartWidth: CGFloat = 0
-    @State private var chartHeight: CGFloat = 0
+    private let yAxisWidth: CGFloat = 42
+    private let xAxisHeight: CGFloat = 24
 
     let content: () -> Content
 
@@ -17,82 +15,162 @@ public struct AxisLabels<Content: View>: View {
         self.content = content
     }
 
+    private var hasYLabels: Bool {
+        !axisConfig.axisYLabels.isEmpty
+    }
+
+    private var hasXLabels: Bool {
+        !axisConfig.axisXLabels.isEmpty
+    }
+
+    private var effectiveYAxisWidth: CGFloat {
+        hasYLabels ? yAxisWidth : 0
+    }
+
+    private var effectiveXAxisHeight: CGFloat {
+        hasXLabels ? xAxisHeight : 0
+    }
+
+    private var leftAxisGutter: CGFloat {
+        axisConfig.axisLabelsYPosition == .leading ? effectiveYAxisWidth : 0
+    }
+
+    private var rightAxisGutter: CGFloat {
+        axisConfig.axisLabelsYPosition == .trailing ? effectiveYAxisWidth : 0
+    }
+
+    private var visibleXValues: [Double] {
+        preferredDataPoints
+            .filter { preferredXRange?.contains($0.0) ?? true }
+            .map(\.0)
+    }
+
+    private var xRangeForScale: ClosedRange<Double>? {
+        preferredXRange ?? axisConfig.axisXRange
+    }
+
+    private var xDomainModeForScale: ChartXDomainMode {
+        preferredDataPoints.isEmpty ? axisConfig.axisXDomainMode : preferredXDomainMode
+    }
+
+    private var xScale: ChartXScale {
+        let scaleValues = visibleXValues.isEmpty ? axisConfig.axisXLabels.map(\.value) : visibleXValues
+        return ChartXScale(values: scaleValues,
+                           rangeX: xRangeForScale,
+                           mode: xDomainModeForScale,
+                           slotCountHint: max(scaleValues.count, axisConfig.axisXLabels.count))
+    }
+
     var yAxis: some View {
-        VStack(spacing: 0.0) {
-            ForEach(Array(axisLabelsData.axisYLabels.reversed().enumerated()), id: \.element) { index, axisYData in
+        VStack(spacing: 0) {
+            ForEach(Array(axisConfig.axisYLabels.reversed().enumerated()), id: \.offset) { index, axisYData in
                 Text(axisYData)
-                    .font(axisLabelsStyle.axisFont)
-                    .foregroundColor(axisLabelsStyle.axisFontColor)
-                    .frame(height: getYHeight(index: index,
-                                              chartHeight: chartHeight,
-                                              count: axisLabelsData.axisYLabels.count),
-                           alignment: getYAlignment(index: index, count: axisLabelsData.axisYLabels.count))
+                    .font(axisConfig.axisFont)
+                    .foregroundColor(axisConfig.axisFontColor)
+                    .frame(maxWidth: .infinity,
+                           alignment: axisConfig.axisLabelsYPosition == .leading ? .trailing : .leading)
+
+                if index < axisConfig.axisYLabels.count - 1 {
+                    Spacer(minLength: 0)
+                }
             }
         }
-        .padding([.leading, .trailing], 4.0)
-        .background(ViewGeometry<YAxisViewKey>())
-        .onPreferenceChange(YAxisViewKey.self) { value in
-            yAxisWidth = value.first?.size.width ?? 0.0
-        }
+        .padding(.horizontal, 4)
     }
 
-    func xAxis(chartWidth: CGFloat) -> some View {
-        HStack(spacing: 0.0) {
-            ForEach(Array(axisLabelsData.axisXLabels.enumerated()), id: \.element) { index, axisXData in
-                Text(axisXData)
-                    .font(axisLabelsStyle.axisFont)
-                    .foregroundColor(axisLabelsStyle.axisFontColor)
-                    .frame(width: chartWidth / CGFloat(axisLabelsData.axisXLabels.count - 1))
+    var xAxis: some View {
+        GeometryReader { geometry in
+            let safeSize = geometry.size.sanitized
+            let width = safeSize.width
+
+            ZStack(alignment: .topLeading) {
+                ForEach(Array(axisConfig.axisXLabels.enumerated()), id: \.offset) { _, xLabel in
+                    positionedXLabel(xLabel, width: width)
+                }
             }
         }
-        .frame(height: 24.0, alignment: .top)
-    }
-
-    var chart: some View {
-        self.content()
-            .background(ViewGeometry<ChartViewKey>())
-            .onPreferenceChange(ChartViewKey.self) { value in
-                chartWidth = value.first?.size.width ?? 0.0
-                chartHeight = value.first?.size.height ?? 0.0
-            }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: xAxisHeight, alignment: .top)
     }
 
     public var body: some View {
-        VStack(spacing: 0.0) {
-            HStack {
-                if axisLabelsStyle.axisLabelsYPosition == .leading {
-                    yAxis
-                } else {
-                    Spacer(minLength: yAxisWidth)
+        GeometryReader { geometry in
+            let safeSize = geometry.size.sanitized
+            let axisHeight = effectiveXAxisHeight
+            let chartHeight = max(0, safeSize.height - axisHeight)
+
+            VStack(spacing: 0) {
+                HStack(spacing: 0) {
+                    if leftAxisGutter > 0 {
+                        yAxis
+                            .frame(width: leftAxisGutter, height: chartHeight, alignment: .trailing)
+                    }
+
+                    content()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+
+                    if rightAxisGutter > 0 {
+                        yAxis
+                            .frame(width: rightAxisGutter, height: chartHeight, alignment: .leading)
+                    }
                 }
-                chart
-                if axisLabelsStyle.axisLabelsYPosition == .leading {
-                    Spacer(minLength: yAxisWidth)
-                } else {
-                    yAxis
+                .frame(height: chartHeight, alignment: .top)
+
+                if axisHeight > 0 {
+                    HStack(spacing: 0) {
+                        if leftAxisGutter > 0 {
+                            Color.clear.frame(width: leftAxisGutter, height: axisHeight)
+                        }
+
+                        xAxis
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+
+                        if rightAxisGutter > 0 {
+                            Color.clear.frame(width: rightAxisGutter, height: axisHeight)
+                        }
+                    }
+                    .frame(height: axisHeight, alignment: .top)
                 }
             }
-            xAxis(chartWidth: chartWidth)
+            .frame(width: safeSize.width, height: safeSize.height, alignment: .topLeading)
+        }
+        .onPreferenceChange(ChartDataPointsPreferenceKey.self) { snapshot in
+            preferredDataPoints = snapshot.points
+        }
+        .onPreferenceChange(ChartXRangePreferenceKey.self) { range in
+            preferredXRange = range
+        }
+        .onPreferenceChange(ChartXDomainModePreferenceKey.self) { mode in
+            preferredXDomainMode = mode
         }
     }
 
-    private func getYHeight(index: Int, chartHeight: CGFloat, count: Int) -> CGFloat {
-        if index == 0 || index == count - 1 {
-            return chartHeight / (CGFloat(count - 1) * 2) + 10
+    @ViewBuilder
+    private func positionedXLabel(_ xLabel: ChartXAxisLabel, width: CGFloat) -> some View {
+        let normalized = xScale.normalizedX(for: xLabel.value)
+        let clamped = min(1.0, max(0.0, normalized))
+
+        if clamped <= 0.001 {
+            Text(xLabel.title)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .font(axisConfig.axisFont)
+                .foregroundColor(axisConfig.axisFontColor)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        } else if clamped >= 0.999 {
+            Text(xLabel.title)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .font(axisConfig.axisFont)
+                .foregroundColor(axisConfig.axisFontColor)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+        } else {
+            Text(xLabel.title)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .font(axisConfig.axisFont)
+                .foregroundColor(axisConfig.axisFontColor)
+                .position(x: width * CGFloat(clamped), y: xAxisHeight / 2)
         }
-
-        return chartHeight / CGFloat(count - 1)
-    }
-
-    private func getYAlignment(index: Int, count: Int) -> Alignment {
-        if index == 0 {
-            return .top
-        }
-
-        if index == count - 1 {
-            return .bottom
-        }
-
-        return .center
     }
 }
