@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0A17A65BC7246EF894FB4C46 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FEFD8F7975122CADED38BF /* AppDelegate.swift */; };
+		1D4CE1A2A00E43B69F8E917B /* ShowcaseDynamicLabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D307985C5742659FBD2048 /* ShowcaseDynamicLabView.swift */; };
 		282BC43F66ABF75981A2CA5E /* ShowcaseHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472650295568456DC645EC4F /* ShowcaseHomeView.swift */; };
 		5C46F84CBBE811CF1BACDC53 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = C3965A0A2A9FEBF45BC880B8 /* SwiftUICharts */; };
 		78F8536EADC5FE60A9B6D6B6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4C0A162EAAD03257FCC320 /* SceneDelegate.swift */; };
+		8BC2B530A7D14FACB535629E /* ShowcaseTabContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812FA90A31E14920A08CC991 /* ShowcaseTabContainerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +20,8 @@
 		09A022B6E881286CD3B96CB5 /* SwiftUIChartsShowcase.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SwiftUIChartsShowcase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		472650295568456DC645EC4F /* ShowcaseHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseHomeView.swift; sourceTree = "<group>"; };
 		4EC45D31E6FCC4FF27B4F3B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		812FA90A31E14920A08CC991 /* ShowcaseTabContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseTabContainerView.swift; sourceTree = "<group>"; };
+		89D307985C5742659FBD2048 /* ShowcaseDynamicLabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowcaseDynamicLabView.swift; sourceTree = "<group>"; };
 		CA4C0A162EAAD03257FCC320 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F8FEFD8F7975122CADED38BF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,6 +70,8 @@
 				4EC45D31E6FCC4FF27B4F3B7 /* Info.plist */,
 				CA4C0A162EAAD03257FCC320 /* SceneDelegate.swift */,
 				472650295568456DC645EC4F /* ShowcaseHomeView.swift */,
+				812FA90A31E14920A08CC991 /* ShowcaseTabContainerView.swift */,
+				89D307985C5742659FBD2048 /* ShowcaseDynamicLabView.swift */,
 			);
 			path = SwiftUIChartsShowcaseApp;
 			sourceTree = "<group>";
@@ -131,6 +137,8 @@
 				0A17A65BC7246EF894FB4C46 /* AppDelegate.swift in Sources */,
 				78F8536EADC5FE60A9B6D6B6 /* SceneDelegate.swift in Sources */,
 				282BC43F66ABF75981A2CA5E /* ShowcaseHomeView.swift in Sources */,
+				8BC2B530A7D14FACB535629E /* ShowcaseTabContainerView.swift in Sources */,
+				1D4CE1A2A00E43B69F8E917B /* ShowcaseDynamicLabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

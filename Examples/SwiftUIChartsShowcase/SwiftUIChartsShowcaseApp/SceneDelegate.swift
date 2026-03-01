@@ -12,7 +12,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = UIHostingController(rootView: ShowcaseHomeView())
+        window.rootViewController = UIHostingController(rootView: ShowcaseTabContainerView())
         self.window = window
         window.makeKeyAndVisible()
     }
