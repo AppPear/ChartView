@@ -1,162 +1,187 @@
 # SwiftUICharts
 
-SwiftUICharts is an open-source chart library for SwiftUI with iOS 13 compatibility.
+SwiftUICharts is a composable, SwiftUI-native chart library for iOS 13+.
 
-This release uses a fully composable, SwiftUI-idiomatic API based on immutable configuration and `ViewModifier` chains.
-
-## 2.0.0 Release
-
-Version `2.0.0` is the new major composable release.
-
-- New modifier-first API (`chartData`, `chartXRange`, `chartYRange`, `chartGridLines`, axis modifiers, line modifiers)
-- Shared X-axis alignment model across chart types
-- Optional interaction model (`chartInteractionValue`) and callback model (`chartSelectionHandler`)
-- Streaming data support (`ChartStreamingDataSource`)
-- Performance mode (`chartPerformance`)
-- Accessibility + high-contrast presets
-- Apple privacy manifest included for SDK distribution (`PrivacyInfo.xcprivacy`)
+`2.0.0` is a major release focused on immutable configuration, environment-driven composition, and modifier-based APIs.
 
 <p align="center">
 <img src="Resources/linevid2.gif" width="30%"/> <img src="Resources/barvid2.gif" width="30%"/> <img src="Resources/pievid2.gif" width="30%"/>
 </p>
 
-## Charts
+## AI Agent Quick Context
 
-- `LineChart`
-- `BarChart`
-- `PieChart`
-- `RingsChart`
+Use this section when an AI agent generates code against this package.
+
+### API contract
+
+- Use only `2.x` composable APIs.
+- Do not use legacy `1.x` types or mutating chains.
+- Build charts with `ViewModifier` composition.
+- Keep data source semantics explicit:
+  - `chartData([Double])` = categorical slots
+  - `chartData([(Double, Double)])` = numeric/continuous domain
+
+### Use these APIs
+
+| Task | API |
+| --- | --- |
+| Set data | `chartData(...)` |
+| Set ranges | `chartXRange(...)`, `chartYRange(...)` |
+| Style chart | `chartStyle(...)` |
+| Grid config | `chartGridLines`, `chartGridStroke`, `chartGridBaseline` |
+| Axis labels/ticks | `chartXAxisLabels`, `chartYAxisLabels`, `chartXAxisAutoTicks`, `chartYAxisAutoTicks` |
+| Line tuning | `chartLineWidth`, `chartLineStyle`, `chartLineMarks`, `chartLineAnimation` |
+| Shared interaction | `chartInteractionValue(...)` |
+| Callback interaction | `chartSelectionHandler { event in ... }` |
+| Streaming data | `ChartStreamingDataSource` + `chartData(stream)` |
+| Large datasets | `chartPerformance(...)` |
+
+### Avoid these legacy APIs
+
+- `LineChartView`, `BarChartView`, `PieChartView`, `MultiLineChartView`
+- `.data(...)`, `.rangeX(...)`, `.rangeY(...)`
+- `.setAxisXLabels(...)`, `.setNumberOfHorizontalLines(...)`
+- `.showChartMarks(...)` (old form)
 
 ## Installation
 
-Use Swift Package Manager in Xcode and add:
+Add with Swift Package Manager:
 
 `https://github.com/AppPear/ChartView`
 
-For `2.0.0`, depend on the `2.0.0` tag or from `2.0.0` up to next major.
+For this release, use tag `2.0.0` (or `from: "2.0.0"` up to next major).
 
-## Migration
-
-This is a major composable API release.
-
-- Previous chain APIs like `.data`, `.rangeX`, `.rangeY`, `.setAxisXLabels`, `.setNumberOfHorizontalLines`, and line-specific setters were replaced by typed chart modifiers.
-- Full old-to-new mapping: [MIGRATION.md](./MIGRATION.md)
-
-## Migration In 3 Steps
-
-1. Replace legacy view types (`LineChartView`, `BarChartView`, `PieChartView`, `MultiLineChartView`) with composable chart views.
-2. Replace old chain methods with new modifiers.
-3. Move interaction to container-level wiring:
-   - shared state: `.chartInteractionValue(ChartValue())`
-   - callback-driven: `.chartSelectionHandler { event in ... }`
-
-### Common replacements
-
-| Old | New |
-| --- | --- |
-| `.data([Double])` | `.chartData([Double])` |
-| `.rangeX(...)` | `.chartXRange(...)` |
-| `.rangeY(...)` | `.chartYRange(...)` |
-| `.setNumberOfHorizontalLines(h)` | `.chartGridLines(horizontal: h, vertical: ...)` |
-| `.setAxisXLabels(...)` | `.chartXAxisLabels(...)` |
-| `.showChartMarks(...)` | `.chartLineMarks(...)` |
-
-## Quick Start
-
-**Simple line chart**
-
-<p align="left">
-<img src="Resources/chartpic1.png" width="350px"/>
-</p>
+## 30-Second Quick Start
 
 ```swift
-LineChart()
-    .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
-    .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
-```
+import SwiftUI
+import SwiftUICharts
 
-**Add background grid**
-
-<p align="left">
-<img src="Resources/chartpic2.png" width="350px"/>
-</p>
-
-```swift
-ChartGrid {
-    LineChart()
-        .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
-        .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
-}
-.chartGridLines(horizontal: 5, vertical: 4)
-```
-
-**Axis labels**
-
-<p align="left">
-<img src="Resources/chartpic3.png" width="350px"/>
-</p>
-
-```swift
-AxisLabels {
-    ChartGrid {
-        LineChart()
-            .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
-            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
+struct DemoView: View {
+    var body: some View {
+        AxisLabels {
+            ChartGrid {
+                LineChart()
+                    .chartData([12, 34, 23, 18, 36, 22, 26])
+                    .chartYRange(10...40)
+                    .chartLineMarks(true, color: ColorGradient(.blue, .purple))
+                    .chartStyle(
+                        ChartStyle(
+                            backgroundColor: .white,
+                            foregroundColor: ColorGradient(.blue, .purple)
+                        )
+                    )
+            }
+            .chartGridLines(horizontal: 5, vertical: 6)
+        }
+        .chartXAxisLabels(["M", "T", "W", "T", "F", "S", "S"])
+        .chartAxisColor(.secondary)
+        .chartAxisFont(.caption)
+        .frame(height: 220)
+        .padding()
     }
-    .chartGridLines(horizontal: 5, vertical: 4)
 }
-.chartXAxisLabels([(1, "Nov"), (2, "Dec"), (3, "Jan")], range: 1...3)
 ```
 
-**Line config + ranges**
+## Feature Recipes
 
-<p align="left">
-<img src="Resources/chartpic5.png" width="350px"/>
-</p>
-
-```swift
-AxisLabels {
-    ChartGrid {
-        LineChart()
-            .chartLineMarks(true)
-            .chartData([3, 5, 4, 1, 0, 2, 4, 1, 0, 2, 8])
-            .chartYRange(0...10)
-            .chartXRange(0...5)
-            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
-    }
-    .chartGridLines(horizontal: 5, vertical: 4)
-}
-.chartXAxisLabels([(1, "Nov"), (2, "Dec"), (3, "Jan")], range: 1...3)
-```
-
-**Mix chart types**
-
-<p align="left">
-<img src="Resources/chartpic7.png" width="350px"/>
-</p>
+### 1) Mixed bar + line
 
 ```swift
 AxisLabels {
     ChartGrid {
         BarChart()
-            .chartData([2, 4, 1, 3])
-            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.orange, .red)))
+            .chartData([2, 4, 1, 3, 5])
+            .chartStyle(ChartStyle(backgroundColor: .white,
+                                   foregroundColor: ColorGradient(.orange, .red)))
 
         LineChart()
+            .chartData([2, 4, 1, 3, 5])
             .chartLineMarks(true)
-            .chartData([2, 4, 1, 3])
-            .chartStyle(ChartStyle(backgroundColor: .white, foregroundColor: ColorGradient(.blue, .purple)))
+            .chartStyle(ChartStyle(backgroundColor: .white,
+                                   foregroundColor: ColorGradient(.blue, .purple)))
     }
-    .chartGridLines(horizontal: 5, vertical: 4)
+    .chartGridLines(horizontal: 5, vertical: 5)
 }
-.chartXAxisLabels([(1, "Nov"), (2, "Dec"), (3, "Jan")], range: 1...3)
+.chartXAxisLabels([(0, "A"), (1, "B"), (2, "C"), (3, "D"), (4, "E")], range: 0...4)
 ```
 
-## Full Examples
+### 2) Shared interaction state
 
-See [example.md](./example.md) and [`Examples/SwiftUIChartsShowcase`](./Examples/SwiftUIChartsShowcase) for complete showcase code.
+```swift
+let selected = ChartValue()
+
+VStack(alignment: .leading) {
+    ChartLabel("Weekly Sales", type: .title)
+    ChartLabel("Drag bars", type: .legend, format: "%.1f")
+
+    BarChart().chartData([14, 22, 18, 31, 26, 19, 24])
+}
+.chartInteractionValue(selected)
+```
+
+### 3) Callback-based interaction
+
+```swift
+BarChart()
+    .chartData([8, 11, 13, 9, 12])
+    .chartSelectionHandler { event in
+        guard event.isActive,
+              let value = event.value,
+              let index = event.index else { return }
+        print("selected", index, value)
+    }
+```
+
+### 4) Dynamic streaming data
+
+```swift
+@ObservedObject private var stream = ChartStreamingDataSource(
+    initialValues: [18, 23, 20, 27, 29, 24],
+    windowSize: 6,
+    autoScroll: true
+)
+
+LineChart()
+    .chartData(stream)
+    .chartYRange(stream.suggestedYRange)
+```
+
+### 5) Performance mode for large datasets
+
+```swift
+LineChart()
+    .chartData(largeSeries)
+    .chartPerformance(.automatic(threshold: 600,
+                                 maxPoints: 180,
+                                 simplifyLineStyle: true))
+```
+
+## Migration
+
+This is a major breaking release.
+
+- Full migration guide: [MIGRATION.md](./MIGRATION.md)
+- Quick examples: [example.md](./example.md)
+
+## Documentation Map
+
+- Wiki index: [docs/wiki/README.md](./docs/wiki/README.md)
+- Getting started: [docs/wiki/01-getting-started.md](./docs/wiki/01-getting-started.md)
+- Modifiers: [docs/wiki/02-composable-modifiers.md](./docs/wiki/02-composable-modifiers.md)
+- Interaction: [docs/wiki/03-interaction-and-selection.md](./docs/wiki/03-interaction-and-selection.md)
+- Streaming: [docs/wiki/04-dynamic-and-streaming-data.md](./docs/wiki/04-dynamic-and-streaming-data.md)
+- Performance: [docs/wiki/05-performance-and-large-datasets.md](./docs/wiki/05-performance-and-large-datasets.md)
+- Axis alignment: [docs/wiki/06-unified-axis-and-label-alignment.md](./docs/wiki/06-unified-axis-and-label-alignment.md)
+- Migration summary: [docs/wiki/07-migration-from-1x.md](./docs/wiki/07-migration-from-1x.md)
+
+## Example App
+
+The showcase app demonstrates all major features:
+
+`Examples/SwiftUIChartsShowcase`
 
 ## Release Notes
 
 - Changelog: [CHANGELOG.md](./CHANGELOG.md)
-- Migration details: [MIGRATION.md](./MIGRATION.md)
+- Includes Apple privacy manifest: `Sources/SwiftUICharts/PrivacyInfo.xcprivacy`
