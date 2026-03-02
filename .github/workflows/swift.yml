@@ -2,21 +2,33 @@ name: Swift
 
 on:
   push:
-    branches:
-      - master
-      - new-version
+    branches: [ master, new-version ]
   pull_request:
-    branches:
-      - master
-      - new-version
-jobs:
-  build:
 
+jobs:
+  build-and-test:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build
+        run: swift build
+
+      - name: Test
+        run: swift test
+
+      - name: Build Showcase App
+        run: |
+          cd Examples/SwiftUIChartsShowcase
+          xcodebuild \
+            -project SwiftUIChartsShowcase.xcodeproj \
+            -scheme SwiftUIChartsShowcase \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            CODE_SIGNING_ALLOWED=NO \
+            build

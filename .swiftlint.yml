@@ -1,0 +1,64 @@
+disabled_rules:
+- explicit_acl
+- trailing_whitespace
+- force_cast
+- unused_closure_parameter
+- multiple_closures_with_trailing_closure
+opt_in_rules:
+- anyobject_protocol
+- array_init
+- attributes
+- collection_alignment
+- colon
+- conditional_returns_on_newline
+- convenience_type
+- empty_count
+- empty_string
+- empty_collection_literal
+- enum_case_associated_values_count
+- function_default_parameter_at_end
+- fatal_error_message
+- file_name
+- first_where
+- modifier_order
+- toggle_bool
+- unused_private_declaration
+- yoda_condition
+excluded:
+- Carthage
+- Pods
+- SwiftLint/Common/3rdPartyLib
+identifier_name:
+  excluded:
+    - a
+    - b
+    - c
+    - i
+    - id
+    - t
+    - to
+    - x
+    - y
+line_length:
+    warning: 150
+    error: 200
+    ignores_function_declarations: true
+    ignores_comments: true
+    ignores_urls: true
+function_body_length:
+    warning: 300
+    error: 500
+function_parameter_count:
+    warning: 6
+    error: 8
+type_body_length:
+    warning: 300
+    error: 400
+file_length:
+    warning: 500
+    error: 1200
+    ignore_comment_only_lines: true
+cyclomatic_complexity:
+    warning: 15
+    error: 21
+reporter: "xcode"

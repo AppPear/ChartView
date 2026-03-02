@@ -1,0 +1,31 @@
+name: SwiftUIChartsShowcase
+options:
+  bundleIdPrefix: com.appear
+settings:
+  base:
+    IPHONEOS_DEPLOYMENT_TARGET: 13.0
+targets:
+  SwiftUIChartsShowcase:
+    type: application
+    platform: iOS
+    deploymentTarget: "13.0"
+    sources:
+      - path: SwiftUIChartsShowcaseApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.appear.swiftuicharts.showcase
+        INFOPLIST_FILE: SwiftUIChartsShowcaseApp/Info.plist
+        SWIFT_VERSION: 5.0
+    dependencies:
+      - package: SwiftUICharts
+        product: SwiftUICharts
+packages:
+  SwiftUICharts:
+    path: ../..
+schemes:
+  SwiftUIChartsShowcase:
+    build:
+      targets:
+        SwiftUIChartsShowcase: all
+    run:
+      config: Debug

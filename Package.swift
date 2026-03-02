@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,13 +6,13 @@ import PackageDescription
 let package = Package(
     name: "SwiftUICharts",
     platforms: [
-        .iOS(.v13), .watchOS(.v6), .macOS(.v11)
+        .iOS(.v13), .watchOS(.v6), .macOS(.v10_15)
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "SwiftUICharts",
-            targets: ["SwiftUICharts"]),
+            targets: ["SwiftUICharts"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -26,6 +26,6 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "SwiftUIChartsTests",
-            dependencies: ["SwiftUICharts"]),
+            dependencies: ["SwiftUICharts"])
     ]
 )
