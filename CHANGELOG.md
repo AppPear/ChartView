@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0-beta.9
+## 2.0.0
 
 ### Added
 
@@ -10,8 +10,13 @@
   - `chartXAxisLabels`, `chartYAxisLabels`, `chartAxisFont`, `chartAxisColor`
   - `chartLineWidth`, `chartLineBackground`, `chartLineMarks`, `chartLineStyle`, `chartLineAnimation`
   - `chartInteractionValue`
+  - `chartSelectionHandler`
+  - `chartPerformance`
 - Immutable chart configuration structs and environment-key-based composition.
 - Updated docs/examples and generated showcase app.
+- Dynamic streaming data source support via `ChartStreamingDataSource`.
+- Unified X-axis alignment strategy shared across chart layers.
+- Apple privacy manifest for SDK distribution (`PrivacyInfo.xcprivacy`).
 
 ### Changed
 

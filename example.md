@@ -2,6 +2,13 @@
 
 ### Example codes (modifier-based composable API)
 
+## Notes for 2.0.0 usage
+
+- Use modifier APIs only (`chartData`, `chartXRange`, `chartYRange`, `chartGridLines`, `chartXAxisLabels`, etc.).
+- Use `chartInteractionValue(_:)` when you want shared interaction state.
+- Use `chartSelectionHandler(_:)` when you prefer callback-based interaction events.
+- Use `ChartStreamingDataSource` for dynamic feeds and `chartPerformance(_:)` for large datasets.
+
 <p align="left">
 <img src="Resources/linechartcard.png" width="400px"/>
 </p>

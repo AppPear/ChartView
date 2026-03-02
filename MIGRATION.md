@@ -1,5 +1,11 @@
 # SwiftUICharts Migration Guide
 
+## Target release
+
+This guide targets `2.0.0`.
+
+`2.0.0` is a major breaking release and phases out the old mutable chain API in favor of composable modifier-based configuration.
+
 ## Version direction
 
 This release moves to a strict SwiftUI-idiomatic modifier API.
@@ -7,6 +13,16 @@ This release moves to a strict SwiftUI-idiomatic modifier API.
 - Immutable configuration
 - `ViewModifier` composition
 - Environment keys instead of mutable reference state in view structs
+
+## Migration checklist
+
+1. Replace legacy chart types with `LineChart`, `BarChart`, `PieChart`, `RingsChart`.
+2. Replace old chain methods with `chart...` modifiers.
+3. Migrate interaction:
+   - shared value model: `chartInteractionValue(_:)`
+   - callback model: `chartSelectionHandler(_:)`
+4. Validate axis label/range behavior under the unified X-axis alignment model.
+5. Run `swift test` and build the showcase app to verify rendering parity.
 
 ## Old -> new mapping
 
@@ -54,6 +70,7 @@ This release moves to a strict SwiftUI-idiomatic modifier API.
 | --- | --- |
 | `.chartValue(...)` on chart views | `.chartInteractionValue(...)` on any parent container |
 | `@EnvironmentObject ChartValue` requirement | optional environment interaction value |
+| N/A | `.chartSelectionHandler { event in ... }` callback-based selection |
 
 ### Legacy public type replacements
 
@@ -108,4 +125,26 @@ AxisLabels {
     .chartGridLines(horizontal: 5, vertical: 4)
 }
 .chartXAxisLabels(["Q1", "Q2", "Q3", "Q4"])
+```
+
+## Advanced migration examples
+
+### Dynamic streaming data
+
+```swift
+@ObservedObject private var stream = ChartStreamingDataSource(initialValues: [12, 14, 18, 16],
+                                                              windowSize: 8,
+                                                              autoScroll: true)
+
+LineChart()
+    .chartData(stream)
+    .chartYRange(stream.suggestedYRange)
+```
+
+### Performance mode for large datasets
+
+```swift
+LineChart()
+    .chartData(largeSeries)
+    .chartPerformance(.automatic(threshold: 600, maxPoints: 180, simplifyLineStyle: true))
 ```
