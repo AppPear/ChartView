@@ -18,6 +18,7 @@ struct ShowcaseTabContainerView: View {
                 .tag(1)
             
             Text("Add Fork")
+            Text("Add Fork 2 :)")
         }
     }
 }
