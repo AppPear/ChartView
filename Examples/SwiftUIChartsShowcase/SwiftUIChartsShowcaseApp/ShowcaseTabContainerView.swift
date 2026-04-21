@@ -16,6 +16,8 @@ struct ShowcaseTabContainerView: View {
                     Text("Dynamic")
                 }
                 .tag(1)
+            
+            Text("Add Fork")
         }
     }
 }
