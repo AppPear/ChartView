@@ -14,22 +14,27 @@ public struct BarChartRow: View {
             let localFrame = geometry.frame(in: .local).sanitized
             let safeWidth = localFrame.width
             let safeHeight = localFrame.height
-            let barCount = max(1, chartData.data.count)
+            let visiblePoints = chartData.points
+            let normalisedPoints = chartData.normalisedPoints
+            let barCount = max(1, visiblePoints.count)
             let slotWidth = safeWidth / CGFloat(barCount)
             let barWidthRatio: CGFloat = 0.72
 
             HStack(alignment: .bottom, spacing: 0) {
-                ForEach(0..<chartData.data.count, id: \.self) { index in
-                    BarChartCell(value: chartData.normalisedPoints[index],
+                ForEach(visiblePoints.indices, id: \.self) { index in
+                    BarChartCell(value: normalisedPoints[index],
                                  index: index,
                                  gradientColor: style.foregroundColor.rotate(for: index),
                                  touchLocation: touchLocation)
                         .frame(width: slotWidth * barWidthRatio)
-                        .scaleEffect(getScaleSize(touchLocation: touchLocation, index: index), anchor: .bottom)
+                        .scaleEffect(
+                            getScaleSize(touchLocation: touchLocation, index: index, barCount: visiblePoints.count),
+                            anchor: .bottom
+                        )
                         .animation(Animation.easeIn(duration: 0.2))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                         .accessibilityElement(children: .ignore)
-                        .accessibility(label: Text("Bar \(index + 1), value \(formatted(chartData.points[index]))"))
+                        .accessibility(label: Text("Bar \(index + 1), value \(formatted(visiblePoints[index]))"))
                 }
             }
             .frame(width: safeWidth,
@@ -66,21 +71,22 @@ public struct BarChartRow: View {
         }
     }
 
-    func getScaleSize(touchLocation: CGFloat, index: Int) -> CGSize {
-        if touchLocation > CGFloat(index) / CGFloat(max(1, chartData.data.count)) &&
-            touchLocation < CGFloat(index + 1) / CGFloat(max(1, chartData.data.count)) {
+    func getScaleSize(touchLocation: CGFloat, index: Int, barCount: Int) -> CGSize {
+        if touchLocation > CGFloat(index) / CGFloat(max(1, barCount)) &&
+            touchLocation < CGFloat(index + 1) / CGFloat(max(1, barCount)) {
             return CGSize(width: 1.4, height: 1.1)
         }
         return CGSize(width: 1, height: 1)
     }
 
     func getCurrentSelection(width: CGFloat) -> (index: Int, value: Double)? {
-        guard !chartData.data.isEmpty else { return nil }
+        let points = chartData.points
+        guard !points.isEmpty else { return nil }
         guard width.isFinite, width > 0 else { return nil }
-        let denominator = width / CGFloat(chartData.data.count)
+        let denominator = width / CGFloat(points.count)
         guard denominator > 0, denominator.isFinite else { return nil }
-        let index = max(0, min(chartData.data.count - 1, Int(floor((touchLocation * width) / denominator))))
-        return (index, chartData.points[index])
+        let index = max(0, min(points.count - 1, Int(floor((touchLocation * width) / denominator))))
+        return (index, points[index])
     }
 
     private func formatted(_ value: Double) -> String {

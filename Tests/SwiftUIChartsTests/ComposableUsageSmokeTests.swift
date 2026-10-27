@@ -17,6 +17,16 @@ final class ComposableUsageSmokeTests: XCTestCase {
         assertCanRender(view)
     }
 
+    func testBarChartRendersWithCategoricalXRange() {
+        let view = BarChart()
+            .chartData([10, 20, 30])
+            .chartXRange(1...2)
+            .chartStyle(sampleStyle)
+            .frame(width: 240, height: 140)
+
+        assertCanRender(view)
+    }
+
     func testPieChartRendersWithOptionalInteractionValue() {
         let view = PieChart()
             .chartData([34, 23, 12])
